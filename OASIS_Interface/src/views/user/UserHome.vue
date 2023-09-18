@@ -37,10 +37,10 @@
                   <div class="NFTList">
                     <el-collapse>
                       <el-collapse-item
-                        :title="address"
+                        :title="NFTSeriesnameList[i]"
                         v-for="address,i in nftContractAddressList"
                         :key="i"
-                        :name="address"
+                        :name="NFTSeriesnameList[i]"
                       >
                         <div
                           class="ToSellMain"
@@ -138,7 +138,7 @@
 </template>
 
 <script>
-  import { UpSale, DownSale } from "@/api/axios/contract.js";
+  import { UpSale, DownSale, getNFTStruct } from "@/api/axios/contract.js";
   import ChatMemu from "@/views/chat/ChatMemu.vue";
   import { getOwnerNFTsByAddress } from "@/api/axios/ownerContractLIst";
   export default {
@@ -151,12 +151,13 @@
         UserNFTListInf: [],
         NFTArray: [],
         nftContractAddressList: [],
+        NFTSeriesnameList: [],
       };
     },
     async mounted() {
-      this.init();
+      await this.init();
+      await this.getNFTSeriesnameList();
       await this.GetNFTContractNFT();
-      console.log(this.UserNFTListInf);
     },
     methods: {
       async init() {
@@ -207,27 +208,21 @@
         try {
           await DownSale(NFT);
           this.UserNFTListInf = this.$store.state.ownerNFTList;
-        this.$notify({
-          title: '成功',
-          message: '下架成功',
-            type: 'success',
-            position: 'top-left',
-            offset: 100,
-            duration:2000
-        });
+          this.$notify({
+            title: "下架成功",
+            type: "success",
+            position: "top-left",
+            offset: 200,
+          });
         } catch (error) {
           this.$notify.error({
-          title: '错误',
-            message: '下架失败',
-            position: 'top-left',
-            offset: 100,
-            duration:2000
-        });
+            title: "下架失败",
+            position: "top-left",
+            offset: 200,
+          });
         }
-       
       },
       async GetNFTContractNFT() {
-        await this.getSetAddressArray();
         let NFTInfList = [];
         for (const nftaddress of this.nftContractAddressList) {
           let nft = {
@@ -245,6 +240,20 @@
           this.nftContractAddressList.push(nft.nftAddress);
         }
         this.nftContractAddressList = new Set(this.nftContractAddressList);
+      },
+      async getNFTSeriesnameList() {
+        await this.getSetAddressArray();
+        for (const key of this.nftContractAddressList) {
+          let SeriesName;
+          let contract = await getNFTStruct(key);
+          await contract.methods
+            .name()
+            .call()
+            .then((re) => {
+              SeriesName = re;
+            });
+          this.NFTSeriesnameList.push(SeriesName);
+        }
       },
     },
   };

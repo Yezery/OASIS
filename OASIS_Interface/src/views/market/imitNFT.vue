@@ -224,12 +224,10 @@
               this.Description
             );
             this.$notify({
-              title: "成功",
-              message: "创造成功",
+              title: "创造成功",
               type: "success",
               position: "top-left",
-              offset: 100,
-              duration: 2000,
+              offset: 200,
             });
             this.fileList = [];
             this.Name = "";
@@ -239,18 +237,16 @@
             this.Description = "";
           } else {
             this.$notify({
-              title: "警告",
-              message: "NFT格式不支持",
+              title: "NFT格式不支持",
               type: "warning",
+              offset: 200,
             });
           }
         } catch (error) {
           this.$notify.error({
-            title: "错误",
-            message: "创造失败",
+            title: "创造失败",
             position: "top-left",
-            offset: 100,
-            duration: 2000,
+            offset: 200,
           });
           return;
         }

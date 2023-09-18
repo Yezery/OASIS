@@ -312,20 +312,16 @@
         try {
           await Buy(NFT);
           this.$notify({
-            title: "成功",
-            message: "购买成功",
+            title: "购买成功",
             type: "success",
             position: "top-left",
-            offset: 100,
-            duration: 2000,
+            offset: 200,
           });
         } catch (error) {
           this.$notify.error({
-            title: "错误",
-            message: "购买失败",
+            title: "购买失败",
             position: "top-left",
-            offset: 100,
-            duration: 2000,
+            offset: 200,
           });
         }
       },

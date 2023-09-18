@@ -133,74 +133,40 @@
             });
             this.walletConnect();
             this.$notify({
-              title: "成功",
-              message: "连接成功",
+              title: "🎉 连接成功",
               position: 'top-left',
-              offset: 100,
-            duration:2000
+              offset: 200,
             });
           } catch (error) {
             console.error(error);
             this.$notify.error({
-              title: "错误",
-              message: "连接失败",
+              title: "连接失败",
               position: 'top-left',
-              offset: 100,
-            duration:2000
+              offset: 200,
             });
           }
         }
-
-        // }
-        // else {
-        //   this.$refs.MMCT.classList.remove("animate__fadeOut");
-        //   this.$refs.MMCT.classList.add("animate__fadeIn");
-        //   this.MetaMaskTipsIsShow = !this.MetaMaskTipsIsShow;
-        //   setTimeout(() => {
-        //     this.MMCTDis();
-        //   }, 1800);
-        // }
       },
-      // async initConnect() {
-      //   if (window.ethereum) {
-      //     this.web3 = new this.Web3(window.ethereum);
-      //     try {
-      //       await window.ethereum.enable();
-      //       this.account = (await this.web3.eth.getAccounts())[0];
-      //     } catch (error) {
-      //       console.error(error);
-      //     }
-      //   } else if (window.web3) {
-      //     this.web3 = new this.Web3(window.web3.currentProvider);
-      //     this.account = (await this.web3.eth.getAccounts())[0];
-      //   } else {
-      //     this.$refs.MMCT.classList.remove("animate__fadeOut");
-      //     this.$refs.MMCT.classList.add("animate__fadeIn");
-      //     this.MetaMaskTipsIsShow = !this.MetaMaskTipsIsShow;
-      //   }
-      // },
-
-      // async transfer() {
-      //   let value = this.web3.utils.toWei(this.value, "ether");
-      //   this.contract.methods
-      //     .transfer(this.toAddress)
-      //     .send({ from: this.account, value: value.toString() })
-      //     .then((result) => {
-      //       console.log("Transaction hash:", result.transactionHash);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-
-      // console.log(this.contract);
-
-      // await this.contract.methods.changeText("log").call().then(result => this.accounts = result)
-      // console.log(this.accounts );
-      // },
     },
   };
 </script>
 
+<style lang="scss">
+/* 全局通知样式 */
+.el-notification {
+  border: none !important;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  .el-notification__title {
+    font-size: 1vw;
+    font-weight: 500;
+  }
+}
+</style>
 <style lang="scss" scoped>
 .Walletbox {
   width: 100%;
@@ -235,7 +201,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 2px solid var(--avatar-border-style--); */
 }
 .BOX {
   width: 100%;
@@ -319,6 +284,6 @@
   right: 0;
   bottom: 0;
   top: 0;
-  // background: rgba(0, 0, 0, 0.05);
 }
+
 </style>
