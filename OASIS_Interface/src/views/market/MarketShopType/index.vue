@@ -115,28 +115,74 @@
       <div class="CollectionShowTitle ">
         Collection Show
       </div>
-      <div
-        class="NFTInf animate__animated animate__fadeInLeft"
-        v-for="NFT in this.NFTList.filter(NFT => NFT.isActive).slice(0,6)"
-        :key="NFT.TokenURI"
-      >
-        <div class="imageBox">
-          <img
-            class="NFTImage"
-            :src="JSON.parse(NFT.tokenURI).image "
-            alt=""
+      <div class="CarouselShow">
+        <el-carousel
+          :interval="5000"
+          type="card"
+          height="500px"
+          width="300px"
+          indicator-position="none"
+        >
+          <el-carousel-item
+            v-for="NFT in this.NFTList.filter(NFT => NFT.isActive).slice(0,10)"
+            :key="NFT.TokenURI"
           >
+            <div class="NFTInf">
+              <div class="imageBox">
+                <img
+                  class="NFTImage"
+                  :src="JSON.parse(NFT.tokenURI).image "
+                  alt=""
+                >
+              </div>
+              <div class="Inf">
+                <div class="NFTName">
+                  {{ JSON.parse(NFT.tokenURI).name.toUpperCase() }}
+                </div>
+                <div class="InfBottom">
+                  <div class="ownerBox">
+                    <div class="ownerAddress">
+                      {{ NFT.seller.slice(0, 5) + "..." + NFT.seller.slice(37) }}
+                    </div>
+                    <div class="ownerAvatarBox">
+                      <img
+                        class="owner"
+                        :src="GETHashAvatar(NFT.seller.toString())"
+                        alt=""
+                        width="55px"
+                        height="55px"
+                      >
+                    </div>
+                  </div>
+                  <div class="PriceBox">
+                    <div class="PriceTitle">
+                      Volume
+                    </div>
+                    <div style="font-weight: 800;color: var(--Dark--);">
+                      {{ $store.state.Web3.utils.fromWei(NFT.price, 'ether') }} ETH
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+
+      <!-- <div class="NFTInf animate__animated animate__fadeInLeft" v-for="NFT in this.NFTList.filter(NFT => NFT.isActive).slice(0,6)" :key="NFT.TokenURI">
+        <div class="imageBox">
+          <img class="NFTImage" :src="JSON.parse(NFT.tokenURI).image " alt="">
         </div>
         <div class="Inf">
           <div class="NFTName">
             {{ JSON.parse(NFT.tokenURI).name.toUpperCase() }}
-            <!-- <div class="ownerBox">
+            <div class="ownerBox">
               <div class="ownerOutBorder">
                 <img class="owner" :src="GETHashAvatar(NFT.seller.toString())" alt="" width="36px" height="36px" />
               </div>
               <div class="ownerName">{{ NFT.seller.slice(0, 5) + "..." + NFT.seller.slice(37) }}
               </div>
-            </div> -->
+            </div>
           </div>
           <div class="InfBottom">
             <div class="ownerBox">
@@ -144,13 +190,7 @@
                 {{ NFT.seller.slice(0, 5) + "..." + NFT.seller.slice(37) }}
               </div>
               <div class="ownerAvatarBox">
-                <img
-                  class="owner"
-                  :src="GETHashAvatar(NFT.seller.toString())"
-                  alt=""
-                  width="55px"
-                  height="55px"
-                >
+                <img class="owner" :src="GETHashAvatar(NFT.seller.toString())" alt="" width="55px" height="55px">
               </div>
             </div>
             <div class="PriceBox">
@@ -163,7 +203,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -211,18 +251,33 @@
 
 <style lang="scss" scoped>
 .collectionShow {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 1%;
-  height: auto;
-  text-align: center;
   font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 6%;
+  .CarouselShow{
+    width: 100%;
+    .el-carousel__container{
+
+    }
+    .el-carousel__item{
+
+      background-color: transparent;
+      height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  }
+  
+
   .CollectionShowTitle {
     width: 100%;
     text-align: left;
-    margin-top: 3.5%;
-    margin-bottom: 3.5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
     font-weight: 800;
     font-family: "Gilroy-Medium";
     font-size: 1.7vw;
@@ -496,4 +551,9 @@
 /deep/.el-table::before {
   display: none;
 }
+</style>
+<style>
+  .el-carousel__mask{
+    display: none !important;
+  }
 </style>

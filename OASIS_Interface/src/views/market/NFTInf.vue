@@ -62,20 +62,26 @@
               >
                 <div class="SeriesNFT">
                   <div
+                    style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 1vw;"
+                    v-if="seriesNFTArrays.filter(inf => inf.isActive && inf.ipfsPath !== NFTImage).length == 0"
+                  >
+                    <el-empty description="无在售" />
+                  </div>
+                  <div
                     class="NFTInf"
-                    v-for="inf in seriesNFTArrays.filter(inf => inf.isActive !== true &&inf.name !== NFTName)"
+                    v-for="inf in seriesNFTArrays.filter(inf => inf.isActive && inf.ipfsPath !== NFTImage)"
                     :key="inf.image"
                   >
                     <div class="imageBox">
                       <img
                         class="NFTImage"
-                        :src="inf.image"
+                        :src="inf.ipfsPath"
                         alt=""
                       >
                     </div>
                     <div class="Inf">
                       <div class="NFTName">
-                        {{ inf.name }}
+                        {{ inf.nftName }}
                       </div>
                       <div class="ownerAndToSell">
                         <div class="ToSellBox" />
@@ -90,8 +96,15 @@
               >
                 <div class="SeriesNFT">
                   <div
+                    style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 1vw;"
+                    v-if="seriesNFTArrays.filter(inf => !inf.isActive).length == 0"
+                  >
+                    <!-- <i class="el-icon-warning"></i> 无数据 -->
+                    <el-empty description="无数据" />
+                  </div>
+                  <div
                     class="NFTInf"
-                    v-for="inf in seriesNFTArrays.filter(inf => inf.isActive == true &&inf.name !== NFTName)"
+                    v-for="inf in seriesNFTArrays.filter(inf => !inf.isActive)"
                     :key="inf.image"
                   >
                     <div class="imageBox">
@@ -118,20 +131,26 @@
               >
                 <div class="SeriesNFT">
                   <div
+                    style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 1vw;"
+                    v-if="seriesNFTArrays.length == 0"
+                  >
+                    <el-empty description="无数据" />
+                  </div>
+                  <div
                     class="NFTInf"
-                    v-for="inf in seriesNFTArrays.filter(inf => inf.image !== NFTImage)"
+                    v-for="inf in seriesNFTArrays"
                     :key="inf.image"
                   >
                     <div class="imageBox">
                       <img
                         class="NFTImage"
-                        :src="inf.image"
+                        :src="inf.ipfsPath"
                         alt=""
                       >
                     </div>
                     <div class="Inf">
                       <div class="NFTName">
-                        {{ inf.name }}
+                        {{ inf.nftName }}
                       </div>
                       <div class="ownerAndToSell">
                         <div class="ToSellBox" />
@@ -143,15 +162,16 @@
             </el-tabs>
           </div>
         </div>
-        <div class="MoreNFTInfBox">
+        <!-- <div class="MoreNFTInfBox">
           <div class="seriesNFTBox" />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getSaleListByContractAddress } from "@/api/axios/Sale";
   import { getNFTStruct, Buy } from "@/api/axios/contract";
   export default {
     name: "NFTInf",
@@ -297,16 +317,12 @@
         };
       },
       async getThisSeriesNFT() {
-        for (let index = 0; index <= this.currentId - 1; index++) {
-          await this.NFTContract.methods
-            ._nftMetaData(index)
-            .call()
-            .then((re) => {
-              let NFTstruct = JSON.parse(re);
-              NFTstruct.isActive = this.seriesNFTArrays.push(JSON.parse(re));
-            });
+        var NFTDto={
+          nftAddress: this.NFTContractAddress,
         }
-        console.log(this.seriesNFTArrays);
+        await getSaleListByContractAddress(NFTDto).then(re => {
+          this.seriesNFTArrays = re.data.data
+        })
       },
       async Buy(NFT) {
         try {
@@ -348,8 +364,7 @@
     .NFTInfBackground {
       width: 100%;
       height: 270px;
-      background-image: url("@/assets/webAssets/MetaMask.png");
-      background-repeat: repeat;
+      background-image: url("@/assets/webAssets/logoGreen.png");
       background-size: contain;
       text-align: left;
       position: relative;
@@ -371,38 +386,29 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+        height: fit-content;
         padding-top: 2%;
         background-color: var(--White--);
 
         /deep/ .selectBox-Button {
           width: 95%;
-          height: 70px;
-          border-bottom: 1px solid #dcdfe6;
+          // border-bottom: 1px solid #dcdfe6;
           .SeriesNFT {
             height: 100%;
             text-align: center;
             width: 100%;
             font-family: Arial, Helvetica, sans-serif;
-
             .NFTInf {
               margin: 2%;
-              background-color: var(--White--);
+              background-color: white;
               border-radius: 30px;
               width: 315px;
               height: 390px;
               display: inline-block;
               overflow: hidden;
-
+              margin-bottom: 10%;
               box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
                 rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-            }
-            @media screen and (max-width: 1600px) and (min-width: 1600px) {
-              .ToSellMain {
-                width: 100%;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-              }
             }
             .imageBox {
               width: 100%;
@@ -418,7 +424,7 @@
               position: relative;
             }
             .NFTImage {
-              object-fit: cover;
+              object-fit: contain;
               width: 100%;
               transition: all 0.6s;
               cursor: pointer;
@@ -432,7 +438,7 @@
             }
             .NFTName {
               display: inline-block;
-              color: var(--Dark--);
+              color: black;
               font-weight: 800;
               text-align: left;
               margin-top: 20px;
@@ -564,6 +570,10 @@
           .selectBox-NOActive {
             @extend .selectBox-Active;
           }
+          .el-tabs__content{
+           height: 100%;
+           background-color: var(--White--);
+          }
         }
       }
       .NFTInfBox {
@@ -628,7 +638,7 @@
             box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
               rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
             img {
-              object-fit: fill;
+              object-fit: contain;
               min-width: 100%;
               height: 100%;
               border-radius: 20px;

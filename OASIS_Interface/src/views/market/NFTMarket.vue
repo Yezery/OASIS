@@ -38,16 +38,15 @@
           </template>
           <template #ad3>
             <img
-              src="../../assets/AD2Assets/Sanshengfu三生馥品牌升级-古田路9号-品牌创意版权保护平台.jpg"
-              alt=""
+              src="../../assets/webAssets/logoGreen.png"
               width="100%"
               height="100%"
-              style="  object-fit: cover;"
+              style="  object-fit: fill;"
             >
           </template>
           <template #ad4>
             <img
-              src="../../assets/AD2Assets/rebrand-studio-古田路9号-品牌创意版权保护平台 (2).png"
+              src="../../assets/webAssets/logoWhite.png"
               alt=""
               width="100%"
               height="100%"
@@ -243,14 +242,13 @@ input::-webkit-input-placeholder {
 }
 .SellTitle {
   width: 100%;
-  height: 40px;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  margin-top: 2%;
+  margin-bottom: 2%;
   font-size: 1vw;
   text-align: center;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: left;
   & .SellAll a {
     font-size: 1vw;
     color: #55c960;
@@ -308,7 +306,7 @@ input::-webkit-input-placeholder {
         overflow: hidden;
 
         .NFTImage {
-          object-fit: cover;
+          object-fit: contain;
           width: 100%;
           height: 100%;
           transition: all 0.6s;
@@ -396,13 +394,13 @@ input::-webkit-input-placeholder {
 }
 </style>
 <style>
-.el-carousel__item:nth-child(2n) {
+/* .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
-}
+} */
 </style>
 <style lang="scss">
 ::-webkit-scrollbar {

@@ -24,5 +24,13 @@ export function deleteSale(nftInf) {
   })
 }
 
+export function getSaleListByContractAddress(nftInf) {
+  return request({
+    url: `/GetSaleListByContractAddress`,
+    method: 'post',
+    data: nftInf
+  })
+}
+
 
 

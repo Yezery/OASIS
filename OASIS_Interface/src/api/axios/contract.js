@@ -264,9 +264,9 @@ export async function DownSale(NFT) {
           from: store.state.currentAddress
         });
       await deleteSale(NFT)
-      // await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
-      //   store.commit("setOwnerNFTList", re.data.data);
-      // });
+      await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
+        store.commit("setOwnerNFTList", re.data.data);
+      });
     } else {
       return
     }

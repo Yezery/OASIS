@@ -102,6 +102,7 @@ func main() {
 	router.POST("/DeleteSale", SaleController.DeleteSale)
 	router.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
 	router.GET("/OasisChat/:username", Client.WebSocketHandler)
+	router.POST("/GetSaleListByContractAddress",SaleController.GetSaleListByContractAddress)
 	router.POST("/Search", NFTOwnerListController.Search)
 	router.Run(":" + config.Server.Port)
 }

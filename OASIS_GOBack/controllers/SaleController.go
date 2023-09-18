@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"example.com/m/models"
+	"example.com/m/models/dto"
 	"example.com/m/repositories"
 	"example.com/m/utils"
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,23 @@ func (SC *SaleController) GetSaleList(c *gin.Context) {
 		panic(result.Error)
 	}
 	utils.SendResponse(c.Writer, http.StatusOK, Sales)
+}
+
+// 条件查询
+func (SC *SaleController) GetSaleListByContractAddress(c *gin.Context) {
+	var vo models.NFTOwnerList
+	if err := c.BindJSON(&vo); err != nil {
+		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
+		panic(err)
+	}
+	var results []dto.NFTOwnerListDTO
+	repositories.GetDb(c).Model(&models.NFTOwnerList{}).
+		Select("*").
+		Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+		Where("nftAddress = ?", vo.NFTAddress).
+		Find(&results)
+	fmt.Println(results)
+	utils.SendResponse(c.Writer, http.StatusOK, &results)
 }
 
 // 创建一条新记录

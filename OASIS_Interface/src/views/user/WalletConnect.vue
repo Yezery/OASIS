@@ -1,6 +1,9 @@
 <template>
   <div class="Walletbox">
-    <div class="WalletInnerBox">
+    <div
+      class="WalletInnerBox"
+      @click.stop="Copy"
+    >
       <span class="avatarBox">
         <img
           class="avatar"
@@ -13,19 +16,15 @@
       </span>
       <span
         class="address"
-        @click.stop="Copy"
-      >{{ account }}
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="isCopy ? CopySuccess : CopyTips"
-          placement="bottom"
-        ><span><i
-          v-if="$store.state.isconnect"
-          style="margin-left: 5px; cursor: pointer"
-          class="el-icon-document-copy"
-        /></span></el-tooltip></span>
+      >{{ 
+        $store.state.currentAddress==""?"MetaMask is not connected":`${this.$store.state.currentAddress.slice(
+          0,
+          5
+        )}...${this.$store.state.currentAddress.slice(-5)}`
+      }}
+      </span>
     </div>
+    <div />
   </div>
 </template>
 
@@ -47,7 +46,6 @@
         //*********************//
         //********Web3********//
         web3: null,
-        account: "MetaMask is not connected",
         contract: null,
         toAddress: "",
         value: "",
@@ -70,7 +68,7 @@
         await this.connectWallet();
       },
       Copy() {
-        navigator.clipboard.writeText(this.accounts).then(() => {
+        navigator.clipboard.writeText(this.$store.state.currentAddress).then(() => {
           this.isCopy = true;
           setTimeout(() => {
             this.isCopy = false;
@@ -98,53 +96,47 @@
         }, 750);
       },
       async connectWallet() {
-        if (!this.$store.state.isconnect) {
-          try {
-            // 请求用户授权
-            await window.ethereum
-              .request({ method: "eth_requestAccounts" })
-              .then((handleAccountsChanged) => {
-                this.accounts = handleAccountsChanged;
-                this.$store.commit("connection", true);
-                this.$store.commit("changeAvatar", handleAccountsChanged[0]);
-              })
-              .catch((error) => {
-                this.$store.commit("connection", false);
-                if (error.code === 4001) {
-                  // EIP-1193 userRejectedRequest error
-                  console.log("Please connect to MetaMask.");
-                } else {
-                  console.error(error);
-                }
-              });
+        try {
+          // 请求用户授权
+          await window.ethereum
+            .request({ method: "eth_requestAccounts" })
+            .then((handleAccountsChanged) => {
+              this.accounts = handleAccountsChanged;
+              this.$store.commit("connection", true);
+              this.$store.commit("changeAvatar", handleAccountsChanged[0]);
+            })
+            .catch((error) => {
+              this.$store.commit("connection", false);
+              if (error.code === 4001) {
+                // EIP-1193 userRejectedRequest error
+                console.log("Please connect to MetaMask.");
+              } else {
+                console.error(error);
+              }
+            });
 
-            this.$store.commit("setcurrentAddress", this.accounts[0]);
-            this.account = `${this.$store.state.currentAddress.slice(
-              0,
-              5
-            )}...${this.$store.state.currentAddress.slice(-5)}`;
-            let currentAddress = {
-              ownerAddress: this.$store.state.currentAddress,
-            };
-            // ====================
-            postOwnerContractList(currentAddress).then((re) => {
-              this.$store.commit("setOwnerNFTList", re.data.data);
-              this.accountNFTList = this.$store.state.ownerNFTList;
-            });
-            this.walletConnect();
-            this.$notify({
-              title: "🎉 连接成功",
-              position: 'top-left',
-              offset: 200,
-            });
-          } catch (error) {
-            console.error(error);
-            this.$notify.error({
-              title: "连接失败",
-              position: 'top-left',
-              offset: 200,
-            });
-          }
+          this.$store.commit("setcurrentAddress", this.accounts[0]);
+          let currentAddress = {
+            ownerAddress: this.$store.state.currentAddress,
+          };
+          // ====================
+          postOwnerContractList(currentAddress).then((re) => {
+            this.$store.commit("setOwnerNFTList", re.data.data);
+            this.accountNFTList = this.$store.state.ownerNFTList;
+          });
+          this.walletConnect();
+          this.$notify({
+            title: "🎉 连接成功",
+            position: "top-left",
+            offset: 200,
+          });
+        } catch (error) {
+          console.error(error);
+          this.$notify.error({
+            title: "连接失败",
+            position: "top-left",
+            offset: 200,
+          });
         }
       },
     },
@@ -166,9 +158,22 @@
     font-weight: 500;
   }
 }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  display: none;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 25px;
+}
 </style>
 <style lang="scss" scoped>
 .Walletbox {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 }
@@ -215,6 +220,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  cursor: pointer;
 }
 .address {
   margin-left: 5%;
@@ -285,5 +291,4 @@
   bottom: 0;
   top: 0;
 }
-
 </style>

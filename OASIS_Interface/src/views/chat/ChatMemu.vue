@@ -23,7 +23,12 @@
             class="animate__animated"
             ref="logo2"
           >
-            🌴S
+            <img
+              src="../../assets/webAssets/s1.png" 
+              alt=""
+              width="27px"
+              height="27px"
+            >S
           </div>
         </router-link>
       </div>
@@ -86,7 +91,7 @@
                       >
                         <img
                           :src="GETHashAvatar(otherUser.username)"
-                          style="object-fit: fill"
+                          style="object-fit: contain"
                         >
                       </span>
                     </div>
@@ -329,7 +334,7 @@
 .ChatMemu {
   font-family: "Transformers_Movie";
   width: 80px;
-  height: 90vh;
+  height:98vh;
   transition: all 0.5s ease-in-out;
   transition-delay: 0.5s;
   position: relative;

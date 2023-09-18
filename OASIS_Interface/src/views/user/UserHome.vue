@@ -1,6 +1,6 @@
 <template>
   <div class="userHomeMain">
-    <el-container>
+    <el-container class="userHomeMainBox">
       <el-aside
         style="width: auto;"
         class="animate__animated animate__fadeInLeft"
@@ -9,128 +9,169 @@
       </el-aside>
       <div class="inf">
         <div class="infBox">
-          <el-container>
-            <div class="content ">
-              <div class="contentTop animate__animated animate__fadeInDown">
-                <div class="userInf ">
-                  <div class="userInfTop">
-                    <div class="userAvatarBox">
-                      <img
-                        :src="userAvatar"
-                        alt=""
-                      >
-                    </div>
-                    <div class="userName">
-                      {{ userName }}
-                    </div>
+          <div class="content ">
+            <div class="contentTop animate__animated animate__fadeInDown">
+              <div class="userInf ">
+                <div class="userInfTop">
+                  <div class="userAvatarBox">
+                    <img
+                      :src="userAvatar"
+                      alt=""
+                    >
                   </div>
-                  <div class="userInfBottom">
-                    <div class="UserBalance">
-                      <span style="font-size: 4vw;font-weight: 800;"> {{ userBalance }}</span> ETH
-                    </div>
+                  <div class="userName">
+                    {{ userName }}
                   </div>
                 </div>
-                <div class="userPet" />
+                <div class="userInfBottom">
+                  <div class="UserBalance">
+                    <span style="font-size: 4vw;font-weight: 800;"> {{ userBalance }}</span> ETH
+                  </div>
+                </div>
               </div>
-              <div class="contentBottom animate__animated animate__fadeInUp">
-                <div class="NFTListBox">
-                  <div class="NFTList">
-                    <el-collapse>
-                      <el-collapse-item
-                        :title="NFTSeriesnameList[i]"
-                        v-for="address,i in nftContractAddressList"
-                        :key="i"
-                        :name="NFTSeriesnameList[i]"
+              <!-- <div class="userPet" /> -->
+            </div>
+            <div class="contentBottom animate__animated animate__fadeInUp">
+              <div class="NFTListBox">
+                <div
+                  class="NFTMenu"
+                  v-if="NFTSeriesnameList.length !== 0"
+                >
+                  <el-input
+                    placeholder="请输入内容"
+                    v-model="SearchVo.key"
+                  >
+                    <el-button
+                      slot="append"
+                      icon="el-icon-search"
+                      @click="SearchNFT"
+                    />
+                  </el-input>
+                </div>
+                <div class="NFTList">
+                  <el-collapse v-if="NFTSeriesnameList.length !== 0">
+                    <el-collapse-item
+                      v-for="address,i in nftContractAddressList"
+                      :key="i"
+                      :name="NFTSeriesnameList[i]"
+                    >
+                      <template slot="title">
+                        <span style="margin-left: 2%;">
+                          {{ NFTSeriesnameList[i] }}
+                        </span>
+                        <el-popover
+                          title="合约地址"
+                          placement="top-start"
+                          width="350"
+                          trigger="hover"
+                          :content="address"
+                        >
+                          <i
+                            class="header-icon el-icon-info"
+                            slot="reference"
+                          />
+                        </el-popover>
+                      </template>
+                      <div
+                        class="ToSellMain"
+                        v-for="inf,j in NFTArray"
+                        :key="j"
                       >
                         <div
-                          class="ToSellMain"
-                          v-for="inf,j in NFTArray"
-                          :key="j"
+                          class="NFTInfBox"
+                          v-for="nft,k in inf"
+                          :key="k"
                         >
-                          <div
-                            class="NFTInfBox"
-                            v-for="nft,k in inf"
-                            :key="k"
-                          >
-                            <template v-if="nft.nftAddress == address">
-                              <div class="NFTInf">
-                                <div style="height:65%;width: 100%;overflow: hidden;">
-                                  <img
-                                    class="NFTImage"
-                                    :src="nft.ipfsPath"
-                                    alt=""
+                          <template v-if="nft.nftAddress == address">
+                            <div class="NFTInf">
+                              <div style="height:65%;width: 100%;overflow: hidden;">
+                                <img
+                                  class="NFTImage"
+                                  :src="nft.ipfsPath"
+                                  alt=""
+                                >
+                              </div>
+                              <div class="Inf">
+                                <div class="InfTop">
+                                  <div class="NFTName">
+                                    {{ nft.nftName }}
+                                  </div>
+                                  <div
+                                    class="Active"
+                                    v-if="nft.isActive"
                                   >
+                                    <i class="el-icon-sort" />
+                                    <span style="font-weight: 800; font-size: 12px;">在售</span>
+                                  </div>
+                                  <div
+                                    class="NoActive"
+                                    v-else
+                                  >
+                                    <i class="el-icon-sort" />
+                                    <span style="font-weight: 800; font-size: 12px;"> 未上架 </span>
+                                  </div>
                                 </div>
-                                <div class="Inf">
-                                  <div class="InfTop">
-                                    <div class="NFTName">
-                                      {{ nft.nftName }}
-                                    </div>
-                                    <div
-                                      class="Active"
-                                      v-if="nft.isActive"
-                                    >
-                                      <i class="el-icon-sort" />
-                                      <span style="font-weight: 800; font-size: 12px;">在售</span>
-                                    </div>
-                                    <div
-                                      class="NoActive"
-                                      v-else
-                                    >
-                                      <i class="el-icon-sort" />
-                                      <span style="font-weight: 800; font-size: 12px;"> 未上架 </span>
-                                    </div>
-                                  </div>
-                                  <div
-                                    v-if="nft.isActive"
-                                    class="priceBox"
-                                  >
-                                    <span class="price">{{ $store.state.Web3.utils.fromWei(nft.price, 'ether') }}</span> ETH
-                                  </div>
-                                  <div
-                                    v-else
-                                    class="priceBox"
-                                  >
-                                    <span class="price" />
-                                  </div>
-                                  <div
-                                    class="InfBottom "
-                                    style="background-color: #d63131b3;"
-                                    @click="downSale(nft)"
-                                    v-if="nft.isActive"
-                                  >
-                                    <i class="el-icon-sold-out" />
-                                  </div>
-                                  <div
-                                    class="InfBottom"
-                                    v-else
-                                    @click="upSale(nft)"
-                                  >
-                                    <i class="el-icon-sell" />
-                                  </div>
+                                <div
+                                  v-if="nft.isActive"
+                                  class="priceBox"
+                                >
+                                  <span class="price">{{ $store.state.Web3.utils.fromWei(nft.price, 'ether') }}</span> ETH
+                                </div>
+                                <div
+                                  v-else
+                                  class="priceBox"
+                                >
+                                  <span class="price" />
+                                </div>
+                                <div
+                                  class="InfBottom "
+                                  style="background-color: #d63131b3;"
+                                  @click="downSale(nft)"
+                                  v-if="nft.isActive"
+                                >
+                                  <i class="el-icon-sold-out" />
+                                </div>
+                                <div
+                                  class="InfBottom"
+                                  v-else
+                                  @click="upSale(nft)"
+                                >
+                                  <i class="el-icon-sell" />
                                 </div>
                               </div>
-                            </template>
-                          </div>
+                            </div>
+                          </template>
                         </div>
-                        <div class="ADDNFT">
-                          <router-link
-                            class="addImit"
-                            :to="{ name: 'addImit',query:{nftContract:address} }"
-                          >
-                            <i class="el-icon-plus" />
-                          </router-link>
+                      </div>
+                      <div class="ADDNFT">
+                        <router-link
+                          class="addImit"
+                          :to="{ name: 'addImit',query:{nftContract:address} }"
+                        >
+                          <i class="el-icon-plus" />
+                        </router-link>
+                      </div>
+                    </el-collapse-item>
+                  </el-collapse>
+                  <div v-else>
+                    <el-empty>
+                      <template slot="description">
+                        <div>
+                          <span
+                            style="font-weight: 800;
+                          margin-bottom: 10%;"
+                          >未查到相关藏品 </span> 
+                          <el-button @click="toMint">
+                            前往创造
+                          </el-button>
                         </div>
-                      </el-collapse-item>
-                    </el-collapse>
+                      </template>
+                    </el-empty>
                   </div>
                 </div>
               </div>
             </div>
-            <el-aside class="Mainbar animate__animated animate__fadeInRight">
-              <div class="barBox" />
-            </el-aside>
-          </el-container>
+          </div>
         </div>
       </div>
     </el-container>
@@ -140,7 +181,7 @@
 <script>
   import { UpSale, DownSale, getNFTStruct } from "@/api/axios/contract.js";
   import ChatMemu from "@/views/chat/ChatMemu.vue";
-  import { getOwnerNFTsByAddress } from "@/api/axios/ownerContractLIst";
+  import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
   export default {
     components: { ChatMemu },
     data() {
@@ -152,6 +193,14 @@
         NFTArray: [],
         nftContractAddressList: [],
         NFTSeriesnameList: [],
+        SearchVo: {
+          key: "",
+          isActive: false,
+          minPrice: "",
+          maxPrice: "",
+          minMaxmums: "",
+          maxMaxmums: "",
+        },
       };
     },
     async mounted() {
@@ -184,21 +233,26 @@
             NFT.price = value;
             try {
               await UpSale(NFT);
+              this.$notify({
+              title: "上架成功 🎉",
+                type: "success",
+                position: "top-left",
+            offset: 200,
+            });
             } catch (error) {
-              this.$message({
-                type: "waring",
-                message: "上架异常",
+              this.$notify.error({
+                title: "上架异常",
+                position: "top-left",
+            offset: 200,
               });
             }
-            this.$message({
-              type: "success",
-              message: "上架成功 ",
-            });
           })
           .catch(() => {
-            this.$message({
-              type: "info",
-              message: "取消输入",
+            this.$notify({
+              title: "用户取消上架",
+              type: "warning",
+              position: "top-left",
+            offset: 200,
             });
           });
 
@@ -207,13 +261,13 @@
       async downSale(NFT) {
         try {
           await DownSale(NFT);
-          this.UserNFTListInf = this.$store.state.ownerNFTList;
           this.$notify({
             title: "下架成功",
             type: "success",
             position: "top-left",
             offset: 200,
           });
+          this.UserNFTListInf = this.$store.state.ownerNFTList;
         } catch (error) {
           this.$notify.error({
             title: "下架失败",
@@ -235,14 +289,14 @@
         }
         this.NFTArray = NFTInfList;
       },
-      async getSetAddressArray() {
-        for (const nft of this.$store.state.ownerNFTList) {
+      async getSetAddressArray(ContractAddressArray) {
+        for (const nft of ContractAddressArray) {
           this.nftContractAddressList.push(nft.nftAddress);
         }
         this.nftContractAddressList = new Set(this.nftContractAddressList);
       },
       async getNFTSeriesnameList() {
-        await this.getSetAddressArray();
+        await this.getSetAddressArray(this.$store.state.ownerNFTList);
         for (const key of this.nftContractAddressList) {
           let SeriesName;
           let contract = await getNFTStruct(key);
@@ -255,48 +309,50 @@
           this.NFTSeriesnameList.push(SeriesName);
         }
       },
+      toMint() {
+        this.$router.push("/home/ImitNFT")
+      },
+      SearchNFT() {
+        search(this.SearchVo).then((re) => {
+          console.log(re);
+          // this.getSetAddressArray(re.data.data);
+        });
+      },
     },
   };
 </script>
 
 <style lang="scss" scoped>
-::-webkit-scrollbar {
-  width: 6px;
-  height: 8px;
-  display: none;
-  background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 25px;
-}
 .userHomeMain {
   width: 100%;
-  height: 100vh;
   background-color: var(--White-eee--);
+  .userHomeMainBox{
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
   .inf {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    overflow: auto;
     .infBox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border-radius: 30px;
-      width: 95%;
-      height: 95%;
-
+      margin-top: 3%;
+      width: 100%;
       .content {
-        overflow: auto;
-        height: 100%;
         width: 100%;
+        height: 100%;
         color: var(--Dark--);
+        margin-left: 3%;
         background-color: var(--White-eee--);
 
         .contentTop {
           width: 100%;
           display: flex;
-          justify-content: space-around;
+          justify-content: flex-start;
           align-items: center;
 
           .userInf {
@@ -360,6 +416,7 @@
           }
           .userPet {
             @extend .userInf;
+            width: 1000px;
           }
           .TopBackground {
             position: relative;
@@ -394,10 +451,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 3%;
             .NFTList {
+              flex: 2;
               width: 95%;
               height: 100%;
-              margin-top: 10%;
               .ToSellMain {
                 height: 100%;
                 width: 100%;
@@ -567,26 +625,13 @@
                 }
               }
             }
-          }
-        }
-      }
-      .Mainbar {
-        padding: 0 !important;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: transparent;
-
-        .barBox {
-          height: 100%;
-          background-color: var(--White--);
-          width: 95%;
-          border-radius: 50px;
-          transition: all 0.3s ease-in-out;
-          &:hover {
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-              rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-            transition: all 0.3s ease-in-out;
+            .NFTMenu {
+              margin-right: 3%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              flex: 1;
+            }
           }
         }
       }
