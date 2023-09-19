@@ -84,7 +84,12 @@
                         {{ inf.nftName }}
                       </div>
                       <div class="ownerAndToSell">
-                        <div class="ToSellBox" />
+                        <div class="ToSellBox" >
+                          #{{ inf.tokenId }}
+                        </div>
+                        <div style="margin-left: 2%;">
+                          <span style="font-weight: 800;font-size: 2vw;">{{ $store.state.Web3.utils.fromWei(inf.price, 'ether') }} </span> ETH
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -285,6 +290,7 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
     watch: {},
     mounted() {
       this.init();
+   
     },
     methods: {
       async init() {
@@ -424,6 +430,7 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
         }
         await getSaleListByContractAddress(NFTDto).then(re => {
           this.seriesNFTArrays = re.data.data
+          console.log(this.seriesNFTArrays);
         })
       },
       async Buy() {
@@ -509,8 +516,8 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
               margin: 2%;
               background-color: white;
               border-radius: 30px;
-              width: 315px;
-              height: 390px;
+              width: 325px;
+              height: 400px;
               display: inline-block;
               overflow: hidden;
               margin-bottom: 10%;
@@ -532,6 +539,7 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
             }
             .NFTImage {
               object-fit: contain;
+              height: 100%;
               width: 100%;
               transition: all 0.6s;
               cursor: pointer;
@@ -549,19 +557,23 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
               font-weight: 800;
               text-align: left;
               margin-top: 20px;
-              font-size: 13px;
+              font-size: 25px;
             }
             .ownerAndToSell {
               width: 100%;
               display: flex;
               margin-top: 18px;
-              justify-content: center;
+              justify-content: space-evenly;
               align-items: center;
             }
             .ToSellBox {
-              display: flex;
-              justify-content: flex-start;
-              align-items: center;
+              font-size: 1.3vw;
+            width: 100px;
+            padding: 15px 0px 15px 0px;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+            background-color: rgba(85, 201, 96, 0.12);
+            color: #55c960;
             }
 
             .ToSellinnerBox {

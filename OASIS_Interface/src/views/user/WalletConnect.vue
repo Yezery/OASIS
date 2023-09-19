@@ -61,10 +61,9 @@
     mounted() {
       if (window.ethereum != undefined) {
         window.ethereum.on("accountsChanged", this.connectWallet);
-        console.log("ok");
       }
     },
-    methods: {
+  methods: {
       Copy() {
         navigator.clipboard.writeText(this.$store.state.currentAddress).then(() => {
           this.isCopy = true;

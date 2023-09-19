@@ -35,12 +35,12 @@
               <img class="NFTImage" :src="NFT.ipfsPath" :alt="NFT.nftName">
             </div>
             <div class="Inf">
-              <div class="NFTName">
+              <div class="NFTName" style="color: var(--Dark--);font-size: 20px;margin-top: 2%;">
                 {{ NFT.nftName }}
               </div>
               <div class="InfBottom">
                 <div class="PriceBox" v-if="NFT.isActive">
-                  <div class="PriceTitle">
+                  <div class="PriceTitle" style="color: var(--Dark--);margin-top: 5%;margin-bottom: 2%;">
                     Volume
                   </div>
                   <div style="font-weight: 800;font-size: 2vw;color: var(--Dark--);">
@@ -53,6 +53,7 @@
               </div>
             </div>
           </div>
+          <el-empty description="无数据" v-if="SearchList.length==0"></el-empty>
         </div>
         <div v-else>
           <div class="SellTitle ">
@@ -76,7 +77,7 @@
                   <template slot-scope="scope">
                     <div class="collectionRow">
                       <span class="collectionImageBorder">
-                        <img class="nftImage" :src="JSON.parse(scope.row.tokenURI).image" alt="" width="65px" height="65px">
+                        <img class="nftImage" :src="JSON.parse(scope.row.tokenURI).image" alt="">
                       </span>
                       <span style="padding-left: 20%;">
                         {{ JSON.parse(scope.row.tokenURI).name.toUpperCase() }}
@@ -134,7 +135,7 @@
                   <el-carousel-item v-for="NFT in this.NFTList.filter(NFT => NFT.isActive).slice(0,10)" :key="NFT.TokenURI">
                     <div class="NFTInf">
                       <div class="imageBox">
-                        <img class="NFTImage" :src="JSON.parse(NFT.tokenURI).image " alt="">
+                        <img class="NFTImage" :src="JSON.parse(NFT.tokenURI).image " :alt="JSON.parse(NFT.tokenURI).name.toUpperCase()">
                       </div>
                       <div class="Inf">
                         <div class="NFTName">
@@ -163,6 +164,7 @@
             </div>
           </div>
         </div>
+        <el-button v-if="SearchList.length!=0" round style="margin-bottom: 5%;padding: 2% 2% 2% 2%; " @click="SearchNFT(2)">加载更多</el-button>
       </div>
     </div>
 
@@ -181,6 +183,8 @@
         SearchVo: {
           key: "",
           isActive: false,
+          page: 0,
+          pageSize:10,
           minPrice: "",
           maxPrice: "",
           minMaxmums: "",
@@ -218,8 +222,11 @@
           this.MetaMaskTipsIsShow = !this.MetaMaskTipsIsShow;
         }, 750);
       },
-      async SearchNFT() {
-        this.$store.commit("setIsSearch", true);
+      async SearchNFT(opt) {
+        if (opt == 2) {
+          this.SearchVo.page+=1
+        }
+        console.log(this.SearchVo);
         await search(this.SearchVo).then((re) => {
           this.SearchList = re.data.data;
         });
@@ -230,6 +237,7 @@
           duration: 1000,
           offset: 200,
         });
+        this.$store.commit("setIsSearch", true);
       },
       GETHashAvatar(address) {
         return (
@@ -356,39 +364,6 @@ input::-webkit-input-placeholder {
     overflow: auto;
     margin-top: 30px;
     border-radius: 35px;
-    .NFTInf {
-      float: left;
-      background-color: var(--White--);
-      margin: 2%;
-      border-radius: 30px;
-      width: 315px;
-      height: 390px;
-      overflow: hidden;
-      box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
-        rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-      .imageBox {
-        width: 100%;
-        height: 65%;
-        border-radius: 30px;
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-
-        .NFTImage {
-          object-fit: contain;
-          width: 100%;
-          height: 100%;
-          transition: all 0.6s;
-          cursor: pointer;
-          transform: scale(1.1);
-          overflow: hidden;
-          &:hover {
-            transform: scale(1.2);
-            transition: all 0.6s;
-          }
-        }
-      }
-    }
   }
 }
 .TypeSelect {
@@ -414,81 +389,12 @@ input::-webkit-input-placeholder {
   }
 }
 </style>
-<style>
-</style>
-<style lang="scss">
-::-webkit-scrollbar {
-  width: 6px;
-  height: 8px;
-  display: none;
-  background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 25px;
-}
-</style>
-<style lang="scss" scoped>
-/* MetaMask弹出框 */
-.MetaMaskConnectionTip {
-  font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden;
-  position: absolute;
-  width: 350px;
-  height: 300px;
-  background-color: var(--White--);
-  color: var(--Dark--);
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, 100%) !important;
-  border-radius: 20px;
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-    rgba(17, 17, 26, 0.1) 0px 0px 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.MetaMaskTipsBtn {
-  border: 0px solid;
-  background-color: white;
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-    rgba(17, 17, 26, 0.1) 0px 0px 8px;
-  border-radius: 7px;
-  padding-top: 5%;
-  padding-bottom: 5%;
-  padding-left: 22%;
-  padding-right: 22%;
-  font-size: 13px;
-  font-weight: 500;
-}
-.MetaMaskTipsBtn:hover {
-  background-color: rgb(252, 251, 251);
-}
-.MetaMaskTips {
-  font-size: 17px;
-  font-weight: 500;
-}
-/* 遮罩层 */
-.Mask {
-  z-index: 100;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  // background: rgba(0, 0, 0, 0.05);
-}
-</style>
-
 <style lang="scss" scoped>
 @import "@/style/index.css";
 </style>
 <style lang="scss" scoped>
 @import "@/style/MarketShop/index.scss";
 </style> 
-
-
-
 <style lang="scss" scoped>
 .collectionShow {
   font-family: Arial, Helvetica, sans-serif;
@@ -542,7 +448,7 @@ input::-webkit-input-placeholder {
       overflow: hidden;
 
       .NFTImage {
-        object-fit: cover;
+        object-fit: contain;
         width: 100%;
         height: 100%;
         transition: all 0.6s;
@@ -582,8 +488,9 @@ input::-webkit-input-placeholder {
         .PriceBox {
           flex: 1;
           font-size: 1vw;
+          color: var(--Dark--);
           .PriceTitle {
-            color: gray;
+       
             margin-bottom: 10%;
           }
         }
@@ -593,44 +500,11 @@ input::-webkit-input-placeholder {
         padding-top: 10%;
         padding-left: 12%;
         padding-bottom: 20px;
-        color: var(--Dark--);
         font-size: 20px;
+        color: var(--Dark--);
         text-align: left;
         font-weight: 800;
       }
-      // .PriceBox {
-      //   font-size: 1vw;
-      //   width: 80%;
-      //   .PriceTitle {
-      //     color: gray;
-      //     margin-bottom: 2%;
-      //   }
-      // }
-      // .ownerAndPrice {
-      //   width: 100%;
-      //   display: flex;
-      //   margin-top: 18px;
-      //   .ownerBox {
-      //     flex: 1;
-      //     display: flex;
-      //     justify-content: center;
-      //     align-items: center;
-      //     .ownerOutBorder {
-      //       width: 36px;
-      //       height: 36px;
-      //       border: 1px solid white;
-      //       border-radius: 50%;
-      //       overflow: hidden;
-      //       margin-right: 10px;
-      //       img {
-      //         object-fit: cover;
-      //       }
-      //       .owner {
-      //         display: inline-block;
-      //       }
-      //     }
-      //   }
-      // }
     }
   }
 }
@@ -707,10 +581,9 @@ input::-webkit-input-placeholder {
     border-radius: 15px;
     overflow: hidden;
     img {
-      object-fit: cover;
-    }
-    .nftImage {
-      display: inline-block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
   }
 }
@@ -787,5 +660,15 @@ input::-webkit-input-placeholder {
 <style>
 .el-carousel__mask {
   display: none !important;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  display: none;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 25px;
 }
 </style>

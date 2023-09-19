@@ -245,8 +245,7 @@
     },
     async mounted() {
       await this.init();
-      await this.getNFTSeriesnameList();
-      console.log(this.nftContractAddressList);
+      await this.getNFTSeriesnameList(this.$store.state.ownerNFTList);
       await this.GetNFTContractNFT();
     },
     methods: {
@@ -329,13 +328,14 @@
         this.NFTArray = NFTInfList;
       },
       async getSetAddressArray(ContractAddressArray) {
+        this.nftContractAddressList=[]
         for (const nft of ContractAddressArray) {
           this.nftContractAddressList.push(nft.nftAddress);
         }
         this.nftContractAddressList = new Set(this.nftContractAddressList);
       },
-      async getNFTSeriesnameList() {
-        await this.getSetAddressArray(this.$store.state.ownerNFTList);
+      async getNFTSeriesnameList(array) {
+        await this.getSetAddressArray(array);
         for (const key of this.nftContractAddressList) {
           let SeriesName;
           let contract = await getNFTStruct(key);
@@ -367,10 +367,26 @@
         this.$router.push("/home/ImitNFT");
       },
       SearchNFT() {
-        search(this.SearchVo).then((re) => {
+        if (this.SearchVo.key.length>0 && this.SearchVo.key.replace(/(^s*)|(s*$)/g, "").length == 0) {
+          search(this.SearchVo).then((re) => {
           console.log(re);
-          // this.getSetAddressArray(re.data.data);
-        });
+         this.getNFTSeriesnameList(re.data.data) 
+          });
+          this.$notify({
+              title: `正在搜索...`,
+              type: "success",
+              position: "top-left",
+              offset: 200,
+            });
+        } else {
+          this.$notify({
+            title: "输入不能为空",
+            type: "warning",
+            position: "top-left",
+            offset: 200,
+          });
+        }
+      
       },
       CloseMessageBox(opt) {
         this.MessageShow = false;
@@ -643,8 +659,8 @@
                   margin: 2%;
                   background-color: var(--White--);
                   border-radius: 50px;
-                  width: 320px;
-                  height: 420px;
+                  width: 350px;
+                  height: 450px;
                   display: inline-block;
                   overflow: hidden;
                   transition: all 0.7s ease-in-out;
@@ -685,7 +701,7 @@
                     color: var(--White--);
                     .price {
                       margin-left: 15%;
-                      font-size: 1.5vw;
+                      font-size: 1.8vw;
                     }
                   }
                   .InfTop {
@@ -694,8 +710,8 @@
                     position: relative;
                     .TokenID {
                       position: absolute;
-                      right: 10%;
-                      top: 15px;
+                      right: 20px;
+                      top: 35px;
                       width: 100px;
                       padding: 4px 0px 4px 0px;
                       border-radius: 10px;
@@ -705,12 +721,12 @@
                     }
                     .NFTName {
                       position: absolute;
-                      left: 0%;
-                      top: 19px;
+                      left: -50px;
+                      top:5px;
                       color: var(--White--);
                       font-weight: 800;
                       text-align: left;
-                      font-size: 14px;
+                      font-size: 1.2vw;
                       margin-left: 20%;
                     }
                   }

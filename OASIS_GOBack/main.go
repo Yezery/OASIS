@@ -26,6 +26,8 @@ type Config struct {
 		Port string `yaml:"port"`
 	} `yaml:"server"`
 }
+type FiscoConfig struct {
+}
 
 // 连接数据库
 func (config *Config) setupDatabase() (*gorm.DB, error) {
@@ -47,6 +49,7 @@ func (config *Config) setupDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
+// 读取配置
 func getYamlConfig(fileName string) Config {
 
 	dataBytes, err := os.ReadFile(fileName)
@@ -67,13 +70,14 @@ func main() {
 
 	// 读取配置文件
 	config := getYamlConfig("config/config.yaml")
-	fmt.Printf("config -> %x", config)
+	fmt.Printf("config -> %x\n", config)
 
 	// 初始化数据库
 	db, _ := config.setupDatabase()
 
 	// 将附加到 Gin 的 Context 上下文中，以便在控制器和服务中进行使用。
 	router := gin.Default()
+	//
 	router.Use(func(c *gin.Context) {
 		c.Set("db", db)
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -102,7 +106,8 @@ func main() {
 	router.POST("/DeleteSale", SaleController.DeleteSale)
 	router.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
 	router.GET("/OasisChat/:username", Client.WebSocketHandler)
-	router.POST("/GetSaleListByContractAddress",SaleController.GetSaleListByContractAddress)
+	router.POST("/GetSaleListByContractAddress", SaleController.GetSaleListByContractAddress)
 	router.POST("/Search", NFTOwnerListController.Search)
+	// router.RunTLS(":"+config.Server.Port, "./config/cert.pem", "./config/key.pem")
 	router.Run(":" + config.Server.Port)
 }

@@ -260,6 +260,7 @@
           this.$notify({
             title: "NFT格式不支持",
             type: "warning",
+            position: "top-left",
             offset: 200,
           });
         }

@@ -63,13 +63,6 @@ func (NFTLC *NFTOwnerListController) GetOwnerUpSaleNFTs(c *gin.Context) {
 	utils.SendResponse(c.Writer, http.StatusOK, results)
 }
 
-// query := `
-//
-//	SELECT nol.*, s.*
-//	FROM nft_owner_lists nol
-//	INNER JOIN sales s ON s.sale_id = nol.id
-//	WHERE nol.ownerAddress = ?`
-//
 // 查询属于个人的NFT
 func (NFTLC *NFTOwnerListController) GetOwnerNFTs(c *gin.Context) {
 	var nftOwnerList models.NFTOwnerList
@@ -157,7 +150,9 @@ func (NFTLC *NFTOwnerListController) UpdateNFTOwnerListAfterBuy(c *gin.Context) 
 
 // 主页查询
 type NFTSearchCriteria struct {
-	Key string `json:"key"`
+	Key      string `json:"key"`
+	Pages    int    `json:"pages"`
+	PageSize int    `json:"pageSize"`
 	// IsActive   bool   `json:"isActive"`
 	// MinPrice   string `json:"minPrice"`
 	// MaxPrice   string `json:"maxPrice"`
@@ -173,18 +168,23 @@ func (NFTLC *NFTOwnerListController) Search(c *gin.Context) {
 		return
 	}
 	keyword := "%" + criteria.Key + "%"
+	// 计算偏移量
+	offset := (criteria.Pages - 1) * criteria.PageSize
 	//精确
-	repositories.GetDb(c).Model(&models.NFTOwnerList{}).
-		Select("*").
+	repositories.GetDb(c).Model(&models.NFTOwnerList{}).Select("*").
 		Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
 		Where("seriesName = ? OR nftName = ? OR symbol = ? OR description = ?", keyword, keyword, keyword, keyword).
+		Offset(offset).
+		Limit(criteria.PageSize).
 		Find(&results)
 	if len(results) == 0 {
 		//模糊
 		repositories.GetDb(c).Model(&models.NFTOwnerList{}).
 			Select("*").
-			// Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+			Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
 			Where("seriesName LIKE ? OR nftName LIKE ? OR symbol LIKE ? OR description LIKE ?", keyword, keyword, keyword, keyword).
+			Offset(offset).
+			Limit(criteria.PageSize).
 			Find(&results)
 	}
 
