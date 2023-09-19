@@ -73,15 +73,12 @@ func (SC *SaleController) DeleteSale(c *gin.Context) {
 		panic(err)
 	}
 	db := repositories.GetDb(c)
-	fmt.Println("--------------")
-	fmt.Println(NFT)
-	fmt.Println("--------------")
 	update := db.Model(&models.NFTOwnerList{}).Where(map[string]interface{}{"tokenId": NFT.TokenId, "nftAddress": NFT.NFTAddress}).Updates(map[string]interface{}{
 		"isActive": false,
 	})
-	delete := db.Where("sales.sale_id = ?", NFT.SaleId-1).Delete(&models.Sale{})
+	delete := db.Where("sales.sale_id = ?", NFT.SaleId).Delete(&models.Sale{})
 	if delete.Error != nil || update.Error != nil {
 		panic(delete.Error)
 	}
-	utils.SendResponse(c.Writer, http.StatusOK, delete)
+	utils.SendResponse(c.Writer, http.StatusOK, "")
 }

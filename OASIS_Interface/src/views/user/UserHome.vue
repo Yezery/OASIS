@@ -63,7 +63,7 @@
                                     <div class="NFTName">
                                     {{ nft.nftName }}
                                     </div>
-                                    <div class="Active">
+                                    <div class="TokenID">
                                       <span style="font-size: 25px;">#{{ nft.tokenId }}</span>
                                     </div>
                                   </div>
@@ -692,19 +692,14 @@
                     width: 100%;
                     height: 40px;
                     position: relative;
-                    .NoActive {
+                    .TokenID {
                       position: absolute;
                       right: 10%;
                       top: 15px;
                       width: 100px;
                       padding: 4px 0px 4px 0px;
-                      color: white;
-                      background-color: #d63131b3;
                       border-radius: 10px;
                       transition: all 0.3s ease-in-out;
-                    }
-                    .Active {
-                      @extend .NoActive;
                       background-color: rgba(85, 201, 96, 0.12);
                       color: #55c960;
                     }
