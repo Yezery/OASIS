@@ -1,10 +1,9 @@
 import request from "@/utils/axiosRequest"
 import store from '@/store';
-
 import { create } from "ipfs-http-client"
 import Web3 from 'web3'
 import { updateSaleactive, insertSale, deleteSale, } from "./Sale"
-import { postOwnerContractList, getOwnerUpSaleNFTs, updateNFTOwnerListAfterBuy } from "./ownerContractLIst";
+import { postOwnerContractList, getOwnerUpSaleNFTs, updateNFTOwnerListAfterBuy} from "./ownerContractLIst";
 import { mintNFTContractABI, mintNFTContractBytecode, marketContractAddress, marketContractABI, ipfsPublicGatewayUrl, rpcUrl } from "@/contract/Contract"
 //  IPFS的根URL
 // const baseURL = ipfsBaseURI();
@@ -70,6 +69,7 @@ async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description,
       console.log(NFTContract.methods);
     }
     await NFTContract.methods.mint(NFTName, description, ipfsHash).send({ from: store.state.currentAddress })
+    await AddNewNFTToMetaMask(NFTContract._address,nftCount,symbol,`${publicGatewayUrl}${ipfsPath}`)
     // // ====================  信息存储到数据库中
     await request({
       url: '/createNFT',
@@ -88,7 +88,7 @@ async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description,
         "description": description,
         "tokenId": Number(nftCount)
       }
-    }).then(res => {
+    }).then( res => {
       if (res.status == 200) {
         postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
           store.commit("setOwnerNFTList", re.data.data);
@@ -118,7 +118,7 @@ export async function addMint(to, nftAddress, NFTName, description, uploadFiles,
       method: 'post',
       data: {
         "ownerAddress": to,
-        "currentOwner":store.state.currentAddress,
+        "currentOwner": store.state.currentAddress,
         "nftAddress": contract._address,
         "ipfsPath": `${publicGatewayUrl}${ipfsPath}`,
         "isActive": false,
@@ -154,6 +154,7 @@ export async function MakeNFT(Name, Symbol, uploadFiles, Maxmums, FirstNFTName, 
   const NFTContract = await deployNFTContract(Name, Symbol, Maxmums);
   console.log("铸造");
   await mintNFT(NFTContract, Name, Symbol, Maxmums, FirstNFTName, Description, uploadFiles)
+
 }
 //====================  市场合约
 let MarketContract;
@@ -190,6 +191,10 @@ export async function getSaleList() {
 
 export async function UpSale(NFT) {
   let SaleId;
+  var Sale = {
+    saleId: Number(SaleId),
+    NFTOwnerList: NFT
+  }
   try {
     //授权
     let NFTContract = await new store.state.Web3.eth.Contract(
@@ -205,45 +210,41 @@ export async function UpSale(NFT) {
     await MarketContract.methods.getSalesId().call().then(re => {
       SaleId = re
     })
-  } catch (error) {
-    console.log(error);
-  }
-  var Sale = {
-    saleId: Number(SaleId),
-    NFTOwnerList: NFT
-  }
-  try {
     await insertSale(Sale)
     NFT.isActive = true
     NFT.price = store.state.Web3.utils.toWei(NFT.price, 'ether')
     await updateSaleactive(NFT)
-    // await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
-    //   store.commit("setOwnerNFTList", re.data.data);
-    // });
+    await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
+      store.commit("setOwnerNFTList", re.data.data);
+    });
+    return true
   } catch (error) {
     console.log(error);
+    return false
   }
+  
 }
 
 export async function Buy(NFT) {
-
   try {
     await MarketContract.methods.buy(NFT.saleId - 1)
       .send({
         from: store.state.currentAddress,
         value: store.state.Web3.utils.toWei(NFT.price, 'ether'),
       });
+    console.log(NFT);
+    await AddNewNFTToMetaMask(NFT.nftAddress, NFT.tokenId.toString(), NFT.symbol, NFT.image)
     NFT.isActive = false
     NFT.currentOwner = store.state.currentAddress
     await updateNFTOwnerListAfterBuy(NFT)
     await deleteSale(NFT)
-    // await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
-    //   store.commit("setOwnerNFTList", re.data.data);
-    // });
-
+    await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
+      store.commit("setOwnerNFTList", re.data.data);
+    });
+    return true
   } catch (error) {
     console.log(error);
-    return
+    return false
   }
 
 }
@@ -263,15 +264,44 @@ export async function DownSale(NFT) {
         .send({
           from: store.state.currentAddress
         });
+      NFT.isActive = false
+      NFT.price = "0"
+      await updateSaleactive(NFT)
       await deleteSale(NFT)
       await postOwnerContractList({ ownerAddress: store.state.currentAddress }).then((re) => {
         store.commit("setOwnerNFTList", re.data.data);
       });
+      return true
     } else {
-      return
+      return false
     }
   } catch (error) {
     console.log(error);
-    return
+    return false
   }
+}
+
+export async function AddNewNFTToMetaMask(address, tokenId, symbol, image) {
+
+  await window.ethereum
+    .request({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC721',
+        options: {
+          address: address,
+          tokenId: tokenId,
+          symbol: symbol,
+          image: JSON.stringify(image),
+        },
+      },
+    })
+    .then((success) => {
+      if (success) {
+        console.log(`${JSON.stringify(symbol)} successfully added to wallet!`);
+      } else {
+        throw new Error('Something went wrong.');
+      }
+    })
+    .catch(console.error);
 }

@@ -67,22 +67,19 @@ func (SC *SaleController) CreateSale(c *gin.Context) {
 
 // 购买后删除相对应纪律
 func (SC *SaleController) DeleteSale(c *gin.Context) {
-	var NFT models.NFTOwnerList
+	var NFT dto.NFTOwnerListDTO
 	if err := c.BindJSON(&NFT); err != nil {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
 		panic(err)
 	}
 	db := repositories.GetDb(c)
-	sale := models.Sale{
-		SaleId:         0,
-		NFTOwnerListId: NFT.Id,
-	}
-	// 执行删除操作
-	// 执行更新操作
-	update := db.Model(&models.NFTOwnerList{}).Where("id = ?", sale.NFTOwnerListId).Updates(map[string]interface{}{
+	fmt.Println("--------------")
+	fmt.Println(NFT)
+	fmt.Println("--------------")
+	update := db.Model(&models.NFTOwnerList{}).Where(map[string]interface{}{"tokenId": NFT.TokenId, "nftAddress": NFT.NFTAddress}).Updates(map[string]interface{}{
 		"isActive": false,
 	})
-	delete := db.Delete(&sale, "nft_owner_list_id = ?", sale.NFTOwnerListId)
+	delete := db.Where("sales.sale_id = ?", NFT.SaleId-1).Delete(&models.Sale{})
 	if delete.Error != nil || update.Error != nil {
 		panic(delete.Error)
 	}

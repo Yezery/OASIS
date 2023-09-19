@@ -55,18 +55,16 @@
         CopyTips: "点击复制",
         CopySuccess: "复制成功！",
         isCopy: false,
+        isRepeatClick:true
       };
     },
     mounted() {
       if (window.ethereum != undefined) {
-        window.ethereum.on("accountsChanged", this.handleAccountsChanged);
+        window.ethereum.on("accountsChanged", this.connectWallet);
+        console.log("ok");
       }
     },
     methods: {
-      async handleAccountsChanged(accounts) {
-        this.accounts = accounts;
-        await this.connectWallet();
-      },
       Copy() {
         navigator.clipboard.writeText(this.$store.state.currentAddress).then(() => {
           this.isCopy = true;
@@ -79,7 +77,7 @@
         if (this.$store.state.isconnect) {
           this.avatar =
             "data:image/png;base64," +
-            new this.Identicon(this.accounts[0], 120).toString();
+            new this.Identicon(this.$store.state.currentAddress, 120).toString();
           this.$refs.avatar.width = 60;
           this.$refs.avatar.height = 60;
         } else {
@@ -96,16 +94,15 @@
         }, 750);
       },
       async connectWallet() {
-        try {
+        if (this.isRepeatClick) {
+          this.isRepeatClick = false;
+          try {
           // 请求用户授权
-          await window.ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then((handleAccountsChanged) => {
-              this.accounts = handleAccountsChanged;
+          await window.ethereum.request({ method: "eth_requestAccounts" }).then((handleAccountsChanged) => {
               this.$store.commit("connection", true);
               this.$store.commit("changeAvatar", handleAccountsChanged[0]);
-            })
-            .catch((error) => {
+              this.$store.commit("setcurrentAddress", handleAccountsChanged[0]);
+            }).catch((error) => {
               this.$store.commit("connection", false);
               if (error.code === 4001) {
                 // EIP-1193 userRejectedRequest error
@@ -114,8 +111,6 @@
                 console.error(error);
               }
             });
-
-          this.$store.commit("setcurrentAddress", this.accounts[0]);
           let currentAddress = {
             ownerAddress: this.$store.state.currentAddress,
           };
@@ -124,12 +119,12 @@
             this.$store.commit("setOwnerNFTList", re.data.data);
             this.accountNFTList = this.$store.state.ownerNFTList;
           });
-          this.walletConnect();
+            this.walletConnect();
           this.$notify({
             title: "🎉 连接成功",
             position: "top-left",
             offset: 200,
-          });
+          });     
         } catch (error) {
           console.error(error);
           this.$notify.error({
@@ -138,6 +133,18 @@
             offset: 200,
           });
         }
+        }else {
+          this.$notify({
+              title: "已经有连接请勿操作频繁",
+              type: "warning",
+              position: "top-left",
+              offset: 200,
+            });
+        }
+          setTimeout(() => {
+            this.isRepeatClick = true;
+          }, 5000);
+   
       },
     },
   };

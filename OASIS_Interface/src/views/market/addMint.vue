@@ -176,6 +176,7 @@
         NFTName: "",
         to: this.$store.state.currentAddress,
         sumitEnable: true,
+        isRepeatClick:true
       };
     },
     async mounted() {
@@ -219,7 +220,9 @@
           });
       },
       async addMint() {
-        if (
+        if (this.isRepeatClick) {
+          this.isRepeatClick = false;
+          if (
           this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/jepg" ||
           this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/png" ||
           this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/jpg"
@@ -245,6 +248,7 @@
             this.NFTName = "";
             this.maxmums = 1;
             this.Description = "";
+
           } catch (error) {
             this.$notify.error({
               title: "添加失败",
@@ -259,6 +263,19 @@
             offset: 200,
           });
         }
+        }else {
+          this.$notify({
+              title: "请勿操作频繁",
+              type: "warning",
+              position: "top-left",
+              offset: 200,
+            });
+        }
+       
+          setTimeout(() => {
+            this.isRepeatClick = true;
+          }, 5000);
+       
       },
       handleRemove(file) {
         let uploadFiles = this.$refs.pictureUpload.uploadFiles;

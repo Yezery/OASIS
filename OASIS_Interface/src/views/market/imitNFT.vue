@@ -86,12 +86,13 @@
                   <span style="color: red">*</span> Symbol
                 </div>
                 <div class="tipsTitle2">
-                  该系列NFT代币符号
+                  该系列NFT代币符号 (要求字符长度不超过11个)
                 </div>
               </div>
               <el-input
                 v-model="Symbol"
                 placeholder="Please enter the token symbol"
+                maxlength="11"
               />
             </div>
             <div class="select">
@@ -186,6 +187,7 @@
         active: 1,
         sumitEnable: true,
         feePercentage: 0,
+        isRepeatClick: true,
       };
     },
     mounted() {
@@ -209,47 +211,62 @@
     },
     methods: {
       async createNFT() {
-        try {
-          if (
-            this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/jepg" ||
-            this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/png" ||
-            this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/jpg"
-          ) {
-            await MakeNFT(
-              this.Name,
-              this.Symbol,
-              this.$refs.pictureUpload.uploadFiles,
-              this.Maxmums,
-              this.FirstNFTName,
-              this.Description
-            );
-            this.$notify({
-              title: "创造成功",
-              type: "success",
+        if (this.isRepeatClick) {
+          this.isRepeatClick = false;
+          try {
+            if (
+              this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/jepg" ||
+              this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/png" ||
+              this.$refs.pictureUpload.uploadFiles[0].raw.type == "image/jpg"
+            ) {
+              await MakeNFT(
+                this.Name,
+                this.Symbol,
+                this.$refs.pictureUpload.uploadFiles,
+                this.Maxmums,
+                this.FirstNFTName,
+                this.Description
+              );
+              this.$notify({
+                title: "创造成功",
+                type: "success",
+                position: "top-left",
+                offset: 200,
+              });
+              this.fileList = [];
+              this.Name = "";
+              this.Symbol = "";
+              this.Maxmums = 1;
+              this.FirstNFTName = "";
+              this.Description = "";
+            } else {
+              this.$notify({
+                title: "NFT格式不支持",
+                type: "warning",
+                position: "top-left",
+                offset: 200,
+              });
+            }
+          } catch (error) {
+            this.$notify.error({
+              title: "创造失败",
               position: "top-left",
               offset: 200,
             });
-            this.fileList = [];
-            this.Name = "";
-            this.Symbol = "";
-            this.Maxmums = 1;
-            this.FirstNFTName = "";
-            this.Description = "";
-          } else {
-            this.$notify({
-              title: "NFT格式不支持",
-              type: "warning",
-              offset: 200,
-            });
+            return;
           }
-        } catch (error) {
-          this.$notify.error({
-            title: "创造失败",
+        } else {
+          this.$notify({
+            title: "请勿操作频繁",
+            type: "warning",
             position: "top-left",
             offset: 200,
           });
-          return;
         }
+
+        setTimeout(() => {
+          this.isRepeatClick = true;
+        }, 5000);
       },
       handleRemove(file) {
         let uploadFiles = this.$refs.pictureUpload.uploadFiles;
@@ -409,6 +426,7 @@
   }
   .tipsTitle2 {
     font-size: 12px;
+    margin-bottom: 3px;
   }
 }
 

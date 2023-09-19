@@ -102,8 +102,8 @@ func (NFTLC *NFTOwnerListController) GetOwnerNFTsByAddress(c *gin.Context) {
 	query := `
 	SELECT nol.*
 	FROM nft_owner_lists nol
-	WHERE nol.nftAddress = ? AND nol.ownerAddress = ?`
-	db.Raw(query, nftOwnerList.NFTAddress, nftOwnerList.OwnerAddress).Scan(&results)
+	WHERE nol.nftAddress = ? AND nol.currentOwner = ?`
+	db.Raw(query, nftOwnerList.NFTAddress, nftOwnerList.CurrentOwner).Scan(&results)
 	utils.SendResponse(c.Writer, http.StatusOK, results)
 }
 
@@ -115,9 +115,7 @@ func (NFTLC *NFTOwnerListController) UpdateNFTOwnerList(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Invalid input")
 		return
 	}
-
 	db := repositories.GetDb(c)
-
 	// 执行更新操作
 	result := db.Model(&models.NFTOwnerList{}).Where("id = ?", newNFTOwnerList.Id).Updates(map[string]interface{}{
 		"isActive": newNFTOwnerList.IsActive, "price": newNFTOwnerList.Price,
@@ -157,6 +155,7 @@ func (NFTLC *NFTOwnerListController) UpdateNFTOwnerListAfterBuy(c *gin.Context) 
 	utils.SendResponse(c.Writer, http.StatusOK, newNFTOwnerList)
 }
 
+// 主页查询
 type NFTSearchCriteria struct {
 	Key string `json:"key"`
 	// IsActive   bool   `json:"isActive"`
@@ -184,7 +183,7 @@ func (NFTLC *NFTOwnerListController) Search(c *gin.Context) {
 		//模糊
 		repositories.GetDb(c).Model(&models.NFTOwnerList{}).
 			Select("*").
-			Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+			// Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
 			Where("seriesName LIKE ? OR nftName LIKE ? OR symbol LIKE ? OR description LIKE ?", keyword, keyword, keyword, keyword).
 			Find(&results)
 	}

@@ -1,7 +1,7 @@
 package models
 
 type NFTOwnerList struct {
-	Id           int64  `gorm:"primaryKey;autoIncrement;"`
+	Id           int64  `gorm:"primaryKey;autoIncrement;" json:"id"`
 	SeriesName   string `gorm:"column:seriesName" json:"seriesName"`
 	NFTName      string `gorm:"column:nftName" json:"nftName"`
 	IsActive     bool   `gorm:"column:isActive" json:"isActive"`

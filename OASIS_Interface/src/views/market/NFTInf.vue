@@ -47,10 +47,10 @@
             type="success"
             plain
             class="Buy"
-            @click="Buy(sale)"
-            :disabled="!$store.state.isconnect || NFTSeller.toUpperCase() == $store.state.currentAddress.toUpperCase()"
+            @click="OpenMessageBox(sale, opt)"
+            :disabled="!$store.state.isconnect || NFTSeller.toUpperCase() == $store.state.currentAddress.toUpperCase() || bought || !NFTIsActive"
           >
-            购入
+            {{ bought?"已购入":"购入" }}
           </el-button>
         </div>
         <div class="selectBox">
@@ -99,10 +99,10 @@
                     style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 1vw;"
                     v-if="seriesNFTArrays.filter(inf => !inf.isActive).length == 0"
                   >
-                    <!-- <i class="el-icon-warning"></i> 无数据 -->
                     <el-empty description="无数据" />
                   </div>
-                  <div
+                  <template v-else>
+                    <div
                     class="NFTInf"
                     v-for="inf in seriesNFTArrays.filter(inf => !inf.isActive)"
                     :key="inf.image"
@@ -122,7 +122,9 @@
                         <div class="ToSellBox" />
                       </div>
                     </div>
-                  </div>
+                    </div>
+                  </template>
+                 
                 </div>
               </el-tab-pane>
               <el-tab-pane
@@ -162,9 +164,84 @@
             </el-tabs>
           </div>
         </div>
-        <!-- <div class="MoreNFTInfBox">
-          <div class="seriesNFTBox" />
-        </div> -->
+      </div>
+    </div>
+    <div class="MessageMask" v-if="MessageShow">
+      <div class="Message animate__animated animate__fadeInUp">
+        <div class="MessageLeft">
+          <div class="imageBox">
+            <img :src="NFTImage" alt="">
+          </div>
+        </div>
+        <div class="MessageRight">
+          <div class="select">
+            <div class="tipsBox">
+              <div class="tipsTitle">
+                系列名 <span class="tipshelp">Series Name</span>
+              </div>
+              <div class="tipsTitle2">
+                {{ NFTSeries }}
+              </div>
+            </div>
+          </div>
+          <div class="select">
+            <div class="tipsBox">
+              <div class="tipsTitle">
+                代币符号 <span class="tipshelp">Symbol</span>
+              </div>
+              <div class="tipsTitle2">
+                {{ symbol }}
+              </div>
+            </div>
+          </div>
+          <div class="select">
+            <div class="tipsBox">
+              <div class="tipsTitle">
+                名称 <span class="tipshelp">NFT Name</span>
+              </div>
+              <div class="tipsTitle2">
+                {{ NFTName }}
+              </div>
+            </div>
+          </div>
+          <div class="select">
+            <div class="tipsBox">
+              <div class="tipsTitle">
+                序号 <span class="tipshelp">Token ID</span>
+              </div>
+              <div class="tipsTitle2">
+                #{{ NFTTokenId }}
+              </div>
+            </div>
+          </div>
+          <div class="select">
+            <div class="tipsBox">
+              <div class="tipsTitle2">
+                <el-divider />
+              </div>
+            </div>
+          </div>
+          <div class="select">
+            <div class="tipsBox">
+              <div class="tipsTitle">
+                价格 <span class="tipshelp">Price</span>
+              </div>
+              <div class="tipsTitle2">
+               <span style="font-size: 30px;"> {{ $store.state.Web3.utils.fromWei(NFTPrice, 'ether') }} </span>ETH
+              </div>
+            </div>
+          </div>
+          <div class="select">
+            <div class="sumbitBox">
+              <el-button @click="CloseMessageBox(1)" class="createButton" type="primary" plain>
+                取消
+              </el-button>
+              <el-button @click="Buy" class="createButton" type="success" plain>
+                购买
+              </el-button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -172,7 +249,7 @@
 
 <script>
 import { getSaleListByContractAddress } from "@/api/axios/Sale";
-  import { getNFTStruct, Buy } from "@/api/axios/contract";
+import { getNFTStruct,Buy } from "@/api/axios/contract";
   export default {
     name: "NFTInf",
     data() {
@@ -185,10 +262,11 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
         NFTTokenId: 0,
         NFTPrice: 0,
         NFTSeller: "",
+        NFTIsActive: false,
+        NFTImage: "#",
+        NFTName: "",
 
         supplyer: "",
-        NFTName: "",
-        NFTImage: "#",
         symbol: null,
         NFTSeries: "",
         description: "",
@@ -197,6 +275,11 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
         activeTab: "first",
         seriesNFTArrays: [],
         sale: {},
+        bought: false,
+
+        MessageShow: false,
+        changeNFT: {},
+        opt: 0,
       };
     },
     watch: {},
@@ -206,6 +289,7 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
     methods: {
       async init() {
         if (typeof this.$store.state.marketNFTInf === typeof "") {
+          console.log(this.$store.state.marketNFTInf);
           try {
             this.NFTInf = await JSON.parse(this.$store.state.marketNFTInf);
             console.log(this.NFTInf);
@@ -220,9 +304,10 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
               0,
               5
             )}...${this.NFTInf[1].slice(37)}`;
-
+            this.NFTIsActive = this.NFTInf[5]
             this.NFTImage = this.NFTMetaData.image;
             this.description = this.NFTMetaData.description;
+
             await getNFTStruct(this.NFTInf[2]).then((re) => {
               this.NFTContract = re;
             });
@@ -265,6 +350,7 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
             this.NFTTokenId = this.NFTInf.tokenId;
             this.NFTPrice = this.NFTInf.price;
             this.NFTName = this.NFTInf.nftName;
+            this.NFTIsActive = this.NFTInf.isActive
             this.supplyer = `${this.NFTInf.ownerAddress.slice(
               0,
               5
@@ -306,6 +392,22 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
           }
         }
       },
+      OpenMessageBox(NFT) {
+        this.changeNFT = NFT;
+        this.MessageShow = true;
+      },
+      CloseMessageBox(opt) {
+        this.MessageShow = false;
+        this.changeNFT = {};
+        if (opt == 1) {
+          this.$notify({
+            title: `您已取消购买`,
+            type: "warning",
+            position: "top-left",
+            offset: 200,
+          });
+        }
+      },
       makeSale() {
         this.sale = {
           isActive: true,
@@ -324,15 +426,20 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
           this.seriesNFTArrays = re.data.data
         })
       },
-      async Buy(NFT) {
+      async Buy() {
         try {
-          await Buy(NFT);
-          this.$notify({
-            title: "购买成功",
+          this.changeNFT.symbol = this.symbol
+          this.changeNFT.image = this.NFTImage
+          if (await Buy(this.changeNFT)) {
+            this.$notify({
+            title: "💖 感谢购买",
             type: "success",
             position: "top-left",
             offset: 200,
           });
+          this.bought = true
+          this.CloseMessageBox(2)
+          } 
         } catch (error) {
           this.$notify.error({
             title: "购买失败",
@@ -672,6 +779,101 @@ import { getSaleListByContractAddress } from "@/api/axios/Sale";
           background-color: var(--White--);
           width: 100%;
           height: 100%;
+        }
+      }
+    }
+  }
+  .MessageMask {
+    z-index: 200;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .Message {
+      transition: all 0.3s ease-in-out;
+      overflow: hidden;
+      width: 90%;
+      height:70%;
+      border-radius: 30px;
+      background-color: white;
+      display: flex;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+        rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+      .MessageLeft {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-right: 10%;
+        .imageBox {
+          width: 75%;
+          height: 75%;
+          border-radius: 30px;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: transparent;
+          img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      .MessageRight {
+        position: relative;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /deep/ .select {
+          width: 100%;
+          text-align: left;
+          margin-bottom: 20px;
+          .tipsBox {
+            width: 100%;
+            color: rgb(105, 105, 105);
+            text-align: left;
+            transition: all 0.3s ease-in-out;
+            .tipsTitle2 {
+              margin-top: 2%;
+              margin-bottom: 1%;
+              font-size: 15px;
+              font-weight: 800;
+              color: black;
+              transition: all 0.3s ease-in-out;
+              width: 300px;
+            }
+            .tipsTitle {
+              font-size: 20px;
+              color: black;
+              .tipshelp {
+                color: rgb(105, 105, 105);
+                font-size: 15px;
+              }
+            }
+          }
+          .sumbitBox {
+            text-align: left;
+            margin-top: 3%;
+            .createButton {
+              padding: 20px 35px 18px 35px;
+              font-size: 17px;
+              border-radius: 15px;
+              transition: all 0.3s ease-in-out;
+              font-family: "Transformers_Movie";
+            }
+          }
+        }
+        .colseButton {
+          margin-right: 10%;
         }
       }
     }

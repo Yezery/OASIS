@@ -46,14 +46,14 @@
           class="WaitLogin"
           v-if="!$store.state.isconnect"
         >
-          <WaitLogin />
+          <ConnectionTips />
         </div>
       </el-aside>
     </el-container>
   </div>
 </template>
 <script>
-  import WaitLogin from "../user/ConnectionTips.vue";
+  import ConnectionTips from "../user/ConnectionTips.vue";
   import Theme from "@/components/oasisTheme.vue";
   import BalanceEchart from "@/views/extend/BalanceEchart.vue";
   import UserInf from "@/views/user/UserInf.vue";
@@ -67,7 +67,7 @@
       UserInf,
       WalletConnect,
       ChatMemu,
-      WaitLogin,
+      ConnectionTips
     },
     data() {
       return {
