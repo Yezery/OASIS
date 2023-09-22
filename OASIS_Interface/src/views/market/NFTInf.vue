@@ -84,7 +84,7 @@
                         {{ inf.nftName }}
                       </div>
                       <div class="ownerAndToSell">
-                        <div class="ToSellBox" >
+                        <div class="ToSellBox">
                           #{{ inf.tokenId }}
                         </div>
                         <div style="margin-left: 2%;">
@@ -108,28 +108,27 @@
                   </div>
                   <template v-else>
                     <div
-                    class="NFTInf"
-                    v-for="inf in seriesNFTArrays.filter(inf => !inf.isActive)"
-                    :key="inf.image"
-                  >
-                    <div class="imageBox">
-                      <img
-                        class="NFTImage"
-                        :src="inf.image"
-                        alt=""
-                      >
-                    </div>
-                    <div class="Inf">
-                      <div class="NFTName">
-                        {{ inf.name }}
+                      class="NFTInf"
+                      v-for="inf in seriesNFTArrays.filter(inf => !inf.isActive)"
+                      :key="inf.image"
+                    >
+                      <div class="imageBox">
+                        <img
+                          class="NFTImage"
+                          :src="inf.image"
+                          alt=""
+                        >
                       </div>
-                      <div class="ownerAndToSell">
-                        <div class="ToSellBox" />
+                      <div class="Inf">
+                        <div class="NFTName">
+                          {{ inf.name }}
+                        </div>
+                        <div class="ownerAndToSell">
+                          <div class="ToSellBox" />
+                        </div>
                       </div>
-                    </div>
                     </div>
                   </template>
-                 
                 </div>
               </el-tab-pane>
               <el-tab-pane
@@ -171,11 +170,17 @@
         </div>
       </div>
     </div>
-    <div class="MessageMask" v-if="MessageShow">
+    <div
+      class="MessageMask"
+      v-if="MessageShow"
+    >
       <div class="Message animate__animated animate__fadeInUp">
         <div class="MessageLeft">
           <div class="imageBox">
-            <img :src="NFTImage" alt="">
+            <img
+              :src="NFTImage"
+              alt=""
+            >
           </div>
         </div>
         <div class="MessageRight">
@@ -232,16 +237,26 @@
                 价格 <span class="tipshelp">Price</span>
               </div>
               <div class="tipsTitle2">
-               <span style="font-size: 30px;"> {{ $store.state.Web3.utils.fromWei(NFTPrice, 'ether') }} </span>ETH
+                <span style="font-size: 30px;"> {{ $store.state.Web3.utils.fromWei(NFTPrice, 'ether') }} </span>ETH
               </div>
             </div>
           </div>
           <div class="select">
             <div class="sumbitBox">
-              <el-button @click="CloseMessageBox(1)" class="createButton" type="primary" plain>
+              <el-button
+                @click="CloseMessageBox(1)"
+                class="createButton"
+                type="primary"
+                plain
+              >
                 取消
               </el-button>
-              <el-button @click="Buy" class="createButton" type="success" plain>
+              <el-button
+                @click="Buy"
+                class="createButton"
+                type="success"
+                plain
+              >
                 购买
               </el-button>
             </div>

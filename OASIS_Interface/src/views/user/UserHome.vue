@@ -1,7 +1,10 @@
 <template>
   <div class="userHomeMain">
     <el-container class="userHomeMainBox">
-      <el-aside style="width: auto;" class="animate__animated animate__fadeInLeft">
+      <el-aside
+        style="width: auto;"
+        class="animate__animated animate__fadeInLeft"
+      >
         <ChatMemu ref="ChatMemu" />
       </el-aside>
       <div class="inf">
@@ -11,7 +14,10 @@
               <div class="userInf ">
                 <div class="userInfTop">
                   <div class="userAvatarBox">
-                    <img :src="userAvatar" alt="">
+                    <img
+                      :src="userAvatar"
+                      alt=""
+                    >
                   </div>
                   <div class="userName">
                     {{ userName }}
@@ -27,26 +33,67 @@
             </div>
             <div class="contentBottom animate__animated animate__fadeInUp">
               <div class="NFTListBox">
-                <div class="NFTMenu" v-if="NFTSeriesnameList.length !== 0">
-                  <el-input placeholder="请输入内容" v-model="SearchVo.key">
-                    <el-button slot="append" icon="el-icon-search" @click="SearchNFT" />
+                <div
+                  class="NFTMenu"
+                  v-if="NFTSeriesnameList.length !== 0"
+                >
+                  <el-input
+                    placeholder="请输入内容"
+                    v-model="SearchVo.key"
+                  >
+                    <el-button
+                      slot="append"
+                      icon="el-icon-search"
+                      @click="SearchNFT"
+                    />
                   </el-input>
                 </div>
                 <div class="NFTList">
                   <el-collapse v-if="NFTSeriesnameList.length !== 0">
-                    <el-collapse-item v-for="address,i in nftContractAddressList" :key="i" :name="NFTSeriesnameList[i]">
+                    <el-collapse-item
+                      v-for="address,i in nftContractAddressList"
+                      :key="i"
+                      :name="NFTSeriesnameList[i]"
+                    >
                       <template slot="title">
-                        <el-popover title="合约地址" placement="top-start" width="350" trigger="hover" :content="address">
-                          <i class="header-icon el-icon-info" slot="reference" />
+                        <el-popover
+                          title="合约地址"
+                          placement="top-start"
+                          width="350"
+                          trigger="hover"
+                          :content="address"
+                        >
+                          <i
+                            class="header-icon el-icon-info"
+                            slot="reference"
+                          />
                         </el-popover>
                         <span style="margin-left: 1%;font-weight: 800;font-size: 1vw;">
                           {{ NFTSeriesnameList[i] }}
                         </span>
-                        <span class="ADDNFT" v-if="isOwnerCheckArray[i]">
-                          <el-popover title="为该合约添加新的NFT 🎉" placement="top-start" width="200" trigger="hover" content="">
-                            <router-link class="addImit" :to="{ name: 'addImit',query:{nftContract:address} }"><el-button type="success" plain>前往</el-button>
+                        <span
+                          class="ADDNFT"
+                          v-if="isOwnerCheckArray[i]"
+                        >
+                          <el-popover
+                            title="为该合约添加新的NFT 🎉"
+                            placement="top-start"
+                            width="200"
+                            trigger="hover"
+                            content=""
+                          >
+                            <router-link
+                              class="addImit"
+                              :to="{ name: 'addImit',query:{nftContract:address} }"
+                            ><el-button
+                              type="success"
+                              plain
+                            >前往</el-button>
                             </router-link>
-                            <i class="el-icon-plus" slot="reference" />
+                            <i
+                              class="el-icon-plus"
+                              slot="reference"
+                            />
                           </el-popover>
                         </span>
                       </template>
@@ -54,29 +101,51 @@
                         <template v-for="inf in NFTArray">
                           <template v-for="nft,k in inf">
                             <template v-if="nft.nftAddress == address">
-                              <div class="NFTInf" :key="k">
+                              <div
+                                class="NFTInf"
+                                :key="k"
+                              >
                                 <div style="height:65%;width: 100%;overflow: hidden;">
-                                  <img class="NFTImage" :src="nft.ipfsPath" alt="">
+                                  <img
+                                    class="NFTImage"
+                                    :src="nft.ipfsPath"
+                                    alt=""
+                                  >
                                 </div>
                                 <div class="Inf">
                                   <div class="InfTop">
                                     <div class="NFTName">
-                                    {{ nft.nftName }}
+                                      {{ nft.nftName }}
                                     </div>
                                     <div class="TokenID">
                                       <span style="font-size: 25px;">#{{ nft.tokenId }}</span>
                                     </div>
                                   </div>
-                                  <div v-if="nft.isActive" class="priceBox">
+                                  <div
+                                    v-if="nft.isActive"
+                                    class="priceBox"
+                                  >
                                     <span class="price">{{ $store.state.Web3.utils.fromWei(nft.price, 'ether') }}</span> ETH
                                   </div>
-                                  <div v-else class="priceBox">
+                                  <div
+                                    v-else
+                                    class="priceBox"
+                                  >
                                     <span class="price" />
                                   </div>
-                                  <div class="InfBottom " style="background-color: #d63131e6;" @click="OpenMessageBox(nft,2)" v-if="nft.isActive">
+                                  <div
+                                    class="InfBottom "
+                                    style="background-color: #d63131e6;"
+                                    @click="OpenMessageBox(nft,2)"
+                                    v-if="nft.isActive"
+                                  >
                                     <i class="el-icon-sold-out" />
                                   </div>
-                                  <div class="InfBottom" v-else @click="OpenMessageBox(nft,1)">
+                                  <div
+                                    class="InfBottom"
+                                    v-else
+                                    @click="OpenMessageBox(nft,1)"
+                                  >
                                     <i class="el-icon-sell" />
                                   </div>
                                 </div>
@@ -91,9 +160,16 @@
                     <el-empty>
                       <template slot="description">
                         <div>
-                          <span style="font-weight: 800;
-                          margin-bottom: 10%;margin-top: 5%;">未查到相关藏品 </span>
-                          <el-button type="success" round plain @click="toMint">
+                          <span
+                            style="font-weight: 800;
+                          margin-bottom: 10%;margin-top: 5%;"
+                          >未查到相关藏品 </span>
+                          <el-button
+                            type="success"
+                            round
+                            plain
+                            @click="toMint"
+                          >
                             前往创造
                           </el-button>
                         </div>
@@ -107,11 +183,17 @@
         </div>
       </div>
     </el-container>
-    <div class="MessageMask" v-if="MessageShow">
+    <div
+      class="MessageMask"
+      v-if="MessageShow"
+    >
       <div class="Message animate__animated animate__fadeInUp">
         <div class="MessageLeft">
           <div class="imageBox">
-            <img :src="changeNFT.ipfsPath" alt="">
+            <img
+              :src="changeNFT.ipfsPath"
+              alt=""
+            >
           </div>
         </div>
         <div class="MessageRight">
@@ -164,7 +246,10 @@
               </div>
             </div>
           </div>
-          <div class="select" v-if="opt==1">
+          <div
+            class="select"
+            v-if="opt==1"
+          >
             <div class="tipsBox">
               <div class="tipsTitle2">
                 <el-divider />
@@ -172,17 +257,27 @@
             </div>
           </div>
 
-          <div class="select" v-if="opt==1">
+          <div
+            class="select"
+            v-if="opt==1"
+          >
             <div class="tipsBox">
               <div class="tipsTitle">
                 请输入 <span class="tipshelp">价格</span>
               </div>
               <div class="tipsTitle2">
-                <el-input-number v-model="Price" :precision="3" :step="0.001"></el-input-number>
+                <el-input-number
+                  v-model="Price"
+                  :precision="3"
+                  :step="0.001"
+                />
               </div>
             </div>
           </div>
-          <div class="select" v-if="opt==2">
+          <div
+            class="select"
+            v-if="opt==2"
+          >
             <div class="tipsBox">
               <div class="tipsTitle">
                 价格 <span class="tipshelp">Price</span>
@@ -194,16 +289,32 @@
           </div>
           <div class="select">
             <div class="sumbitBox">
-              <el-button @click="CloseMessageBox(1)" class="createButton" type="primary" plain>
+              <el-button
+                @click="CloseMessageBox(1)"
+                class="createButton"
+                type="primary"
+                plain
+              >
                 取消
               </el-button>
-              <el-button @click="upSale" class="createButton" type="success" plain v-if="opt==1">
+              <el-button
+                @click="upSale"
+                class="createButton"
+                type="success"
+                plain
+                v-if="opt==1"
+              >
                 上架
               </el-button>
-              <el-button @click="downSale" class="createButton" type="success" plain v-if="opt==2">
+              <el-button
+                @click="downSale"
+                class="createButton"
+                type="success"
+                plain
+                v-if="opt==2"
+              >
                 下架
               </el-button>
-
             </div>
           </div>
         </div>
@@ -215,7 +326,7 @@
 <script>
   import { UpSale, DownSale, getNFTStruct } from "@/api/axios/contract.js";
   import ChatMemu from "@/views/chat/ChatMemu.vue";
-  import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
+import { getOwnerNFTsByAddress, search ,postOwnerContractList} from "@/api/axios/ownerContractLIst";
   export default {
     components: { ChatMemu },
     data() {
@@ -243,7 +354,10 @@
         opt: 0,
       };
     },
-    async mounted() {
+  async mounted() {
+      await postOwnerContractList({ownerAddress: this.$store.state.currentAddress}).then((re) => {
+              this.$store.commit("setOwnerNFTList", re.data.data);
+      });
       await this.init();
       await this.getNFTSeriesnameList(this.$store.state.ownerNFTList);
       await this.GetNFTContractNFT();

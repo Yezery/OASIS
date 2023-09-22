@@ -1,22 +1,10 @@
 <template>
   <div class="Walletbox">
-    <div
-      class="WalletInnerBox"
-      @click.stop="Copy"
-    >
+    <div class="WalletInnerBox" @click.stop="Copy">
       <span class="avatarBox">
-        <img
-          class="avatar"
-          :src="$store.state.avatar"
-          alt=""
-          ref="avatar"
-          slot="reference"
-          @click.stop="connectWallet"
-        >
+        <img class="avatar" :src="$store.state.avatar" alt="" ref="avatar" slot="reference" @click.stop="connectWallet">
       </span>
-      <span
-        class="address"
-      >{{ 
+      <span class="address">{{ 
         $store.state.currentAddress==""?"MetaMask is not connected":`${this.$store.state.currentAddress.slice(
           0,
           5
@@ -29,7 +17,9 @@
 </template>
 
 <script>
-  import { postOwnerContractList } from "@/api/axios/ownerContractLIst";
+  import { getToken, setMnemonic, checkUserExist } from "@/api/axios/user";
+
+  import CryptoJS from "crypto-js";
   export default {
     props: {
       walletConnect: {
@@ -55,22 +45,27 @@
         CopyTips: "点击复制",
         CopySuccess: "复制成功！",
         isCopy: false,
-        isRepeatClick:true
+        isRepeatClick: true,
+        password: "",
       };
     },
     mounted() {
       if (window.ethereum != undefined) {
-        window.ethereum.on("accountsChanged", this.connectWallet);
+        window.ethereum.on("accountsChanged", () => {
+          this.connectWallet();
+        });
       }
     },
-  methods: {
+    methods: {
       Copy() {
-        navigator.clipboard.writeText(this.$store.state.currentAddress).then(() => {
-          this.isCopy = true;
-          setTimeout(() => {
-            this.isCopy = false;
-          }, 3000);
-        });
+        navigator.clipboard
+          .writeText(this.$store.state.currentAddress)
+          .then(() => {
+            this.isCopy = true;
+            setTimeout(() => {
+              this.isCopy = false;
+            }, 3000);
+          });
       },
       GETHashAvatar() {
         if (this.$store.state.isconnect) {
@@ -92,58 +87,101 @@
           this.MetaMaskTipsIsShow = !this.MetaMaskTipsIsShow;
         }, 750);
       },
+
       async connectWallet() {
         if (this.isRepeatClick) {
           this.isRepeatClick = false;
           try {
-          // 请求用户授权
-          await window.ethereum.request({ method: "eth_requestAccounts" }).then((handleAccountsChanged) => {
-              this.$store.commit("connection", true);
-              this.$store.commit("changeAvatar", handleAccountsChanged[0]);
-              this.$store.commit("setcurrentAddress", handleAccountsChanged[0]);
-            }).catch((error) => {
-              this.$store.commit("connection", false);
-              if (error.code === 4001) {
-                // EIP-1193 userRejectedRequest error
-                console.log("Please connect to MetaMask.");
+            // 请求用户授权
+            await window.ethereum
+              .request({ method: "eth_requestAccounts" })
+              .then(async (handleAccountsChanged) => {
+                this.$store.commit("connection", true);
+                this.$store.commit("changeAvatar", handleAccountsChanged[0]);
+                this.$store.commit("setcurrentAddress", handleAccountsChanged[0]);
+              })
+              .catch((error) => {
+                this.$store.commit("connection", false);
+                if (error.code === 4001) {
+                  // EIP-1193 userRejectedRequest error
+                  console.log("Please connect to MetaMask.");
+                } else {
+                  console.error(error);
+                }
+              });
+            // var isExist = false
+            //   if (re.data=="") {
+            //     alert("账户没有注册")
+            //     this.password = prompt("醒密码");
+            //     this.password = CryptoJS.SHA256(this.password).toString();
+            //     await setMnemonic().then(re => {
+            //       console.log(re);
+            //     })
+            //     await getToken(user).then((re) => {
+            //     console.log(re);
+            //     localStorage.setItem("token", re.data.data);
+            //   })
+            //   } else {
+            //     this.password = prompt("密码");
+            //     this.password = CryptoJS.SHA256(this.password).toString();
+            //     console.log(this.password);
+            //     await getToken(user).then((re) => {
+            //     console.log(re);
+            //     localStorage.setItem("token", re.data.data);
+            //   });
+            // localStorage.getItem("token");
+            //   }
+            var user = {
+              userAddress: this.$store.state.currentAddress,
+              encryptedPassword: CryptoJS.SHA256(this.password).toString(),
+            };
+            await checkUserExist(user).then(async (re) => {
+              if (re.data.data == "") {
+                alert("账户没有注册");
+                this.password = prompt("醒密码");
+                console.log(user);
+                await setMnemonic(user).then((re) => {
+                  console.log(re);
+                });
               } else {
-                console.error(error);
+                this.password = prompt("密码");
               }
             });
-          let currentAddress = {
-            ownerAddress: this.$store.state.currentAddress,
-          };
-          // ====================
-          postOwnerContractList(currentAddress).then((re) => {
-            this.$store.commit("setOwnerNFTList", re.data.data);
-            this.accountNFTList = this.$store.state.ownerNFTList;
-          });
-            this.walletConnect();
-          this.$notify({
-            title: "🎉 连接成功",
-            position: "top-left",
-            offset: 200,
-          });     
-        } catch (error) {
-          console.error(error);
-          this.$notify.error({
-            title: "连接失败",
-            position: "top-left",
-            offset: 200,
-          });
-        }
-        }else {
-          this.$notify({
-              title: "已经有连接请勿操作频繁",
-              type: "warning",
+
+            await getToken(user).then((re) => {
+              localStorage.clear();
+              console.log(user);
+              if (re.data.data == "") {
+                alert("密码错误");
+              } else {
+                localStorage.setItem("token", re.data.data);
+                this.walletConnect();
+                this.$notify({
+                  title: "🎉 连接成功",
+                  position: "top-left",
+                  offset: 200,
+                });
+              }
+            });
+          } catch (error) {
+            console.error(error);
+            this.$notify.error({
+              title: "连接失败",
               position: "top-left",
               offset: 200,
             });
+          }
+        } else {
+          this.$notify({
+            title: "已经有连接请勿操作频繁",
+            type: "warning",
+            position: "top-left",
+            offset: 200,
+          });
         }
-          setTimeout(() => {
-            this.isRepeatClick = true;
-          }, 5000);
-   
+        setTimeout(() => {
+          this.isRepeatClick = true;
+        }, 5000);
       },
     },
   };

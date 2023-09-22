@@ -77,9 +77,6 @@ func (NFTLC *NFTOwnerListController) GetOwnerNFTs(c *gin.Context) {
 		FROM nft_owner_lists nol
 		WHERE nol.currentOwner = ?`
 	db.Raw(query, nftOwnerList.OwnerAddress).Scan(&results)
-	for _, result := range results {
-		fmt.Println(result)
-	}
 	utils.SendResponse(c.Writer, http.StatusOK, results)
 }
 
