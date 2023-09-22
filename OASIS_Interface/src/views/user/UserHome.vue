@@ -216,11 +216,6 @@
                 {{ changeNFT.symbol }}
               </div>
             </div>
-            <!-- <el-input
-                v-model="Symbol"
-                placeholder="Please enter the token symbol"
-                maxlength="11"
-              /> -->
           </div>
           <div class="select">
             <div class="tipsBox">
