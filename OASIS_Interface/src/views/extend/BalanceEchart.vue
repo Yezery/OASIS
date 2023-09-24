@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { scheduleDailySummary } from "@/api/axios/Sale";
   import * as echarts from "echarts";
   export default {
     data() {
@@ -57,12 +58,11 @@
             {
               type: "line",
               smooth: true,
-              data: [8240, 7532, 5480, 6748, 5365, 7364, 5264],
+              data: [],
               itemStyle: {
                 color: "#55C960", //改变折线点的颜色
                 lineStyle: {
                   width: 6,
-                  // color: "#55C960", //改变折线颜色
                 },
               },
               emphasis: {
@@ -71,36 +71,15 @@
                 },
                 label: {
                   show: true, // 显示提示标签
-                  //   color: "white", // 标签字体颜色
                   padding: [15, 25, 15, 25], // 标签内边距
-                  formatter: "{b} $ {c}", // 标签内容格式
+                  formatter: "{b} {c} ETH", // 标签内容格式
                   fontWeight: "bolder",
                   borderRadius: [10, 10, 10, 10], // 设置
                   borderColor: "white",
                   backgroundColor: "#1e1e2c", // 标签背景色
                   position: "bottom",
-
                   fontSize: 14,
                   color: "white",
-                  // color: function (params) {
-                  //   // 自定义颜色函数
-                  //   var colorList = [];
-                  //   var data = params.data;
-                  //   for (var i = 0; i < data.length; i++) {
-                  //     if (i == 0) {
-                  //       colorList.push("blue");
-                  //     } else {
-                  //       var diff = data[i] - data[i - 1];
-                  //       if (diff >= 0) {
-                  //         colorList.push("red"); // 上升趋势设为红色
-                  //       } else {
-                  //         colorList.push("green"); // 下降趋势设为绿色
-                  //       }
-                  //     }
-                  //   }
-                  //   return colorList;
-                  // },
-                  // color: ["red", "green", "blue", "purple", "orange", "black", "grey"]
                 },
               },
               symbol: "emptyCircle", // 空心圆作为转折点标志
@@ -132,74 +111,10 @@
             },
           ],
         },
+        
       };
-    },
-    methods: {
-      isDayLight() {
-        var currdate = new Date();
-        if (currdate.getHours() >= 18 || currdate.getHours() < 6) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      // updateTitleData() {
-      //   let myChart = echarts.init(document.getElementById("EchartsShow"));
-      //   // 更新标题数据
-      //   var sum = 0;
-      //   for (
-      //     let index = 0;
-      //     index < this.chartOptions.series[0].data.length;
-      //     index++
-      //   ) {
-      //     sum += this.chartOptions.series[0].data[index];
-      //   }
-      //   this.subtitle = `$ ${sum}`;
-      //   // 使用 setOption 方法重新渲染图表
-      //   if (this.isDayLight()) {
-      //     this.chartOptions.title.subtext = this.subtitle;
-      //     this.chartOptions.xAxis.axisLabel.color = "#000000";
-      //     this.chartOptions.title.subtextStyle.color = "#000000";
-      //   } else {
-      //     this.chartOptions.title.subtext = this.subtitle;
-      //     this.chartOptions.title.subtextStyle.color = "#ffffff";
-      //     this.chartOptions.xAxis.axisLabel.color = "#ffffff";
-      //   }
-      //   myChart.setOption(this.chartOptions);
-      // },
-      // calculTotal(chart) {},
-      echartsChangTheme() {
-        echarts.dispose(document.getElementById("EchartsShow"));
-        if (this.isOpen) {
-          var sum = 0;
-        for (
-          let index = 0;
-          index < this.chartOptions.series[0].data.length;
-          index++
-        ) {
-          sum += this.chartOptions.series[0].data[index];
-        }
-        this.title=`Balance`
-        this.subtitle = `$ ${sum}`;
-        }
-        let myChart = echarts.init(document.getElementById("EchartsShow"));
-        if (this.$store.state.isDark) {
-          this.chartOptions.title.text = this.title;
-          this.chartOptions.title.subtext = this.subtitle;
-          this.chartOptions.title.subtextStyle.color = "#000000";
-          this.chartOptions.xAxis.axisLabel.color = "#000000";
-          
-        } else {
-          this.chartOptions.title.text = this.title;
-          this.chartOptions.title.subtext = this.subtitle;
-          this.chartOptions.title.subtextStyle.color = "#ffffff";
-          this.chartOptions.xAxis.axisLabel.color = "#ffffff";
-        }
-        myChart.setOption(this.chartOptions);
-      },
-    },
+  },
   mounted() {
-    
     this.$emit("echartsChangTheme", this.echartsChangTheme);
       this.$refs.EchartBox.addEventListener("click", () => {
         this.$refs.EchartBox.style.height = "400px";
@@ -218,7 +133,57 @@
           this.echartsChangTheme();
         }, 300);
       });
+      this.init()
+  },
+    methods: {
+      isDayLight() {
+        var currdate = new Date();
+        if (currdate.getHours() >= 18 || currdate.getHours() < 6) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      echartsChangTheme() {
+        echarts.dispose(document.getElementById("EchartsShow"));
+        if (this.isOpen) {
+          var sum = 0;
+        for (
+          let index = 0;
+          index < this.chartOptions.series[0].data.length;
+          index++
+        ) {
+          sum += this.chartOptions.series[0].data[index];
+        }
+        this.title=`Balance`
+        this.subtitle = `${sum} ETH`;
+        }
+        let myChart = echarts.init(document.getElementById("EchartsShow"));
+        if (this.$store.state.isDark) {
+          this.chartOptions.title.text = this.title;
+          this.chartOptions.title.subtext = this.subtitle;
+          this.chartOptions.title.subtextStyle.color = "#000000";
+          this.chartOptions.xAxis.axisLabel.color = "#000000";
+          
+        } else {
+          this.chartOptions.title.text = this.title;
+          this.chartOptions.title.subtext = this.subtitle;
+          this.chartOptions.title.subtextStyle.color = "#ffffff";
+          this.chartOptions.xAxis.axisLabel.color = "#ffffff";
+        }
+        myChart.setOption(this.chartOptions);
+      },
+      async init() {
+        await scheduleDailySummary().then(re => {
+        console.log(re);
+        for (let index = 0; index < re.data.data.length; index++) {
+          this.chartOptions.series[0].data.push(re.data.data[index].TotalTurnover)
+          }  
+        console.log(this.chartOptions.series[0].data);
+      })
+      }
     },
+ 
   };
 </script>
 

@@ -146,6 +146,7 @@ func main() {
 	SaleTypeController := &controllers.SaleTypeController{}
 	NFTOwnerListController := &controllers.NFTOwnerListController{}
 	UserTokenController := &controllers.UserTokenController{}
+	TransactionController := &controllers.TransactionController{}
 	// 连接FiscoBcos
 	UserMnemonicController.FiscoConn()
 	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
@@ -173,6 +174,9 @@ func main() {
 	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
 	jwtGroup.POST("/GetSaleListByContractAddress", SaleController.GetSaleListByContractAddress)
 	router.GET("/OasisChat/:username", Client.WebSocketHandler)
+
+	router.POST("/scheduleDailySummary", TransactionController.ScheduleDailySummary)
+	router.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
 	// router.RunTLS(":"+config.Server.Port, "./config/cert.pem", "./config/key.pem")
 	router.Run(":" + config.Server.Port)
 }

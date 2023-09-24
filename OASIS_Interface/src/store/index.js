@@ -10,9 +10,9 @@ export default new Vuex.Store({
     // IP:"10.39.5.194", 
     IP:"localhost",
     //  市场合约地址
-    // MarketContractAddress: "0x950EA6251a3EF72768A2cb701b3c5eCd0cE3A603",
+    MarketContractAddress: "0x950EA6251a3EF72768A2cb701b3c5eCd0cE3A603",
     // local
-    MarketContractAddress : "0xe3A96a34639C7bf2907B4693EfD2BD7a94479661",
+    // MarketContractAddress : "0xe3A96a34639C7bf2907B4693EfD2BD7a94479661",
     isSearch:false,
     isconnect: false,
     isDark: false,

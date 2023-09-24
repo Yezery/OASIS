@@ -2,7 +2,7 @@ import request from "@/utils/axiosRequest"
 import store from '@/store';
 import { create } from "ipfs-http-client"
 import Web3 from 'web3'
-import { updateSaleactive, insertSale, deleteSale, } from "./Sale"
+import { updateSaleactive, insertSale, deleteSale,makeNewTransaction } from "./Sale"
 import { postOwnerContractList, getOwnerUpSaleNFTs, updateNFTOwnerListAfterBuy } from "./ownerContractLIst";
 import { mintNFTContractABI, mintNFTContractBytecode, marketContractAddress, marketContractABI, ipfsPublicGatewayUrl, rpcUrl } from "@/contract/Contract"
 //  IPFS的根URL
@@ -224,7 +224,6 @@ export async function UpSale(NFT) {
 
 }
 
-
 export async function DownSale(NFT) {
   let SaleId;
   try {
@@ -260,6 +259,12 @@ export async function Buy(NFT) {
         from: store.state.currentAddress,
         value: store.state.Web3.utils.toWei(NFT.price, 'ether'),
       });
+    console.log("makeNewTransaction");
+      await makeNewTransaction({
+        turnover: NFT.price,
+      }).then(re => {
+        console.log(re);
+      })
     await AddNewNFTToMetaMask(NFT.nftAddress, NFT.tokenId.toString(), NFT.symbol, NFT.image)
     NFT.isActive = false
     NFT.currentOwner = store.state.currentAddress

@@ -74,7 +74,10 @@
         </div>
       </el-aside>
     </el-container>
-    <transition enter-active-class="animate__animated animate__fadeIn" leave-active-class="animate__animated animate__fadeOut">
+    <transition
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
+    >
       <div
         class="EmpowerMask"
         v-if="isGetToken"
@@ -136,15 +139,14 @@
                 <div class="EmpowerPasswordBoxBottom">
                   <div class="EmpowerPasswordOpt">
                     <span
-                    style="margin-right: 5%;"
-                    @click="forgetEmpoverPassword(1)"
-                  >忘记授权码</span>
-                  <span
-                    style="margin-left: 5%;"
-                    @click="canacelEmpover"
-                  >不授权直接进入</span>
+                      style="margin-right: 5%;"
+                      @click="forgetEmpoverPassword(1)"
+                    >忘记授权码</span>
+                    <span
+                      style="margin-left: 5%;"
+                      @click="canacelEmpover"
+                    >不授权直接进入</span>
                   </div>
-               
                 </div>
               </div>
             </div>
@@ -177,21 +179,37 @@
                   :model="EmpowerSignForm"
                 >
                   <el-form-item label="授权码:">
-                    <el-input type="password" v-model="user.encryptedPassword" />
+                    <el-input
+                      type="password"
+                      v-model="user.encryptedPassword"
+                      placeholder="请输入授权码"
+                    />
                   </el-form-item>
                   <el-divider />
                   <el-form-item label="你喜欢看的电影:">
-                    <el-input v-model="EmpowerSignForm.sp1" />
+                    <el-input
+                      v-model="EmpowerSignForm.sp1"
+                      placeholder="请输入密保1"
+                    />
                   </el-form-item>
                   <el-form-item label="你喜欢听的音乐:">
-                    <el-input v-model="EmpowerSignForm.sp2" />
+                    <el-input
+                      v-model="EmpowerSignForm.sp2"
+                      placeholder="请输入密保2"
+                    />
                   </el-form-item>
                   <el-form-item label="你喜欢的运动:">
-                    <el-input v-model="EmpowerSignForm.sp3" />
+                    <el-input
+                      v-model="EmpowerSignForm.sp3"
+                      placeholder="请输入密保3"
+                    />
                   </el-form-item>
                 </el-form>
                 <div class="SignSubmitBox">
-                  <el-button type="danger" @click="isGetToken=false">
+                  <el-button
+                    type="danger"
+                    @click="isGetToken=false"
+                  >
                     取消
                   </el-button>
                   <el-button
@@ -203,8 +221,10 @@
                 </div>
               </div>
             </div>
-            <div class="animate4 animate__animated animate__fadeInLeft"
-              v-if="animate4">
+            <div
+              class="animate4 animate__animated animate__fadeInLeft"
+              v-if="animate4"
+            >
               <div class="SignTop">
                 <div class="SignUserInf">
                   <img
@@ -230,18 +250,30 @@
                   :model="EmpowerSignForm"
                 >
                   <el-form-item label="你喜欢看的电影:">
-                    <el-input v-model="EmpowerSignForm.sp1" />
+                    <el-input
+                      v-model="EmpowerSignForm.sp1"
+                      placeholder="请输入密保1"
+                    />
                   </el-form-item>
                   <el-form-item label="你喜欢听的音乐:">
-                    <el-input v-model="EmpowerSignForm.sp2" />
+                    <el-input
+                      v-model="EmpowerSignForm.sp2"
+                      placeholder="请输入密保2"
+                    />
                   </el-form-item>
                   <el-form-item label="你喜欢的运动:">
-                    <el-input v-model="EmpowerSignForm.sp3" />
+                    <el-input
+                      v-model="EmpowerSignForm.sp3"
+                      placeholder="请输入密保3"
+                    />
                   </el-form-item>
                 </el-form>
                 <div class="SignSubmitBox">
-                  <el-button type="danger" @click="forgetEmpoverPassword(2)
-                  ">
+                  <el-button
+                    type="danger"
+                    @click="forgetEmpoverPassword(2)
+                    "
+                  >
                     返回
                   </el-button>
                   <el-button
@@ -253,10 +285,18 @@
                 </div>
               </div>
             </div>
-            <div class="animate5" v-if="animate5">
-              请重新设置密码
-              <el-input v-model="newMnemonic"></el-input>
-              <el-button @click="resetMnemonic">重设</el-button>
+            <div
+              class="animate5"
+              v-if="animate5"
+            >
+              <div style="margin-bottom: 20px;font-size: 1vw;">请设置新的授权码</div>
+              <el-input
+                v-model="newMnemonic"
+                placeholder="请设置新的授权码"
+              />
+              <el-button @click="resetMnemonic" style="margin-top: 20px;">
+                重设
+              </el-button>
             </div>
           </div>
         </div>
