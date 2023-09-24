@@ -150,8 +150,6 @@ func main() {
 	UserMnemonicController.FiscoConn()
 	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
 
-	router.POST("/forgetMnemonic", UserMnemonicController.ForgetMnemonic)
-
 	// 开启WebSocket协议
 	Client := models.NewChatController()
 
@@ -160,8 +158,10 @@ func main() {
 	router.GET("/getSaleList", SaleController.GetSaleList)
 	router.GET("/getTypeList", SaleTypeController.GetTypeList)
 	router.POST("/setMnemonic", UserMnemonicController.SetMnemonic)
+	router.POST("/setAuthenticationMetaInformation", UserMnemonicController.SetAuthenticationMetaInformation)
 	router.POST("/Search", NFTOwnerListController.Search)
-
+	router.POST("/forgetMnemonic", UserMnemonicController.ForgetMnemonic)
+	router.POST("/resetMnemonic", UserMnemonicController.ResetMnemonic)
 	jwtGroup := router.Group("/", JWT())
 	jwtGroup.POST("/getOwnerNFTs", NFTOwnerListController.GetOwnerNFTs)
 	jwtGroup.POST("/getOwnerNFTsByAddress", NFTOwnerListController.GetOwnerNFTsByAddress)
@@ -173,9 +173,6 @@ func main() {
 	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
 	jwtGroup.POST("/GetSaleListByContractAddress", SaleController.GetSaleListByContractAddress)
 	router.GET("/OasisChat/:username", Client.WebSocketHandler)
-
-	jwtGroup.POST("/setAuthenticationMetaInformation", UserMnemonicController.SetAuthenticationMetaInformation)
-
 	// router.RunTLS(":"+config.Server.Port, "./config/cert.pem", "./config/key.pem")
 	router.Run(":" + config.Server.Port)
 }

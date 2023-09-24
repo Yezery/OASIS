@@ -53,11 +53,11 @@ func (UMC *UserMnemonicController) FiscoConn() error {
 }
 
 // 实例化合约
-func makeUserMnemonicContract() *contracts.UserMnemonic {
-	contractAddress := "0x12b75b61835d7192b9132fa78d5f20a7fcd2dd8c"
-	var UserMnemonicContract *contracts.UserMnemonic
+func makeUserMnemonicContract() *contracts.UsrMnemonic {
+	contractAddress := "0x27a0bf96e92ea917dd7f72797ca93a9457b7375a"
+	var UserMnemonicContract *contracts.UsrMnemonic
 	if bcosClient != nil {
-		UserMnemonicContract, _ = contracts.NewUserMnemonic(common.HexToAddress(contractAddress), bcosClient)
+		UserMnemonicContract, _ = contracts.NewUsrMnemonic(common.HexToAddress(contractAddress), bcosClient)
 		return UserMnemonicContract
 	}
 	return UserMnemonicContract
@@ -69,15 +69,19 @@ type userMnemonicDTO struct {
 }
 
 type AuthenticationMetaInformationDTO struct {
-	UserAddress common.Address `json:"userAddress"`
-	Sp1         string         `json:"sp1"`
-	Sp2         string         `json:"sp2"`
-	Sp3         string         `json:"sp3"`
+	UserAddress string `json:"userAddress"`
+	Sp1         string `json:"sp1"`
+	Sp2         string `json:"sp2"`
+	Sp3         string `json:"sp3"`
+	NewMnemonic string `json:"newMnemonic"`
 }
 
 func (UMC *UserMnemonicController) SetMnemonic(c *gin.Context) {
 	var userMnemonic userMnemonicDTO
 	_ = c.ShouldBind(&userMnemonic) //绑定参数，将参数解析到NFT结构体中
+	fmt.Println("========userMnemonic=======")
+	fmt.Println(userMnemonic)
+	fmt.Println("======================")
 	UserMnemonicContract := makeUserMnemonicContract()
 	Transaction, Receipt, err := UserMnemonicContract.SetMnemonic(bcosClient.GetTransactOpts(), userMnemonic.Mnemonic, common.HexToAddress(userMnemonic.UserAddress))
 	if err != nil {
@@ -92,8 +96,9 @@ func (UMC *UserMnemonicController) SetAuthenticationMetaInformation(c *gin.Conte
 
 	var authenticationMetaInformationDTO AuthenticationMetaInformationDTO
 	_ = c.ShouldBind(&authenticationMetaInformationDTO) //绑定参数，将参数解析到NFT结构体中
+	fmt.Println(authenticationMetaInformationDTO)
 	UserMnemonicContract := makeUserMnemonicContract()
-	Transaction, Receipt, err := UserMnemonicContract.SetAuthenticationMetaInformation(bcosClient.GetTransactOpts(), authenticationMetaInformationDTO.Sp1, authenticationMetaInformationDTO.Sp2, authenticationMetaInformationDTO.Sp3, authenticationMetaInformationDTO.UserAddress)
+	Transaction, Receipt, err := UserMnemonicContract.SetAuthenticationMetaInformation(bcosClient.GetTransactOpts(), authenticationMetaInformationDTO.Sp1, authenticationMetaInformationDTO.Sp2, authenticationMetaInformationDTO.Sp3, common.HexToAddress(authenticationMetaInformationDTO.UserAddress))
 	if err != nil {
 		log.Fatalf("could not connect to local node: %v", err)
 	}
@@ -117,11 +122,23 @@ func (UMC *UserMnemonicController) ForgetMnemonic(c *gin.Context) {
 	var authenticationMetaInformationDTO AuthenticationMetaInformationDTO
 	_ = c.ShouldBind(&authenticationMetaInformationDTO) //绑定参数，将参数解析到NFT结构体中
 	UserMnemonicContract := makeUserMnemonicContract()
-	code, err := UserMnemonicContract.ForgetMnemonic(bcosClient.GetCallOpts(), authenticationMetaInformationDTO.Sp1, authenticationMetaInformationDTO.Sp2, authenticationMetaInformationDTO.Sp3, authenticationMetaInformationDTO.UserAddress)
-
+	code, err := UserMnemonicContract.ForgetMnemonic(bcosClient.GetCallOpts(), authenticationMetaInformationDTO.Sp1, authenticationMetaInformationDTO.Sp2, authenticationMetaInformationDTO.Sp3, common.HexToAddress(authenticationMetaInformationDTO.UserAddress))
 	if err != nil {
-		log.Fatalf("could not connect to local node: %v", err)
+		utils.SendResponse(c.Writer, http.StatusBadRequest, code)
 	}
 	fmt.Println(code)
 	utils.SendResponse(c.Writer, http.StatusOK, code)
+}
+
+func (UMC *UserMnemonicController) ResetMnemonic(c *gin.Context) {
+	var authenticationMetaInformationDTO AuthenticationMetaInformationDTO
+	_ = c.ShouldBind(&authenticationMetaInformationDTO) //绑定参数，将参数解析到NFT结构体中
+	UserMnemonicContract := makeUserMnemonicContract()
+	Transaction, _, err := UserMnemonicContract.ReSetMnemonic(bcosClient.GetTransactOpts(), authenticationMetaInformationDTO.Sp1, authenticationMetaInformationDTO.Sp2, authenticationMetaInformationDTO.Sp3, common.HexToAddress(authenticationMetaInformationDTO.UserAddress), authenticationMetaInformationDTO.NewMnemonic)
+	if err != nil {
+		utils.SendResponse(c.Writer, http.StatusBadRequest, Transaction)
+		// log.Fatalf("could not connect to local node: %v", err.Error())
+
+	}
+	utils.SendResponse(c.Writer, http.StatusOK, Transaction)
 }

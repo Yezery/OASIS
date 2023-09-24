@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.10;
+pragma solidity ^0.6.0;
 
 contract UserMnemonic {
     mapping(address => string) public  userMnemonic;
@@ -95,10 +95,10 @@ contract UserMnemonic {
         string memory Sp3,
         address userAddress
     )
-        public
+        public  
         view
         isAuthenticationMetaInformationCorrect(Sp1, Sp2, Sp3, userAddress)
-        returns (string memory)
+        returns (bool)
     {
           require(
                 userAddress != address(0),
@@ -109,6 +109,32 @@ contract UserMnemonic {
                 keccak256(abi.encodePacked("")),
             "404"
         );
-        return userMnemonic[userAddress];
+
+        return true;
     }
+
+    function reSetMnemonic(
+        string memory Sp1,
+        string memory Sp2,
+        string memory Sp3,
+        address userAddress,
+        string memory NewMnemonic
+    )
+        public  
+        isAuthenticationMetaInformationCorrect(Sp1, Sp2, Sp3, userAddress)
+        returns (bool)
+    {
+          require(
+                userAddress != address(0),
+            "505"
+        );
+        require(
+            keccak256(abi.encodePacked(userMnemonic[userAddress])) !=
+                keccak256(abi.encodePacked("")),
+            "404"
+        );
+        userMnemonic[userAddress] = NewMnemonic;
+        return true;
+    }
+
 }

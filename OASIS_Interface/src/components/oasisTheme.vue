@@ -28,7 +28,7 @@
         isDarkMode: true,
         radio: "1",
         // 小狐狸钱包连接情况
-        isonload: this.$store.state.isconnect,
+        isonload: this.$store.state.isEmpower,
       };
     },
     mounted() {
@@ -37,7 +37,7 @@
     },
     computed: {
       isOnload() {
-        return this.$store.state.isconnect;
+        return this.$store.state.isEmpower;
       },
     },
     watch: {

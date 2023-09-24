@@ -321,7 +321,7 @@
 <script>
   import { UpSale, DownSale, getNFTStruct } from "@/api/axios/contract.js";
   import ChatMemu from "@/views/chat/ChatMemu.vue";
-import { getOwnerNFTsByAddress, search ,postOwnerContractList} from "@/api/axios/ownerContractLIst";
+import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
   export default {
     components: { ChatMemu },
     data() {
@@ -350,15 +350,13 @@ import { getOwnerNFTsByAddress, search ,postOwnerContractList} from "@/api/axios
       };
     },
   async mounted() {
-      await postOwnerContractList({ownerAddress: this.$store.state.currentAddress}).then((re) => {
-              this.$store.commit("setOwnerNFTList", re.data.data);
-      });
       await this.init();
       await this.getNFTSeriesnameList(this.$store.state.ownerNFTList);
       await this.GetNFTContractNFT();
     },
     methods: {
       async init() {
+        console.log(this.$store.state.currentAddress);
         let user = this.$store.state.currentAddress;
         try {
           this.userBalance = this.$store.state.Web3.utils
@@ -443,7 +441,8 @@ import { getOwnerNFTsByAddress, search ,postOwnerContractList} from "@/api/axios
         }
         this.nftContractAddressList = new Set(this.nftContractAddressList);
       },
-      async getNFTSeriesnameList(array) {
+      async getNFTSeriesnameList(array) { 
+        console.log(array);
         await this.getSetAddressArray(array);
         for (const key of this.nftContractAddressList) {
           let SeriesName;

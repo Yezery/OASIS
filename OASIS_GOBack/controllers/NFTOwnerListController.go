@@ -70,6 +70,8 @@ func (NFTLC *NFTOwnerListController) GetOwnerNFTs(c *gin.Context) {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
 		panic(err)
 	}
+	
+	fmt.Println(nftOwnerList)
 	var results []models.NFTOwnerList
 	db := repositories.GetDb(c)
 	query := `

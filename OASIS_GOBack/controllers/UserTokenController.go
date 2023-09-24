@@ -24,7 +24,7 @@ func (UTC *UserTokenController) GetToken(c *gin.Context) {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
 		panic(err)
 	}
-	EncryptedPassword, err := makeUserMnemonicContract().UserMnemonicCaller.UserMnemonic(bcosClient.GetCallOpts(), common.HexToAddress(user.Address))
+	EncryptedPassword, err := makeUserMnemonicContract().UsrMnemonicCaller.UserMnemonic(bcosClient.GetCallOpts(), common.HexToAddress(user.Address))
 	if EncryptedPassword == user.EncryptedPassword {
 		fmt.Println(EncryptedPassword == user.EncryptedPassword)
 		// 模拟验证成功，生成JWT令牌

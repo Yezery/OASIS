@@ -1,9 +1,23 @@
 <template>
   <div class="MainWindow animate__animated animate__fadeInDown">
     <div class="searchBox ">
-      <span class="searchSpan" style="width: 100%; position: relative">
-        <i class="el-icon-arrow-left" v-if="$store.state.isSearch" style="font-size: 2.4vw;position: absolute;top: 15%;left: 1%;cursor: pointer;color: white;" @click="isSearch" />
-        <input type="text" class="search" placeholder="Search any collection" v-model="SearchVo.key" @keydown.enter.prevent.stop="SearchNFT">
+      <span
+        class="searchSpan"
+        style="width: 100%; position: relative"
+      >
+        <i
+          class="el-icon-arrow-left"
+          v-if="$store.state.isSearch"
+          style="font-size: 2.4vw;position: absolute;top: 15%;left: 1%;cursor: pointer;color: white;"
+          @click="isSearch"
+        />
+        <input
+          type="text"
+          class="search"
+          placeholder="Search any collection"
+          v-model="SearchVo.key"
+          @keydown.enter.prevent.stop="SearchNFT"
+        >
       </span>
     </div>
 
@@ -14,33 +28,77 @@
             <ad1 />
           </template>
           <template #ad2>
-            <img src="../../assets/AD2Assets/MotorShow 2023.png" alt="" width="100%" height="100%" style="  object-fit: cover;">
+            <img
+              src="../../assets/AD2Assets/MotorShow 2023.png"
+              alt=""
+              width="100%"
+              height="100%"
+              style="  object-fit: cover;"
+            >
           </template>
           <template #ad3>
-            <img src="../../assets/webAssets/logoGreen.png" width="100%" height="100%" style="  object-fit: fill;">
+            <img
+              src="../../assets/webAssets/logoGreen.png"
+              width="100%"
+              height="100%"
+              style="  object-fit: fill;"
+            >
           </template>
           <template #ad4>
-            <img src="../../assets/webAssets/logoWhite.png" alt="" width="100%" height="100%" style="  object-fit: fill;">
+            <img
+              src="../../assets/webAssets/logoWhite.png"
+              alt=""
+              width="100%"
+              height="100%"
+              style="  object-fit: fill;"
+            >
           </template>
         </ad>
       </div>
 
-      <div class="MarketMain animate__animated animate__fadeInLeft" style="animation-delay: 1s;">
-        <div class="searchResults animate__animated animate__fadeInLeft" v-if="$store.state.isSearch">
+      <div
+        class="MarketMain animate__animated animate__fadeInLeft"
+        style="animation-delay: 1s;"
+      >
+        <div
+          class="searchResults animate__animated animate__fadeInLeft"
+          v-if="$store.state.isSearch"
+        >
           Search Results
         </div>
-        <div class="SearchBox animate__animated animate__fadeInLeft" v-if="$store.state.isSearch">
-          <div class="NFTInf animate__animated animate__fadeInLeft" v-for="NFT in SearchList" :key="NFT.TokenURI" @click="toInfPage(NFT)">
+        <div
+          class="SearchBox animate__animated animate__fadeInLeft"
+          v-if="$store.state.isSearch"
+        >
+          <div
+            class="NFTInf animate__animated animate__fadeInLeft"
+            v-for="NFT in SearchList"
+            :key="NFT.TokenURI"
+            @click="toInfPage(NFT)"
+          >
             <div class="imageBox">
-              <img class="NFTImage" :src="NFT.ipfsPath" :alt="NFT.nftName">
+              <img
+                class="NFTImage"
+                :src="NFT.ipfsPath"
+                :alt="NFT.nftName"
+              >
             </div>
             <div class="Inf">
-              <div class="NFTName" style="color: var(--Dark--);font-size: 20px;margin-top: 2%;">
+              <div
+                class="NFTName"
+                style="color: var(--Dark--);font-size: 20px;margin-top: 2%;"
+              >
                 {{ NFT.nftName }}
               </div>
               <div class="InfBottom">
-                <div class="PriceBox" v-if="NFT.isActive">
-                  <div class="PriceTitle" style="color: var(--Dark--);margin-top: 5%;margin-bottom: 2%;">
+                <div
+                  class="PriceBox"
+                  v-if="NFT.isActive"
+                >
+                  <div
+                    class="PriceTitle"
+                    style="color: var(--Dark--);margin-top: 5%;margin-bottom: 2%;"
+                  >
                     Volume
                   </div>
                   <div style="font-weight: 800;font-size: 2vw;color: var(--Dark--);">
@@ -50,33 +108,60 @@
               </div>
             </div>
           </div>
-          <el-empty description="无数据" v-if="SearchList.length==0" />
+          <el-empty
+            description="无数据"
+            v-if="SearchList.length==0"
+          />
         </div>
         <div v-else>
           <div class="SellTitle ">
-            <h3 class="title animate__animated animate__fadeInLeft" style="animation-delay: 1.1s;">
+            <h3
+              class="title animate__animated animate__fadeInLeft"
+              style="animation-delay: 1.1s;"
+            >
               Trending NFTs
             </h3>
           </div>
           <div class="SellIndex ">
             <div class="marketShopMain ">
-              <el-table :data="filteredNFTList.slice(0, 5)" class="marketShopTableLeft" @row-click="handleColumnClick">
+              <el-table
+                :data="filteredNFTList.slice(0, 5)"
+                class="marketShopTableLeft"
+                @row-click="handleColumnClick"
+              >
                 <template slot="empty">
                   <div>
-                    <img style="padding: 10% 0 0 0;" width="20%" height="20%" src="@/assets/webAssets/MetaMask.png" alt="">
+                    <img
+                      style="padding: 10% 0 0 0;"
+                      width="20%"
+                      height="20%"
+                      src="@/assets/webAssets/MetaMask.png"
+                      alt=""
+                    >
                     <h4 style="padding: 0 0 10% 0">
                       浏览器未连接Metamask
                     </h4>
                   </div>
                 </template>
-                <el-table-column type="index" width="70" label="Rank" />
-                <el-table-column label="藏品" width="250">
+                <el-table-column
+                  type="index"
+                  width="70"
+                  label="Rank"
+                />
+                <el-table-column
+                  label="藏品"
+                  width="400"
+                >
                   <template slot-scope="scope">
                     <div class="collectionRow">
-                      <span class="collectionImageBorder">
-                        <img class="nftImage" :src="JSON.parse(scope.row.tokenURI).image" alt="">
-                      </span>
-                      <div style="padding-left: 20px; font-size: 1vw; ">
+                      <div class="collectionImageBorder" style="display: inline-block;">
+                        <img
+                          class="nftImage"
+                          :src="JSON.parse(scope.row.tokenURI).image"
+                          alt=""
+                        >
+                      </div>
+                      <div style="padding-left: 20px; font-size: 1vw; display: inline-block;">
                         {{ JSON.parse(scope.row.tokenURI).name.toUpperCase() }}
                         <span style="font-size: 0.5vw;">
                           #{{ scope.row.tokenId }}
@@ -85,29 +170,55 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" label="价格" fixed="right" width="150">
+                <el-table-column
+                  align="center"
+                  label="价格"
+                  fixed="right"
+                  width="150"
+                >
                   <template slot-scope="scope">
                     <h4> {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH</h4>
                   </template>
                 </el-table-column>
               </el-table>
-              <el-table :data="filteredNFTList.slice(5, 10)" class="marketShopTableLeft" @row-click="handleColumnClick">
+              <el-table
+                :data="filteredNFTList.slice(5, 10)"
+                class="marketShopTableLeft"
+                @row-click="handleColumnClick"
+              >
                 <template slot="empty">
                   <div>
-                    <img style="padding: 10% 0 0 0;" width="20%" height="20%" src="@/assets/webAssets/MetaMask.png" alt="">
+                    <img
+                      style="padding: 10% 0 0 0;"
+                      width="20%"
+                      height="20%"
+                      src="@/assets/webAssets/MetaMask.png"
+                      alt=""
+                    >
                     <h4 style="padding: 0 0 10% 0">
                       浏览器未连接Metamask
                     </h4>
                   </div>
                 </template>
-                <el-table-column type="index" width="70" label="Rank" />
-                <el-table-column label="藏品" width="250">
+                <el-table-column
+                  type="index"
+                  width="70"
+                  label="Rank"
+                />
+                <el-table-column
+                  label="藏品"
+                  width="400"
+                >
                   <template slot-scope="scope">
                     <div class="collectionRow">
-                      <span class="collectionImageBorder">
-                        <img class="nftImage" :src="JSON.parse(scope.row.tokenURI).image" alt="">
-                      </span>
-                      <div style="padding-left: 20px; font-size: 1vw; ">
+                      <div class="collectionImageBorder" style="display: inline-block;">
+                        <img
+                          class="nftImage"
+                          :src="JSON.parse(scope.row.tokenURI).image"
+                          alt=""
+                        >
+                      </div>
+                      <div style="padding-left: 20px; font-size: 1vw; display: inline-block;">
                         {{ JSON.parse(scope.row.tokenURI).name.toUpperCase() }}
                         <span style="font-size: 0.5vw;">
                           #{{ scope.row.tokenId }}
@@ -116,7 +227,12 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" label="价格" fixed="right" width="150">
+                <el-table-column
+                  align="center"
+                  label="价格"
+                  fixed="right"
+                  width="150"
+                >
                   <template slot-scope="scope">
                     <h4> {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH</h4>
                   </template>
@@ -128,11 +244,24 @@
                 Collection Show
               </div>
               <div class="CarouselShow">
-                <el-carousel :interval="5000" type="card" height="500px" width="300px" indicator-position="none">
-                  <el-carousel-item v-for="NFT in this.NFTList.filter(NFT => NFT.isActive).slice(0,10)" :key="NFT.TokenURI">
+                <el-carousel
+                  :interval="5000"
+                  type="card"
+                  height="500px"
+                  width="300px"
+                  indicator-position="none"
+                >
+                  <el-carousel-item
+                    v-for="NFT in this.NFTList.filter(NFT => NFT.isActive).slice(0,10)"
+                    :key="NFT.TokenURI"
+                  >
                     <div class="NFTInf">
                       <div class="imageBox">
-                        <img class="NFTImage" :src="JSON.parse(NFT.tokenURI).image " :alt="JSON.parse(NFT.tokenURI).name.toUpperCase()">
+                        <img
+                          class="NFTImage"
+                          :src="JSON.parse(NFT.tokenURI).image "
+                          :alt="JSON.parse(NFT.tokenURI).name.toUpperCase()"
+                        >
                       </div>
                       <div class="Inf">
                         <div class="NFTName">
@@ -161,7 +290,12 @@
             </div>
           </div>
         </div>
-        <el-button v-if="SearchList.length!=0" round style="margin-bottom: 5%;padding: 2% 2% 2% 2%; " @click="SearchNFT(2)">
+        <el-button
+          v-if="SearchList.length!=0"
+          round
+          style="margin-bottom: 5%;padding: 2% 2% 2% 2%; "
+          @click="SearchNFT(2)"
+        >
           加载更多
         </el-button>
       </div>
@@ -688,16 +822,15 @@ input::-webkit-input-placeholder {
 }
 .collectionRow {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   font-weight: 800;
   color: var(--Dark--);
   .collectionImageBorder {
-    min-width: 65px;
+    width: 65px;
     height: 65px;
     border-radius: 15px;
     overflow: hidden;
-    img {
+    .nftImage {
       width: 100%;
       height: 100%;
       object-fit: contain;

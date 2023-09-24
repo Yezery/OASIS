@@ -26,8 +26,8 @@
         <div class="userInfBox-head-NFTInfBox">
           <div class="userInfBox-head-NFTInfBox-innerBox">
             <div class="possessBox">
-              <span class="possessBox-count">12</span>
-              <span class="possessBox-title">Possess</span>
+              <span class="possessBox-count">{{ $store.state.ownerNFTList.length }}</span>
+              <span class="possessBox-title">Contrate Count</span>
             </div>
             <div class="sellingBox">
               <span class="sellingBox-count">12</span>

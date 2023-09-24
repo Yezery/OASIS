@@ -21,19 +21,23 @@
         <div class="WaitLoginBox-head-nameBox">
           <div class="nameBox">
             <span class="name">{{ this.tips }}
-              <a
-                href="https://go.microsoft.com/fwlink/?LinkID=2093505"
-                v-if="windows32"
-              >window32位Edge</a>
-              <a
-                href="https://go.microsoft.com/fwlink/?LinkID=2093437"
-                v-else-if="windows64"
-              >window64位Edge</a>
-              <a
-                href="https://www.microsoft.com/zh-cn/edge/download?form=MA13FJ"
-                v-else-if="mac"
-              >Mac版Edge</a>
+              <span v-if="!metaMask">
+                <a
+                  href="https://go.microsoft.com/fwlink/?LinkID=2093505"
+                  v-if="windows32 "
+                >window32位Edge</a>
+                <a
+                  href="https://go.microsoft.com/fwlink/?LinkID=2093437"
+                  v-else-if="windows64"
+                >window64位Edge</a>
+                <a
+                  href="https://www.microsoft.com/zh-cn/edge/download?form=MA13FJ"
+                  v-else-if="mac"
+                >Mac版Edge</a>
+              </span>
+             
             </span>
+
             <span
               class="title"
               v-html="tipsE"
@@ -54,22 +58,18 @@
         mac: false,
         windows64: false,
         windows32: false,
-        // metaMask: true,
+        metaMask: false,
       };
     },
     mounted() {
-      this.$refs.WaitLoginBox_head.addEventListener("mouseover", () => {
-        this.$refs.avatar.classList.add("animate__swing");
-      });
-      this.$refs.WaitLoginBox_head.addEventListener("mouseout", () => {
-        this.$refs.avatar.classList.remove("animate__swing");
-      });
       if (window.ethereum == undefined) {
+       
         this.tips = "您的浏览器不支持/未安装";
         this.tipsE = "Your browser does not support <br/> or install MetaMask";
       } else {
-        this.tips = "请点击页面右上角头像连接小狐狸";
-        this.tipsE = `Please click on the avatar in the upper <br/> right corner of the page to connect <br/> to the MetaMask`;
+        this.metaMask = true
+        this.tips = "账号没有授权请点击上方头像进行授权";
+        this.tipsE = `If the account is not authorized <br/> please click the avatar above to authorize`;
       }
       this.OSnow();
     },
@@ -148,7 +148,7 @@
             font-size: 13px;
             text-align: center;
             font-family: Gilroy-Medium;
-            a{
+            a {
               color: var(--blueblack-white--);
             }
           }
