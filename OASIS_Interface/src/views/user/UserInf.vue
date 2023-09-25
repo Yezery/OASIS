@@ -9,8 +9,6 @@
               :src="$store.state.avatar"
               width="90px"
               height="90px"
-              alt=""
-              style=""
             >
           </div>
         </div>
@@ -26,12 +24,12 @@
         <div class="userInfBox-head-NFTInfBox">
           <div class="userInfBox-head-NFTInfBox-innerBox">
             <div class="possessBox">
-              <span class="possessBox-count">{{ $store.state.ownerNFTList.length }}</span>
-              <span class="possessBox-title">Contrate Count</span>
+              <span class="possessBox-count">{{ accountNFTList.length }}</span>
+              <span class="possessBox-title">NFT Count</span>
             </div>
             <div class="sellingBox">
-              <span class="sellingBox-count">12</span>
-              <span class="sellingBox-title">Selling</span>
+              <span class="sellingBox-count">{{ balance }} <span style="font-size: 0.1vw;font-weight: 500;">ETH</span></span>
+              <span class="sellingBox-title">Balance</span>
             </div>
           </div>
         </div>
@@ -40,7 +38,7 @@
             class="toSellLink"
             :to="{ name: 'ImitNFT' }"
           >
-            <span>To Make</span>
+            <span>Mint</span>
           </router-link>
         </div>
         <div class="toSellLink-Box">
@@ -48,7 +46,7 @@
             class="toSellLink"
             :to="{ name: 'userhome' }"
           >
-            <span>To Home</span>
+            <span>Home</span>
           </router-link>
         </div>
       </div>
@@ -68,12 +66,21 @@
     data() {
       return {
         accountNFTList: [],
+        balance: 0,
       };
     },
-    mounted() {
-        this.accountNFTList = this.$store.state.ownerNFTList;
+  mounted() {
+      this.getBalance()
     },
-    methods: {},
+  methods: {
+    async getBalance() {
+      this.balance = this.$store.state.Web3.utils.fromWei(await this.$store.state.Web3.eth.getBalance(this.$store.state.currentAddress), "ether").slice(0, 4) 
+      if (this.$store.state.ownerNFTList !== null) {
+      this.accountNFTList = this.$store.state.ownerNFTList;
+      }
+
+    },
+    },
   };
 </script>
 
@@ -105,7 +112,6 @@
           height: 89px;
           overflow: hidden;
           border-radius: 10px;
-          // border: 1px solid black;s
           .avatar {
             object-fit: fill;
           }
@@ -185,7 +191,6 @@
         width: 100%;
         height: 100%;
         .accountNFTList {
-          // display: none;
           .NFTImage {
             object-fit: cover;
             width: 90px;
@@ -198,14 +203,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 60px;
+      height: 70px;
+      margin-top: 20px;
       width: 100%;
       .toSellLink {
         background-color: rgba(85, 201, 96, 0.12);
         color: #55c960;
         text-decoration: none;
-        border-radius: 10px;
-        padding: 6px 0px 6px 0px;
+        border-radius: 20px;
+        padding: 14px 0px 14px 0px;
         border: solid 2px rgba(85, 201, 96, 0.24);
         width: 60%;
         &:hover {

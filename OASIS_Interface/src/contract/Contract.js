@@ -1146,11 +1146,6 @@ export function ipfsBaseURI() {
 }
 
 
-// 指定其他节点的 IP 和端口
-// const peerAddress = "/ip4/10.39.5.194/tcp/5001"
-// export function ipfsPeerAddress() {
-//   return peerAddress
-// }
 //  IPFS网关根URL
 const publicGatewayUrl = `http://${IP}:8080/`;
 export function ipfsPublicGatewayUrl() {

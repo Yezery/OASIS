@@ -33,7 +33,7 @@
             </div>
             <div class="contentBottom animate__animated animate__fadeInUp">
               <div class="NFTListBox">
-                <div
+                <!-- <div
                   class="NFTMenu"
                   v-if="NFTSeriesnameList.length !== 0"
                 >
@@ -47,7 +47,7 @@
                       @click="SearchNFT"
                     />
                   </el-input>
-                </div>
+                </div> -->
                 <div class="NFTList">
                   <el-collapse v-if="NFTSeriesnameList.length !== 0">
                     <el-collapse-item
@@ -356,7 +356,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
     },
     methods: {
       async init() {
-        console.log(this.$store.state.currentAddress);
         let user = this.$store.state.currentAddress;
         try {
           this.userBalance = this.$store.state.Web3.utils
@@ -429,7 +428,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
           };
           await getOwnerNFTsByAddress(nft).then((re) => {
             NFTInfList.push(re.data.data);
-            console.log(re);
           });
         }
         this.NFTArray = NFTInfList;
@@ -442,7 +440,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
         this.nftContractAddressList = new Set(this.nftContractAddressList);
       },
       async getNFTSeriesnameList(array) { 
-        console.log(array);
         await this.getSetAddressArray(array);
         for (const key of this.nftContractAddressList) {
           let SeriesName;
@@ -459,7 +456,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
             .owner()
             .call()
             .then((re) => {
-              console.log(re);
               owner = re;
             });
           if (
@@ -475,9 +471,8 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
         this.$router.push("/home/ImitNFT");
       },
       SearchNFT() {
-        if (this.SearchVo.key.length>0 && this.SearchVo.key.replace(/(^s*)|(s*$)/g, "").length == 0) {
+        if (this.SearchVo.key.length >0 && this.SearchVo.key.replace(/(^s*)|(s*$)/g, "").length !== 0) {
           search(this.SearchVo).then((re) => {
-          console.log(re);
          this.getNFTSeriesnameList(re.data.data) 
           });
           this.$notify({
@@ -756,12 +751,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
                   background-color: var(--White--);
                 }
               }
-
-              // .NFTListArray {
-              //   width: 100%;
-              //   display: flex;
-
-              // }
               .collapseInnerBox {
                 .NFTInf {
                   margin: 2%;
@@ -854,15 +843,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
 
               .ADDNFT {
                 margin-left: 1%;
-                // background-color: var(--White--);
-                // border-radius: 50px;
-                // margin-left: 4%;
-                // width: 320px;
-                // height: 400px;
-                // display: inline-block;
-                // transition: all 0.7s ease-in-out;
-                // box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-                //   rgba(17, 17, 26, 0.1) 0px 0px 8px;
                 cursor: pointer;
                 div {
                   display: flex;
@@ -871,9 +851,6 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
                   width: 40px;
                   padding: 2% 10% 2% 10%;
                 }
-                // display: flex;
-                // justify-content: center;
-                // align-items: center;
                 i {
                   font-weight: 800;
                   color: var(--Dark--);

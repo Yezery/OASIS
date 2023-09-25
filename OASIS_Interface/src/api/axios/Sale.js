@@ -1,6 +1,5 @@
 import request from "@/utils/axiosRequest"
 export function updateSaleactive(data) {
-  console.log(data);
   return request({
     url: `/UpdateNFTOwnerList`,
     method: 'post',

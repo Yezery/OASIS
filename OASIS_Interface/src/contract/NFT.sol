@@ -33,10 +33,6 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
         );
         uint256 newTokenId = _currentId;
         _safeMint(msg.sender, newTokenId);
-        // bytes(baseUri).length > 0 && bytes(ipfsHash).length > 0
-        //             ? string(abi.encodePacked(baseUri, ipfsHash))
-        //             : "",
-        // `ipfs/${ipfsHash}?filename=${Name}`
         string memory image = string(
             abi.encodePacked(
                 _baseURI(),
@@ -74,10 +70,6 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
         );
         uint256 newTokenId = _currentId;
         _safeMint(to, newTokenId);
-        // bytes(baseUri).length > 0 && bytes(ipfsHash).length > 0
-        //             ? string(abi.encodePacked(baseUri, ipfsHash))
-        //             : "",
-        // `ipfs/${ipfsHash}?filename=${Name}`
         string memory image = string(
             abi.encodePacked(
                 _baseURI(),
@@ -165,8 +157,4 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
         }
         return tokens;
     }
-
-    // function ChangeBaseURI(string memory baseURI) public onlyOwner {
-    //     _baseTokenURI = baseURI;
-    // }
 }

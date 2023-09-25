@@ -379,7 +379,6 @@
             background-color: white;
             border-radius: 12px;
             width: 25vw;
-            // color: var(--Dark--);
             transition: all 0.3s ease-in-out;
           }
           .input_number {

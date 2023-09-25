@@ -3,10 +3,8 @@ import store from '@/store';
 import { create } from "ipfs-http-client"
 import Web3 from 'web3'
 import { updateSaleactive, insertSale, deleteSale,makeNewTransaction } from "./Sale"
-import { postOwnerContractList, getOwnerUpSaleNFTs, updateNFTOwnerListAfterBuy } from "./ownerContractLIst";
+import { postOwnerContractList, getOwnerUpSaleNFTs, updateNFTOwnerListAfterBuy} from "./ownerContractLIst";
 import { mintNFTContractABI, mintNFTContractBytecode, marketContractAddress, marketContractABI, ipfsPublicGatewayUrl, rpcUrl } from "@/contract/Contract"
-//  IPFS的根URL
-// const baseURL = ipfsBaseURI();
 //  铸币合约ABI
 const MintNFTContractABI = mintNFTContractABI()
 //  铸币合约ByteCode
@@ -15,8 +13,6 @@ const MintNFTContractBytecode = mintNFTContractBytecode()
 const MarketContractAddress = marketContractAddress();
 //  市场合约ABI
 const MarketContractABI = marketContractABI();
-// 指定其他节点的 IP 和端口
-// const peerAddress = ipfsPeerAddress()
 //  IPFS网关
 const publicGatewayUrl = ipfsPublicGatewayUrl();
 // 服务器IP
@@ -30,12 +26,11 @@ async function deployNFTContract(Name, Symbol, Maxmums) {
     .send({
       from: store.state.currentAddress
     });
-  console.log(NewNFTContractAddress._address);
   //  通过部署合约返回的合约地址，与合约ABI产生合约实例
   let NFTContract = await new store.state.Web3.eth.Contract(MintNFTContractABI, NewNFTContractAddress._address);
   return NFTContract;
 }
-//====================  保存到IPFS，返回IPFS哈希值
+// ====================  保存到IPFS，返回IPFS哈希值
 async function savetoIPFS(uploadFiles) {
   try {
     if (uploadFiles.length != 0) {
@@ -56,7 +51,7 @@ async function savetoIPFS(uploadFiles) {
   }
 }
 
-// 
+// ====================  铸造
 async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description, uploadFiles) {
   let nftCount = 0
   let ipfsHash = await savetoIPFS(uploadFiles)
@@ -66,7 +61,6 @@ async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description,
       await NFTContract.methods._currentId().call().then(re => { nftCount = re })
     } catch (error) {
       console.log(error);
-      console.log(NFTContract.methods);
     }
     await NFTContract.methods.mint(NFTName, description, ipfsHash).send({ from: store.state.currentAddress })
     await AddNewNFTToMetaMask(NFTContract._address, nftCount, symbol, `${publicGatewayUrl}${ipfsPath}`)
@@ -257,14 +251,13 @@ export async function Buy(NFT) {
     await MarketContract.methods.buy(NFT.saleId)
       .send({
         from: store.state.currentAddress,
-        value: store.state.Web3.utils.toWei(NFT.price, 'ether'),
+        value: store.state.Web3.utils.toWei(NFT.price.toString(), 'ether'),
       });
-    console.log("makeNewTransaction");
+
       await makeNewTransaction({
-        turnover: NFT.price,
-      }).then(re => {
-        console.log(re);
+        turnover: parseFloat(NFT.price),
       })
+    
     await AddNewNFTToMetaMask(NFT.nftAddress, NFT.tokenId.toString(), NFT.symbol, NFT.image)
     NFT.isActive = false
     NFT.currentOwner = store.state.currentAddress
@@ -278,7 +271,6 @@ export async function Buy(NFT) {
     console.log(error);
     return false
   }
-
 }
 
 export async function getFeePercentage() {

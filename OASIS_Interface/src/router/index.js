@@ -13,7 +13,6 @@ const routes = [
     name: 'home',
     component: () => import('@/views/market/index.vue'),
     meta: { isAuth: true },
-    // 
     children: [
       {
         path: 'ImitNFT',

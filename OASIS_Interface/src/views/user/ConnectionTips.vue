@@ -74,31 +74,18 @@
       this.OSnow();
     },
     methods: {
-      // checkMetaMaskInstall() {
-      //   try {
-      //     window.ethereum.enable();
-      //     this.metaMask = false;
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // },
       //判断系统类型
       OSnow() {
         var agent = navigator.userAgent.toLowerCase();
         var isMac = /macintosh|mac os x/i.test(navigator.userAgent);
         if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
           this.windows32 = true;
-          // this.checkMetaMaskInstall();
-          // https://go.microsoft.com/fwlink/?LinkID=2093505
         }
         if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
           this.windows64 = true;
-          // this.checkMetaMaskInstall();
-          // https://go.microsoft.com/fwlink/?LinkID=2093437
         }
         if (isMac) {
           this.mac = true;
-          // this.checkMetaMaskInstall();
         }
       },
     },

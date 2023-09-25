@@ -27,7 +27,7 @@ func (UTC *UserTokenController) GetToken(c *gin.Context) {
 	EncryptedPassword, err := makeUserMnemonicContract().UsrMnemonicCaller.UserMnemonic(bcosClient.GetCallOpts(), common.HexToAddress(user.Address))
 	if EncryptedPassword == user.EncryptedPassword {
 		fmt.Println(EncryptedPassword == user.EncryptedPassword)
-		// 模拟验证成功，生成JWT令牌
+		// 生成JWT令牌
 		jwtKey := []byte("0xbbcb99c61cd3d3746b8760dfc99ee23f336ef0ea")
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)

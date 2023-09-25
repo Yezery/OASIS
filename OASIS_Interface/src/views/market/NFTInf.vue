@@ -159,7 +159,12 @@
                         {{ inf.nftName }}
                       </div>
                       <div class="ownerAndToSell">
-                        <div class="ToSellBox" />
+                        <div class="ToSellBox">
+                          #{{ inf.tokenId }}
+                        </div>
+                        <div style="margin-left: 2%;">
+                          <span style="font-weight: 800;font-size: 2vw;">{{ $store.state.Web3.utils.fromWei(inf.price, 'ether') }} </span> ETH
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -310,10 +315,8 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
     methods: {
       async init() {
         if (typeof this.$store.state.marketNFTInf === typeof "") {
-          console.log(this.$store.state.marketNFTInf);
           try {
             this.NFTInf = await JSON.parse(this.$store.state.marketNFTInf);
-            console.log(this.NFTInf);
             this.NFTMetaData = await JSON.parse(this.NFTInf[6]);
             this.NFTContractAddress = this.NFTInf[2];
             this.NFTSaleId = this.NFTInf[0];
@@ -362,7 +365,6 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
             console.log(error);
           }
         } else {
-          console.log(this.$store.state.marketNFTInf);
           try {
             this.NFTInf = this.$store.state.marketNFTInf;
             this.NFTContractAddress = this.NFTInf.nftAddress;
@@ -445,7 +447,6 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
         }
         await getSaleListByContractAddress(NFTDto).then(re => {
           this.seriesNFTArrays = re.data.data
-          console.log(this.seriesNFTArrays);
         })
       },
       async Buy() {
@@ -521,7 +522,6 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
 
         /deep/ .selectBox-Button {
           width: 95%;
-          // border-bottom: 1px solid #dcdfe6;
           .SeriesNFT {
             height: 100%;
             text-align: center;

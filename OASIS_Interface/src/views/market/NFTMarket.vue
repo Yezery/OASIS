@@ -16,6 +16,7 @@
           class="search"
           placeholder="Search any collection"
           v-model="SearchVo.key"
+          style="border: 1px solid var(--Dark--);"
           @keydown.enter.prevent.stop="SearchNFT"
         >
       </span>
@@ -154,7 +155,10 @@
                 >
                   <template slot-scope="scope">
                     <div class="collectionRow">
-                      <div class="collectionImageBorder" style="display: inline-block;">
+                      <div
+                        class="collectionImageBorder"
+                        style="display: inline-block;"
+                      >
                         <img
                           class="nftImage"
                           :src="JSON.parse(scope.row.tokenURI).image"
@@ -201,17 +205,23 @@
                   </div>
                 </template>
                 <el-table-column
-                  type="index"
                   width="70"
                   label="Rank"
-                />
+                >
+                  <template slot-scope="scope">
+                    {{ scope.$index + 6 }}
+                  </template>
+                </el-table-column>
                 <el-table-column
                   label="藏品"
                   width="400"
                 >
                   <template slot-scope="scope">
                     <div class="collectionRow">
-                      <div class="collectionImageBorder" style="display: inline-block;">
+                      <div
+                        class="collectionImageBorder"
+                        style="display: inline-block;"
+                      >
                         <img
                           class="nftImage"
                           :src="JSON.parse(scope.row.tokenURI).image"
@@ -331,7 +341,6 @@
     },
     mounted() {
       getSaleList().then((re) => {
-        console.log(re);
         this.NFTList = re;
         this.filteredNFTList = re.filter((NFT) => NFT.isActive);
       });
@@ -358,7 +367,6 @@
         if (opt == 2) {
           this.SearchVo.page += 1;
         }
-        console.log(this.SearchVo);
         await search(this.SearchVo).then((re) => {
           this.SearchList = re.data.data;
         });
@@ -386,7 +394,6 @@
         this.$store.commit("setIsSearch", false);
       },
       handleColumnClick(row) {
-        console.log(row);
         this.$store.commit("setMarketNFTInf", JSON.stringify(row));
         this.$router.push({
           path: "/home/NFTInf",
@@ -419,19 +426,15 @@
   transition: all 2s ease-in-out;
 
   & .search {
-    // z-index: 3;
     height: 60px;
     width: 90%;
     border-radius: 50px;
-    border: 1px solid gray;
+    
     background-color: var(--White--);
     text-align: center;
     color: var(--Dark--);
     font-size: 17px;
     box-shadow: var(--boxshdow-style--);
-    // &:focus {
-    //   animation: shine 1s linear 1s infinite alternate;
-    // }
     transition: all 0.3s ease-in-out;
     &:hover {
       box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
@@ -716,6 +719,9 @@ input::-webkit-input-placeholder {
       box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
         rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
       transition: all 0.3s ease-in-out;
+    }
+    .el-table__fixed-right::before, .el-table__fixed::before {
+      display: none;
     }
     .el-table,
     .el-table__expanded-cell {

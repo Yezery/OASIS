@@ -156,7 +156,7 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
           sum += this.chartOptions.series[0].data[index];
         }
         this.title=`Balance`
-        this.subtitle = `${sum} ETH`;
+        this.subtitle = `${Number(sum)} ETH`;
         }
         let myChart = echarts.init(document.getElementById("EchartsShow"));
         if (this.$store.state.isDark) {
@@ -175,11 +175,9 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
       },
       async init() {
         await scheduleDailySummary().then(re => {
-        console.log(re);
         for (let index = 0; index < re.data.data.length; index++) {
-          this.chartOptions.series[0].data.push(re.data.data[index].TotalTurnover)
+          this.chartOptions.series[0].data.push(Number(re.data.data[index].TotalTurnover.toString().slice(0, 4)))
           }  
-        console.log(this.chartOptions.series[0].data);
       })
       }
     },

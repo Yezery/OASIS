@@ -66,6 +66,9 @@
         >
           <UserInf />
         </div>
+        <!-- <div class="userInf">
+          <div class="feePercentage" />
+        </div> -->
         <div
           class="WaitLogin"
           v-if="!$store.state.isEmpower"
@@ -140,7 +143,7 @@
                   <div class="EmpowerPasswordOpt">
                     <span
                       style="margin-right: 5%;"
-                      @click="forgetEmpoverPassword(1)"
+                      @click="viewControl(1)"
                     >忘记授权码</span>
                     <span
                       style="margin-left: 5%;"
@@ -271,7 +274,7 @@
                 <div class="SignSubmitBox">
                   <el-button
                     type="danger"
-                    @click="forgetEmpoverPassword(2)
+                    @click="viewControl(2)
                     "
                   >
                     返回
@@ -289,12 +292,25 @@
               class="animate5"
               v-if="animate5"
             >
-              <div style="margin-bottom: 20px;font-size: 1vw;">请设置新的授权码</div>
+              <div style="margin-bottom: 20px;font-size: 1vw;">
+                请设置新的授权码
+              </div>
               <el-input
                 v-model="newMnemonic"
                 placeholder="请设置新的授权码"
               />
-              <el-button @click="resetMnemonic" style="margin-top: 20px;">
+              <el-button
+                type="danger"
+                @click="viewControl(3)"
+                style="margin-top: 20px;"
+              >
+                取消
+              </el-button>
+              <el-button
+                type="primary"
+                @click="resetMnemonic"
+                style="margin-top: 20px;"
+              >
                 重设
               </el-button>
             </div>
@@ -310,9 +326,9 @@
     getToken,
     setMnemonic,
     checkUserExist,
-  setAuthenticationMetaInformation,
-  forgetMnemonic,
-  resetMnemonic
+    setAuthenticationMetaInformation,
+    forgetMnemonic,
+    resetMnemonic,
   } from "@/api/axios/user";
   import CryptoJS from "crypto-js";
   import ConnectionTips from "../user/ConnectionTips.vue";
@@ -345,7 +361,7 @@
         animate2: false,
         animate3: false,
         animate4: false,
-        animate5:false,
+        animate5: false,
         EmpowerSignForm: {
           sp1: "",
           sp2: "",
@@ -356,12 +372,14 @@
         CopySuccess: "复制成功！",
         isCopy: false,
         isRepeatClick: true,
-        newMnemonic:""
+        newMnemonic: "",
+        isUnlocked:false
       };
     },
     created() {},
-    mounted() {
-      if (window.ethereum != undefined && window.ethereum.isMetaMask) {
+    async mounted() {
+      if (window.ethereum != undefined) {
+        await window.ethereum._metamask.isUnlocked().then(re => this.isUnlocked = re)
         window.ethereum.on("accountsChanged", async () => {
           window.location.reload();
         });
@@ -374,15 +392,14 @@
             offset: 200,
           });
         });
-        this.connectWallet();
-        if (!this.$store.state.isconnect) {
+        if (!this.$store.state.isconnect && this.isUnlocked) {
+          await this.connectWallet();
           this.isGetToken = true;
           setTimeout(async () => {
             this.anmiate1 = false;
             await checkUserExist({
               userAddress: this.$store.state.currentAddress,
             }).then(async (re) => {
-              console.log(re);
               if (re.data.data == "") {
                 this.animate3 = true;
               } else {
@@ -398,25 +415,18 @@
         this.user.encryptedPassword = CryptoJS.SHA256(
           this.user.encryptedPassword
         ).toString();
-        await setMnemonic(this.user).then((re) => {
-          console.log(re);
-        });
+        await setMnemonic(this.user)
         this.EmpowerSignForm.userAddress = this.$store.state.currentAddress;
-        await setAuthenticationMetaInformation(this.EmpowerSignForm).then(
-          (re) => {
-            console.log(re);
-          }
-        );
-        await getToken(this.user).then((re) => {
+        await setAuthenticationMetaInformation(this.EmpowerSignForm)
+        await getToken(this.user).then(async (re) => {
           localStorage.clear();
-          console.log(re);
           if (re.data.data == null) {
             alert("密码错误");
           } else {
             let currentAddress = {
               ownerAddress: this.$store.state.currentAddress,
             };
-            postOwnerContractList(currentAddress).then((re) => {
+            await postOwnerContractList(currentAddress).then((re) => {
               this.$store.commit("setOwnerNFTList", re.data.data);
             });
             localStorage.setItem("token", re.data.data);
@@ -429,21 +439,34 @@
               position: "top-left",
               offset: 200,
             });
+            
           }
         });
       },
       openEmpower() {
-        if (!this.$store.state.isEmpower) {
+        if (this.$store.state.isEmpower || window.ethereum == undefined) {
+          return
+        }
+        if (!this.isUnlocked) {
+          this.$notify({
+            title: "钱包未解锁",
+            type: "warning",
+            position: "top-left",
+            offset: 200,
+          });
+          return
+        } else {
           this.isGetToken = true;
         }
+       
+         
       },
-      async checkEmpower() {     
+      async checkEmpower() {
         this.user.encryptedPassword = CryptoJS.SHA256(
           this.user.encryptedPassword
         ).toString();
         await getToken(this.user).then((re) => {
           localStorage.clear();
-          console.log(re);
           if (re.data.data == null) {
             this.user.encryptedPassword = "";
             this.$notify({
@@ -457,7 +480,6 @@
               ownerAddress: this.$store.state.currentAddress,
             };
             postOwnerContractList(currentAddress).then((re) => {
-              console.log(re);
               this.$store.commit("setOwnerNFTList", re.data.data);
             });
             localStorage.setItem("token", re.data.data);
@@ -473,22 +495,28 @@
           }
         });
       },
-      forgetEmpoverPassword(opt) {
-        if (opt == 1) {
-          this.animate2 =false
-        this.animate4 = true;
-        } else {
-          this.animate2 =true
-        this.animate4 = false;
+      viewControl(opt) {
+        switch (opt) {
+          case 1:
+            this.animate2 = false;
+            this.animate4 = true;
+            break;
+          case 2:
+            this.animate2 = true;
+            this.animate4 = false;
+            break;
+          case 3:
+            this.animate2 = true;
+            this.animate5 = false;
+            break;
         }
-      
       },
       async backPassword() {
         this.EmpowerSignForm.userAddress = this.$store.state.currentAddress;
-        forgetMnemonic(this.EmpowerSignForm).then(re => {
+        forgetMnemonic(this.EmpowerSignForm).then((re) => {
           if (re.data.data) {
-            this.animate5 = true
-            this.animate4 = false
+            this.animate5 = true;
+            this.animate4 = false;
           } else {
             this.$notify({
               title: "密保错误",
@@ -497,42 +525,41 @@
               offset: 200,
             });
           }
-        })
+        });
       },
       async resetMnemonic() {
         this.EmpowerSignForm.newMnemonic = CryptoJS.SHA256(
-          this.newMnemonic).toString();
-        this.EmpowerSignForm.userAddress = this.$store.state.currentAddress
-        console.log(this.EmpowerSignForm);
-        await checkUserExist(this.EmpowerSignForm).then(re => {
+          this.newMnemonic
+        ).toString();
+        this.EmpowerSignForm.userAddress = this.$store.state.currentAddress;
+        await checkUserExist(this.EmpowerSignForm).then((re) => {
           if (re.data.data == this.EmpowerSignForm.encryptedPassword) {
             this.$notify({
-            title: "不能与旧密码重复",
-            type: "warning",
-            position: "top-left",
-            offset: 200,
-          });
-            return
-          } else {
-            resetMnemonic(this.EmpowerSignForm).then(re => {
-              if (re.data.data == null) {
-                this.$notify.error({
-              title: "系统异常",
+              title: "不能与旧密码重复",
+              type: "warning",
               position: "top-left",
               offset: 200,
             });
+            return;
+          } else {
+            resetMnemonic(this.EmpowerSignForm).then((re) => {
+              if (re.data.data == null) {
+                this.$notify.error({
+                  title: "系统异常",
+                  position: "top-left",
+                  offset: 200,
+                });
               }
               this.$notify({
-              title: "🎉 重设成功",
-              position: "top-left",
-              offset: 200,
+                title: "🎉 重设成功",
+                position: "top-left",
+                offset: 200,
               });
-              this.animate2 = true
-              this.animate5 =false
-             })
+              this.animate2 = true;
+              this.animate5 = false;
+            });
           }
-        })
-       
+        });
       },
       canacelEmpover() {
         this.isGetToken = false;
@@ -547,53 +574,40 @@
         this.eChangTheme = method;
       },
       async connectWallet() {
-        // if (this.isRepeatClick) {
-        // this.isRepeatClick = false;
-        if (
-          localStorage.getItem["token"] == null ||
-          !this.$store.state.isconnect
-        ) {
-          try {
-            // 请求用户授权
-            await window.ethereum
-              .request({ method: "eth_requestAccounts" })
-              .then(async (handleAccountsChanged) => {
-                this.$store.commit("setcurrentAddress", handleAccountsChanged[0]);
-                this.$store.commit("changeAvatar", handleAccountsChanged[0]);
-                this.user.userAddress = handleAccountsChanged[0];
-              })
-              .catch((error) => {
-                this.$store.commit("connection", false);
-                if (error.code === 4001) {
-                  // EIP-1193 userRejectedRequest error
-                  console.log("Please connect to MetaMask.");
-                } else {
-                  console.error(error);
-                }
+          if (
+            localStorage.getItem["token"] == null ||
+            !this.$store.state.isconnect
+          ) {
+            try {
+              // 请求用户授权
+              await window.ethereum
+                .request({ method: "eth_requestAccounts" })
+                .then(async (handleAccountsChanged) => {
+                  this.$store.commit(
+                    "setcurrentAddress",
+                    handleAccountsChanged[0]
+                  );
+                  this.$store.commit("changeAvatar", handleAccountsChanged[0]);
+                  this.user.userAddress = handleAccountsChanged[0];
+                })
+                .catch((error) => {
+                  this.$store.commit("connection", false);
+                  if (error.code === 4001) {
+                    // EIP-1193 userRejectedRequest error
+                    console.log("Please connect to MetaMask.");
+                  } else {
+                    console.error(error);
+                  }
+                });
+            } catch (error) {
+              console.error(error);
+              this.$notify.error({
+                title: "连接失败",
+                position: "top-left",
+                offset: 200,
               });
-          } catch (error) {
-            console.error(error);
-            this.$notify.error({
-              title: "连接失败",
-              position: "top-left",
-              offset: 200,
-            });
+            }
           }
-        } else {
-          alert("jaslkjdkljaskldjl");
-        }
-
-        // } else {
-        //   this.$notify({
-        //     title: "请稍等再c",
-        //     type: "warning",
-        //     position: "top-left",
-        //     offset: 200,
-        //   });
-        // }
-        // setTimeout(() => {
-        //   this.isRepeatClick = true;
-        // }, 5000);
       },
       Copy() {
         navigator.clipboard
@@ -689,20 +703,18 @@
           margin-left: 4%;
           .EmpowerPasswordBoxTop {
             width: 100%;
-            
           }
           .EmpowerPasswordBoxBottom {
             width: 100%;
             font-size: 0.7vw;
-            .EmpowerPasswordOpt{
+            .EmpowerPasswordOpt {
               margin-top: 30px;
-            display: flex;
-            justify-content: space-around;
+              display: flex;
+              justify-content: space-around;
               span {
-              cursor: pointer;
+                cursor: pointer;
+              }
             }
-            }
-           
           }
         }
       }
@@ -744,8 +756,8 @@
           }
         }
       }
-      .animate4{
-        @extend .animate3
+      .animate4 {
+        @extend .animate3;
       }
     }
   }
@@ -846,6 +858,19 @@
   transition: all 0.3s ease-in-out;
   &:hover {
     background-color: rgba(238, 238, 238, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+}
+.feePercentage {
+  width: 90%;
+  height: 100%;
+  background-color: var(--White--);
+  border-radius: 40px;
+  box-shadow: var(--boxshdow-style--);
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+      rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
     transition: all 0.3s ease-in-out;
   }
 }

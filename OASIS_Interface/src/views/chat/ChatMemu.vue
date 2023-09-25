@@ -71,7 +71,7 @@
           >
             <div
               class="ChatWindowBox"
-              style="width: 309px; height: 499px"
+              style="width: 329px; height: 520px"
             >
               <el-container>
                 <el-header>
@@ -135,8 +135,8 @@
                     >
                     <button @click="send">
                       <i
-                        class="el-icon-thumb"
-                        style="font-size: 27px"
+                        class="el-icon-arrow-up"
+                        style="font-size: 30px;cursor: pointer;"
                       />
                     </button>
                   </div>
@@ -157,7 +157,6 @@
   export default {
     data() {
       return {
-        // Chat
         user: {},
         isCollapse: false,
         users: [],
@@ -192,12 +191,12 @@
         );
       },
       send() {
-        if (!this.chatUser) {
-          this.$message({ type: "warning", message: "请选择聊天对象" });
-          return;
-        }
         if (!this.text) {
-          this.$message({ type: "warning", message: "请输入内容" });
+          this.$notify({
+                title: "输入不能为空",
+                type: "warning",
+                position: "bottom-left",
+              });
         } else {
           if (typeof WebSocket == "undefined") {
             console.log("您的浏览器不支持WebSocket");
@@ -205,7 +204,6 @@
             console.log("您的浏览器支持WebSocket");
             // 组装待发送的消息 json
             // {"from": "zhang", "to": "admin", "text": "聊天文本"}
-
             let message = {
               from: this.user.username,
               to: this.chatUser,
@@ -397,8 +395,6 @@
   transition-delay: 0s;
   transition: all 0.3s ease-in-out;
   border: 2px solid transparent;
-  // box-shadow: 0 0 8px var(--HomeBackgrounde-blue-green--);
-  // box-shadow: 0 0 10px var(--HomeBackgrounde-blue-green--);
 }
 
 .friendname {
@@ -512,7 +508,7 @@
 }
 
 .inputarea {
-  height: 4vh;
+  height: 3vh;
   width: 65%;
   resize: none;
   outline: none;
@@ -527,7 +523,7 @@
 .inputer {
   text-align: center;
   width: 90%;
-  padding: 10px 0px 10px 0px;
+  padding: 7px 0px 7px 0px;
   margin-bottom: 10px;
   margin-top: 20px;
   border-radius: 40px;

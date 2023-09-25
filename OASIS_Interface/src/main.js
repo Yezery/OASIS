@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import Web3 from 'web3'
 Vue.config.productionTip = false
-// Vue.prototype.echarts = echarts
 import 'animate.css';
 import './plugins/element.js'
 import Identicon from "identicon.js"

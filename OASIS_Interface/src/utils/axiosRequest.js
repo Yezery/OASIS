@@ -3,7 +3,7 @@ import axios from 'axios'
 // const IP = store.state.IP
 const service = axios.create({
   // baseURL: `http://${IP}:8082`,
-  baseURL: 'http://127.0。0.1:8082',
+  baseURL: 'http://10.22.60.221:8082',
     // baseURL: 'http://10.22.60.119:8082',
     timeout: 10000,
 })

@@ -140,7 +140,8 @@ func main() {
 	router.Use(func(c *gin.Context) {
 		c.Set("db", db)
 	})
-
+	// 开启WebSocket协议
+	Client := models.NewChatController()
 	UserMnemonicController := &controllers.UserMnemonicController{}
 	SaleController := &controllers.SaleController{}
 	SaleTypeController := &controllers.SaleTypeController{}
@@ -149,12 +150,10 @@ func main() {
 	TransactionController := &controllers.TransactionController{}
 	// 连接FiscoBcos
 	UserMnemonicController.FiscoConn()
+	// 公开路由
 	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
-
-	// 开启WebSocket协议
-	Client := models.NewChatController()
-
-	// 路由接口
+	router.POST("/GetSaleListByContractAddress", SaleController.GetSaleListByContractAddress)
+	router.GET("/OasisChat/:username", Client.WebSocketHandler)
 	router.POST("/getToken", UserTokenController.GetToken)
 	router.GET("/getSaleList", SaleController.GetSaleList)
 	router.GET("/getTypeList", SaleTypeController.GetTypeList)
@@ -163,6 +162,8 @@ func main() {
 	router.POST("/Search", NFTOwnerListController.Search)
 	router.POST("/forgetMnemonic", UserMnemonicController.ForgetMnemonic)
 	router.POST("/resetMnemonic", UserMnemonicController.ResetMnemonic)
+	router.POST("/scheduleDailySummary", TransactionController.ScheduleDailySummary)
+	// 授权路由
 	jwtGroup := router.Group("/", JWT())
 	jwtGroup.POST("/getOwnerNFTs", NFTOwnerListController.GetOwnerNFTs)
 	jwtGroup.POST("/getOwnerNFTsByAddress", NFTOwnerListController.GetOwnerNFTsByAddress)
@@ -172,11 +173,7 @@ func main() {
 	jwtGroup.POST("/createNFT", NFTOwnerListController.CreateNFTInf)
 	jwtGroup.POST("/DeleteSale", SaleController.DeleteSale)
 	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
-	jwtGroup.POST("/GetSaleListByContractAddress", SaleController.GetSaleListByContractAddress)
-	router.GET("/OasisChat/:username", Client.WebSocketHandler)
-
-	router.POST("/scheduleDailySummary", TransactionController.ScheduleDailySummary)
-	router.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
+	jwtGroup.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
 	// router.RunTLS(":"+config.Server.Port, "./config/cert.pem", "./config/key.pem")
 	router.Run(":" + config.Server.Port)
 }
