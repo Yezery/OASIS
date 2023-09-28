@@ -56,7 +56,6 @@
           </template>
         </ad>
       </div>
-
       <div
         class="MarketMain animate__animated animate__fadeInLeft"
         style="animation-delay: 1s;"

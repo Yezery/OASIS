@@ -75,7 +75,7 @@ type AuthenticationMetaInformationDTO struct {
 	Sp3         string `json:"sp3"`
 	NewMnemonic string `json:"newMnemonic"`
 }
-
+// 设置授权码
 func (UMC *UserMnemonicController) SetMnemonic(c *gin.Context) {
 	var userMnemonic userMnemonicDTO
 	_ = c.ShouldBind(&userMnemonic) //绑定参数，将参数解析到NFT结构体中
@@ -91,7 +91,7 @@ func (UMC *UserMnemonicController) SetMnemonic(c *gin.Context) {
 	fmt.Println(Receipt)
 	utils.SendResponse(c.Writer, http.StatusOK, Receipt)
 }
-
+// 设置密保
 func (UMC *UserMnemonicController) SetAuthenticationMetaInformation(c *gin.Context) {
 
 	var authenticationMetaInformationDTO AuthenticationMetaInformationDTO
@@ -107,6 +107,7 @@ func (UMC *UserMnemonicController) SetAuthenticationMetaInformation(c *gin.Conte
 	utils.SendResponse(c.Writer, http.StatusOK, Receipt)
 }
 
+// 检查授权码
 func (UMC *UserMnemonicController) CheckMnemonic(c *gin.Context) {
 	var userMnemonic userMnemonicDTO
 	_ = c.ShouldBind(&userMnemonic) //绑定参数，将参数解析到NFT结构体中
@@ -118,6 +119,7 @@ func (UMC *UserMnemonicController) CheckMnemonic(c *gin.Context) {
 	utils.SendResponse(c.Writer, http.StatusOK, Mnemonic)
 }
 
+// 重置授权码
 func (UMC *UserMnemonicController) ForgetMnemonic(c *gin.Context) {
 	var authenticationMetaInformationDTO AuthenticationMetaInformationDTO
 	_ = c.ShouldBind(&authenticationMetaInformationDTO) //绑定参数，将参数解析到NFT结构体中
