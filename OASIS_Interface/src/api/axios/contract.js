@@ -15,8 +15,8 @@ const MarketContractAddress = marketContractAddress();
 const MarketContractABI = marketContractABI();
 //  IPFS网关
 const publicGatewayUrl = ipfsPublicGatewayUrl();
-// 服务器IP
-const IP = store.state.IP
+// ipfsIP
+const ipfsIP = store.state.ipfsIP
 
 //====================  部署铸造NFT合约，返回NFT合约实例 
 async function deployNFTContract(Name, Symbol, Maxmums) {
@@ -31,12 +31,12 @@ async function deployNFTContract(Name, Symbol, Maxmums) {
   return NFTContract;
 }
 // ====================  保存到IPFS，返回IPFS哈希值
-async function savetoIPFS(uploadFiles) {
+export async function savetoIPFS(uploadFiles) {
   try {
     if (uploadFiles.length != 0) {
       //ipfs的add方法是将东西添加到ipfs网络上
       let results = await create({
-        host: `${IP}`,
+        host: `${ipfsIP}`,
         port: "5001",
         protocol: "http",
       }).add(
@@ -153,9 +153,9 @@ export async function MakeNFT(Name, Symbol, uploadFiles, Maxmums, FirstNFTName, 
 //====================  市场合约
 let MarketContract;
 let marketUseWeb3;
-// 实例化市场合约
 
-console.log("初始化WEB3......");
+// 实例化市场合约
+  console.log("初始化WEB3......");
 if (window.ethereum != undefined) {
   marketUseWeb3 = new Web3(window.ethereum);
   store.commit("setWEB3", new Web3(window.ethereum));
@@ -165,6 +165,7 @@ if (window.ethereum != undefined) {
   store.commit("setWEB3", new Web3(rpcUrl()));
   console.log("初始化WEB3(RPC)完毕");
 }
+
 
 MarketContract = new marketUseWeb3.eth.Contract(
   MarketContractABI,

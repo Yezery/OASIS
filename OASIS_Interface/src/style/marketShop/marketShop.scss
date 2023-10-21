@@ -1,0 +1,404 @@
+.MainWindow {
+  width: 100%;
+  display: flex;
+  .leftMain {
+    flex: 3;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    
+    .ad {
+      border: $globalBorder;
+      margin-top: $globalMargin;
+      width: 95%;
+      height: 300px;
+      overflow: hidden;
+      border-radius: $globalBorderRadius;
+      transition: $globalTransitionUI;
+      box-shadow: $globalboxshadowfrom;
+
+      &:hover {
+        box-shadow: $globalboxshadowto;
+        transition: $globalTransitionUI;
+      }
+    }
+
+    .MarketMain {
+      width: 100%;
+      
+      .SellIndex {
+        font-family: Arial, Helvetica, sans-serif;
+        width: 100%;
+
+
+        /deep/ .SellIndexInner {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .el-tabs__nav-wrap::after {
+            display: none;
+          }
+
+          .el-tabs__nav {
+            height: 100%;
+          }
+
+          .el-tabs {
+            border-radius: 20px;
+            left: 0px;
+            top: 0px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+          }
+
+          /* 去除灰色横条 */
+          .el-tabs__nav-wrap::after {
+            position: static !important;
+          }
+
+          /* 设置滑块颜色 */
+          .el-tabs__active-bar {
+            background-color: var(--Dark--);
+            height: 100%;
+            border: 1px solid white;
+          }
+
+          /* 设置滑块停止位置 */
+          .el-tabs__active-bar.is-top {
+
+            width: 104px !important;
+            border-radius: 17px;
+            top: 0px !important;
+            left: -15px !important;
+            position: absolute !important;
+            z-index: 1;
+          }
+
+          /* 设置当前选中样式 */
+          .el-tabs__item.is-active {
+            background-color: transparent;
+            color: var(--White--) !important;
+            z-index: 2;
+          }
+
+          /* 设置未被选中样式 */
+          .el-tabs__item {
+            padding: 0px 20px !important;
+            width: auto;
+            font-size: 18px;
+            font-weight: 800;
+            box-sizing: border-box;
+            display: inline-block;
+            position: relative !important;
+            color: var(--Dark--) !important;
+            z-index: 2;
+          }
+
+          .selectBox-Active {
+            border: none;
+            font-size: 1vw;
+            border-radius: 20px;
+            transition: all 0.3s ease-in-out;
+            font-weight: 800;
+            border: none;
+            background-color: rgb(246, 246, 246);
+
+            &:hover {
+              background-color: rgb(246, 246, 246);
+              transition: all 0.3s ease-in-out;
+              color: white;
+            }
+          }
+
+          .selectBox-NOActive {
+            @extend .selectBox-Active;
+          }
+
+          .el-tabs__content {
+            height: 100%;
+          }
+        }
+      }
+
+      /deep/ .marketShopMain {
+        transition: $globalTransitionUI;
+        box-shadow: $globalboxshadowfrom;
+        border: $globalBorder;
+        &:hover {
+          box-shadow: $globalboxshadowto;
+          transition: $globalTransitionUI;
+        }
+
+        display: flex;
+        margin-top: $globalMargin;
+        margin-bottom: $globalMargin;
+        width: 90%;
+        height: 96%;
+        overflow: hidden;
+        border-radius: $globalBorderRadius;
+        background-color: var(--White--);
+        padding: 2% 2% 2% 2%;
+
+        // padding-bottom: 5%;
+        // &:hover {
+        //   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+        //     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+        //   transition: all 0.3s ease-in-out;
+        // }
+        .el-table::before{
+          display: none;
+          
+        } 
+        .el-table__fixed-right::before,
+        .el-table__fixed::before {
+          display: none;
+        }
+
+        .el-table,
+        .el-table__expanded-cell {
+          background-color: var(--White--);
+          transition: all 0.3s ease-in-out;
+        }
+        .el-table th.el-table__cell.is-leaf{
+          border:none
+        }
+        /* 表格内背景颜色 */
+        .el-table th,
+        .el-table tr,
+        .el-table td {
+          background-color: transparent;
+        }
+
+        .el-skeleton__row {
+          /* 设置骨架屏行样式 */
+          height: 48px;
+          margin-bottom: 10px;
+          background-color: black;
+ 
+        }
+
+        .marketShopTableLeft {
+          font-size: 1vw;
+          color: var(--Dark--);
+          flex: 1;
+
+          td.el-table__cell {
+            border: 0px solid white;
+            text-align: center;
+            border-bottom:$globalBorder;
+          }
+          // .el-table__body tr:hover{
+          //   background-color: rgba(245, 247, 250, 0.6);
+          // }
+          .el-table__body tr:hover>td.el-table__cell{
+            color: var(--Dark--);
+            background-color: rgba(245, 247, 250, 0.6);
+            cursor: pointer;
+          }
+
+          .el-table__body tr:hover>td.el-table__cell:first-child {
+            border-radius: 20px 0 0 20px;
+  
+          }
+
+          .el-table__body tr:hover>td.el-table__cell:last-child {
+            border-radius: 0 20px 20px 0;
+          }
+
+          td {
+            padding-top: 20px;
+            padding-bottom: 20px;
+           
+          }
+
+          .el-table__header {
+            th {
+              font-size: 15px;
+
+              :nth-child(2) {
+                font-size: 20px;
+                text-align: left;
+              }
+            }
+          }
+          .collectionRow {
+              display: flex;
+              align-items: center;
+              font-weight: 800;
+              color: var(--Dark--);
+              .collectionImageBorder {
+                width: 65px;
+                height: 65px;
+                border-radius: 15px;
+                overflow: hidden;
+                .nftImage {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
+              }
+            }
+        }
+      }
+    }
+  }
+
+  .rightMain {
+    width: 50%;
+    height: 100%;
+    flex: 1;
+
+    .balanceEchartBox {
+      margin-top: $globalMargin;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+//  .el-aside:last-child {
+//     max-width: auto;
+//     min-width: 25%;
+//     padding-right: 1vw;
+//     background: var(--White-eee--);
+// }
+
+// .el-tabs__item.is-active {
+
+//     border: 3px solid var(--Selected-button1-blue-black) !important;
+//     animation: colorChange 3s linear 1s infinite alternate;
+//     animation: ChangeHomeBackground 3s linear 1s infinite alternate;
+// }
+
+// @keyframes ChangeHomeBackground {
+//     0% {
+//         transition: all 1s ease-in-out;
+//         border: 3px solid transparent !important;
+//     }
+
+//     100% {
+//         transition: all 1s ease-in-out;
+//         background-color: var(re--Selected-button1-blue-black);
+//         -webkit-box-reflect: below 1px linera-gradient(transparent, rgba(0, 0, 0, 0.3));
+//     }
+// }
+
+
+// // .el-header {
+// //     background-color: var(--White--);
+// //     color: #333;
+// //     height: 24px !important;
+// //     height: 0px !important;
+// //     display: flex;
+// //     align-items: center;
+// // }
+
+// .el-aside {
+//     background-color: var(--White--);
+//     color: #333;
+//     height: 100% !important;
+//     transition: all .3s ease-in-out;
+// }
+
+// .el-main {
+//     background-color: var(--White-eee--);
+//     color: #333;
+//     width: 100% !important;
+//     height: 100% !important;
+//     padding: 0px !important;
+//     transition: all .3s ease-in-out;
+// }
+
+// // .el-container {
+// //     height: 100%;
+// // }
+
+// // .el-menu-vertical-demo:not(.el-menu--collapse) {
+// //     width: 200px;
+// // }
+
+// .UserImage {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     height: 50px;
+//     background-color: black;
+//     display: flexbox;
+//     width: 70px;
+// }
+
+// .el-row {
+//     margin-bottom: 20px;
+
+//     &:last-child {
+//         margin-bottom: 0;
+//     }
+// }
+
+// .el-col {
+//     border-radius: 4px;
+// }
+
+// .bg-purple {
+//     background-color: var(--White--);
+//     transition: all .3s ease-in-out;
+
+//     &:hover {
+//         box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+//         transition: all .3s ease-in-out;
+//     }
+// }
+
+// .grid-content {
+//     border-radius: 40px;
+//     min-height: 60px;
+//     display: flex;
+//     justify-content: space-around;
+//     align-items: center;
+// }
+
+// .row-bg {
+//     padding: 3.5% 0;
+// }
+
+
+// .BalanceEchart {
+//     width: 100%;
+//     margin-top: 3.5%;
+//     margin-bottom: 3.5%;
+//     display: flex;
+//     align-items: center;
+//     flex-direction: column;
+
+
+
+// }
+
+// .userInf {
+//     width: 100%;
+//     padding-top: 3.5%;
+//     height: auto;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
+// .WaitLogin{
+//     @extend .userInf
+// }

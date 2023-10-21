@@ -1,0 +1,121 @@
+$globalBorderRadius: 35px;
+$globalTransition: all .7s ease-in-out;
+$globalTransitionUI: all .3s ease-in-out;
+$globalboxshadowfrom: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+$globalboxshadowto: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+$globalMargin:15px;
+$globalBorder:1.5px solid var(--HFBorder--);
+// transition: $globalTransitionUI;
+// box-shadow: $globalboxshadowfrom;
+// &:hover {
+//   box-shadow: $globalboxshadowto;
+//   transition: $globalTransitionUI;
+// }
+
+
+/* 全局css */
+@font-face {
+  font-family: "TESLA";
+  src: url(@/font/TESLA.ttf);
+}
+
+@font-face {
+  font-family: "Transformers_Movie";
+  src: url(@/font/Transformers_Movie.ttf);
+}
+
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url(@/font/Gilroy-Medium.ttf);
+}
+
+@font-face {
+  font-family: "PF";
+  src: url(@/font/PF_J.ttf);
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  /* user-select: none; */
+  font-family: "PF";
+  background-color: var(--White-eee--);
+}
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  // color: #2c3e50;
+}
+
+/* 全局通知样式 */
+.el-notification {
+  border: none !important;
+  padding-top: 30px;
+  width: 200px;
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+
+  .el-notification__title {
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  display: none;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 25px;
+}
+
+.el-popover.monitor-yt-popover {
+  background-color: var(--White--);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+      rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    transition: all 0.3s ease-in-out;
+  }
+}
+
+
+// /* 全局通知样式 */
+// .el-notification {
+//   border: none !important;
+//   padding-top: 2%;
+//   padding-bottom: 2%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   border-radius: 20px;
+//   .el-notification__title {
+//     font-size: 1vw;
+//     font-weight: 500;
+//   }
+// }
+// ::-webkit-scrollbar {
+//   width: 6px;
+//   height: 8px;
+//   display: none;
+//   background-color: transparent;
+// }
+// ::-webkit-scrollbar-thumb {
+//   background-color: #ccc;
+//   border-radius: 25px;
+// }
+

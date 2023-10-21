@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"example.com/m/controllers"
-	"example.com/m/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/yaml.v3"
@@ -141,13 +140,14 @@ func main() {
 		c.Set("db", db)
 	})
 	// 开启WebSocket协议
-	Client := models.NewChatController()
+	Client := controllers.NewChatController()
 	UserMnemonicController := &controllers.UserMnemonicController{}
 	SaleController := &controllers.SaleController{}
 	SaleTypeController := &controllers.SaleTypeController{}
 	NFTOwnerListController := &controllers.NFTOwnerListController{}
 	UserTokenController := &controllers.UserTokenController{}
 	TransactionController := &controllers.TransactionController{}
+	GPTController := &controllers.GPTController{}
 	// 连接FiscoBcos
 	UserMnemonicController.FiscoConn()
 	// 公开路由
@@ -174,6 +174,7 @@ func main() {
 	jwtGroup.POST("/DeleteSale", SaleController.DeleteSale)
 	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
 	jwtGroup.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
+	router.POST("/sendToGPT", GPTController.SendToGPT)
 	// router.RunTLS(":"+config.Server.Port, "./config/cert.pem", "./config/key.pem")
 	router.Run(":" + config.Server.Port)
 }

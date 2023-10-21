@@ -1,0 +1,149 @@
+.EmpowerMask {
+  z-index: 200;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .EmpowerBox {
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    border-radius: $globalBorderRadius;
+    background-color: white;
+    display: flex;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    .EmpowerUserInfbox {
+      margin: 5% 0 5% 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .animate1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 1s ease-in-out;
+        width: 100%;
+        .EmpowerUserInf {
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 4px solid var(--border-green--);
+          .UserImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .EmpowerUserAddress {
+          margin-top: 3%;
+          margin-bottom: 3%;
+          font-weight: 800;
+          font-size: 1.2vw;
+          padding-left: 4%;
+        }
+      }
+      .animate2 {
+        transition: all 1s ease-in-out;
+        @extend .animate1;
+        .EmpowerUserAddress {
+          padding-left: 0;
+        }
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .EmpowerPasswordBox {
+          .EmpowerPasswordBoxTop {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            .el-form {
+              margin-right: 10%;
+            }
+            .el-input /deep/ .el-input__inner {
+              border: 1px solid rgba(0, 0, 0, 0);
+              border-bottom: 1px solid rgb(0, 0, 0);
+              border-radius: 0px;
+            }
+          }
+          .EmpowerPasswordBoxBottom {
+            width: 100%;
+            font-size: 10px;
+            .EmpowerPasswordOpt {
+              margin-top: 10px;
+              display: flex;
+              justify-content: space-around;
+              span {
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+      .animate3 {
+        @extend .animate1;
+        flex-direction: column;
+        .SignTop {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .SignUserInf {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #ff0000;
+            .SignUserImage {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+          .SignUserAddress {
+            font-weight: 800;
+            font-size: 1vw;
+            padding-left: 2%;
+          }
+        }
+
+        .SignForm {
+          width: 50%;
+          margin-top: 2%;
+          .SignSubmitBox {
+            display: flex;
+            margin: 3% 0 3% 0;
+            justify-content: space-around;
+            align-items: center;
+          }
+        }
+      }
+      .animate4 {
+        @extend .animate3;
+        .el-input /deep/ .el-input__inner {
+          border: 1px solid rgba(0, 0, 0, 0);
+          border-bottom: 1px solid rgb(0, 0, 0);
+          border-radius: 0px;
+        }
+      }
+      .animate5 {
+        .el-input /deep/ .el-input__inner {
+          border: 1px solid rgba(0, 0, 0, 0);
+          border-bottom: 1px solid rgb(0, 0, 0);
+          border-radius: 0px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+
+
+.oasisTheme {
+  transition: $globalTransition;
+  display: flex;justify-content: center;align-items: center;
+
+  .oasisThemeInner{
+    width: 100px;
+    /deep/ .el-radio__input {
+      display: none;
+    }
+    /deep/ .el-radio{
+      // color: white;
+    }
+    /deep/ .el-radio__label {
+      height: 100%;
+      text-align: center;
+      padding: 0;
+      i {
+        font-size: 20px;
+        font-weight: 800;
+      }
+    }
+    /deep/ .el-radio__input.is-checked + .el-radio__label {
+      color: var(--ThemeColorChange--);
+      transition: $globalTransition;
+    }
+  
+  }
+ 
+}

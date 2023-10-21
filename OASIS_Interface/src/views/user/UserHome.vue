@@ -5,12 +5,15 @@
         style="width: auto;"
         class="animate__animated animate__fadeInLeft"
       >
-        <ChatMemu ref="ChatMemu" />
+        <oasisChat ref="ChatMemu" />
       </el-aside>
-      <div class="inf">
-        <div class="infBox">
-          <div class="content ">
-            <div class="contentTop animate__animated animate__fadeInDown">
+      <div
+        class="inf"
+        ref="inf"
+      >
+        <div class="content ">
+          <div class="contentLeft animate__animated animate__fadeInDown">
+            <div class="contentLeftInner">
               <div class="userInf ">
                 <div class="userInfTop">
                   <div class="userAvatarBox">
@@ -29,112 +32,114 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="userPet" /> -->
+              <div
+                class="BurBox  animate__animated animate__fadeInLeft"
+                v-if="isInitModel"
+              >
+                <Show3D
+                  :model-path="modelPath"
+                  @initModel="seeModel"
+                />
+              </div>
             </div>
-            <div class="contentBottom animate__animated animate__fadeInUp">
-              <div class="NFTListBox">
-                <!-- <div
-                  class="NFTMenu"
+          </div>
+          <div class="contentRight animate__animated animate__fadeInUp">
+            <div class="NFTListBox">
+              <div class="NFTList">
+                <el-collapse
                   v-if="NFTSeriesnameList.length !== 0"
+                  @change="isInitModel=false"
                 >
-                  <el-input
-                    placeholder="请输入内容"
-                    v-model="SearchVo.key"
+                  <el-collapse-item
+                    v-for="address,i in nftContractAddressList"
+                    :key="i"
+                    :name="NFTSeriesnameList[i]"
                   >
-                    <el-button
-                      slot="append"
-                      icon="el-icon-search"
-                      @click="SearchNFT"
-                    />
-                  </el-input>
-                </div> -->
-                <div class="NFTList">
-                  <el-collapse v-if="NFTSeriesnameList.length !== 0">
-                    <el-collapse-item
-                      v-for="address,i in nftContractAddressList"
-                      :key="i"
-                      :name="NFTSeriesnameList[i]"
-                    >
-                      <template slot="title">
+                    <template slot="title">
+                      <el-popover
+                        title="合约地址"
+                        placement="top-start"
+                        width="350"
+                        trigger="hover"
+                        :content="address"
+                      >
+                        <i
+                          class="header-icon el-icon-info"
+                          slot="reference"
+                        />
+                      </el-popover>
+                      <span style="margin-left: 1%;font-weight: 800;font-size: 1vw;">
+                        {{ NFTSeriesnameList[i] }}
+                      </span>
+                      <span
+                        class="ADDNFT"
+                        v-if="isOwnerCheckArray[i]"
+                      >
                         <el-popover
-                          title="合约地址"
+                          title="为该合约添加新的NFT 🎉"
                           placement="top-start"
-                          width="350"
+                          width="200"
                           trigger="hover"
-                          :content="address"
+                          content=""
                         >
+                          <router-link
+                            class="addImit"
+                            :to="{ name: 'addImit',query:{nftContract:address} }"
+                          ><el-button
+                            type="success"
+                            plain
+                          >前往</el-button>
+                          </router-link>
                           <i
-                            class="header-icon el-icon-info"
+                            class="el-icon-plus"
                             slot="reference"
                           />
                         </el-popover>
-                        <span style="margin-left: 1%;font-weight: 800;font-size: 1vw;">
-                          {{ NFTSeriesnameList[i] }}
-                        </span>
-                        <span
-                          class="ADDNFT"
-                          v-if="isOwnerCheckArray[i]"
-                        >
-                          <el-popover
-                            title="为该合约添加新的NFT 🎉"
-                            placement="top-start"
-                            width="200"
-                            trigger="hover"
-                            content=""
-                          >
-                            <router-link
-                              class="addImit"
-                              :to="{ name: 'addImit',query:{nftContract:address} }"
-                            ><el-button
-                              type="success"
-                              plain
-                            >前往</el-button>
-                            </router-link>
-                            <i
-                              class="el-icon-plus"
-                              slot="reference"
-                            />
-                          </el-popover>
-                        </span>
-                      </template>
-                      <div class="collapseInnerBox">
-                        <template v-for="inf in NFTArray">
-                          <template v-for="nft,k in inf">
-                            <template v-if="nft.nftAddress == address">
-                              <div
-                                class="NFTInf"
-                                :key="k"
-                              >
-                                <div style="height:65%;width: 100%;overflow: hidden;">
-                                  <img
-                                    class="NFTImage"
-                                    :src="nft.ipfsPath"
-                                    alt=""
-                                  >
-                                </div>
-                                <div class="Inf">
-                                  <div class="InfTop">
+                      </span>
+                    </template>
+                    <div class="collapseInnerBox">
+                      <template v-for="inf in NFTArray">
+                        <template v-for="nft,k in inf">
+                          <template v-if="nft.nftAddress == address">
+                            <div
+                              class="NFTInf"
+                              :key="k"
+                              v-if="nft.description != '3D'"
+                            >
+                              <div style="height:65%;width: 100%;overflow: hidden;">
+                                <img
+                                  class="NFTImage"
+                                  :src="nft.ipfsPath"
+                                  alt=""
+                                >
+                              </div>
+                              <div class="Inf">
+                                <div class="InfInnerBox">
+                                  <div class="Inf-NFTNameBox">
                                     <div class="NFTName">
                                       {{ nft.nftName }}
                                     </div>
+                                  </div>
+                                  <div class="InfTop">
                                     <div class="TokenID">
                                       <span style="font-size: 25px;">#{{ nft.tokenId }}</span>
                                     </div>
+                                    <div
+                                      v-if="nft.isActive"
+                                      class="priceBox"
+                                    >
+                                      <span class="price">{{ $store.state.Web3.utils.fromWei(nft.price, 'ether') }}</span> ETH
+                                    </div>
+                                    <div
+                                      v-else
+                                      class="priceBox"
+                                    >
+                                      <span class="price">&nbsp;</span>
+                                    </div>
                                   </div>
+                                </div>
+                                <div class="InfBottom ">
                                   <div
-                                    v-if="nft.isActive"
-                                    class="priceBox"
-                                  >
-                                    <span class="price">{{ $store.state.Web3.utils.fromWei(nft.price, 'ether') }}</span> ETH
-                                  </div>
-                                  <div
-                                    v-else
-                                    class="priceBox"
-                                  >
-                                    <span class="price" />
-                                  </div>
-                                  <div
-                                    class="InfBottom "
                                     style="background-color: #d63131e6;"
                                     @click="OpenMessageBox(nft,2)"
                                     v-if="nft.isActive"
@@ -142,7 +147,7 @@
                                     <i class="el-icon-sold-out" />
                                   </div>
                                   <div
-                                    class="InfBottom"
+                                    style="background-color: #2c97fa;"
                                     v-else
                                     @click="OpenMessageBox(nft,1)"
                                   >
@@ -150,32 +155,91 @@
                                   </div>
                                 </div>
                               </div>
-                            </template>
+                            </div>
+                            <div
+                              class="NFTInf3D"
+                              :key="k"
+                              v-else
+                            >
+                              <div class="Inf3D">
+                                <div class="Inf3DLeft">
+                                  <div class="Inf3DLeftTop">
+                                    <el-button
+                                      @click="setNewModelPath(nft.ipfsPath)"
+                                      type="primary" 
+                                      icon="el-icon-video-play"
+                                      circle
+                                    />
+                                  </div>
+
+                                  <div class="Inf3DLeftBottom">
+                                    <el-button
+                                      @click="OpenMessageBox(nft,2,2)"
+                                    
+                                      type="danger" 
+                                      icon="el-icon-sold-out"
+                                      circle
+                                      v-if="nft.isActive"
+                                    />
+                                    <el-button
+                                      v-else
+                                      type="primary" 
+                                      @click="OpenMessageBox(nft,1,1)"
+                                      icon="el-icon-sell"
+                                      circle
+                                    />
+                                  </div>
+                                </div>
+                               
+                                <div class="Inf3DRight">
+                                  <div style="height: 60%;display: flex;justify-content: center;align-items: center;font-size: 1vw;">
+                                    {{ nft.nftName }}
+                                  </div>
+                                  <div style="width: 90%;height: 40%;display: flex;justify-content:space-between;align-items: center;">
+                                    <div class="TokenID">
+                                      <span style="font-size: 20px;">#{{ nft.tokenId }}</span>
+                                    </div>
+                                    <div
+                                      v-if="nft.isActive"
+                                      class="priceBox"
+                                    >
+                                      <span class="price">{{ $store.state.Web3.utils.fromWei(nft.price, 'ether') }}</span> ETH
+                                    </div>
+                                    <div
+                                      v-else
+                                      class="priceBox"
+                                    >
+                                      <span class="price" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </template>
                         </template>
-                      </div>
-                    </el-collapse-item>
-                  </el-collapse>
-                  <div v-else>
-                    <el-empty>
-                      <template slot="description">
-                        <div>
-                          <span
-                            style="font-weight: 800;
-                          margin-bottom: 10%;margin-top: 5%;"
-                          >未查到相关藏品 </span>
-                          <el-button
-                            type="success"
-                            round
-                            plain
-                            @click="toMint"
-                          >
-                            前往创造
-                          </el-button>
-                        </div>
                       </template>
-                    </el-empty>
-                  </div>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
+                <div v-else>
+                  <el-empty>
+                    <template slot="description">
+                      <div>
+                        <span
+                          style="font-weight: 800;
+                          margin-bottom: 10%;margin-top: 5%;"
+                        >未查到相关藏品 </span>
+                        <el-button
+                          type="success"
+                          round
+                          plain
+                          @click="toMint"
+                        >
+                          前往创造
+                        </el-button>
+                      </div>
+                    </template>
+                  </el-empty>
                 </div>
               </div>
             </div>
@@ -183,13 +247,27 @@
         </div>
       </div>
     </el-container>
+
+
     <div
       class="MessageMask"
       v-if="MessageShow"
     >
       <div class="Message animate__animated animate__fadeInUp">
         <div class="MessageLeft">
-          <div class="imageBox">
+          <div
+            class="imageBox"
+            v-if="three"
+          >
+            <Show3D
+              :model-path="changeNFT.ipfsPath"
+              @initModel="seeModel"
+            />
+          </div>
+          <div
+            class="imageBox"
+            v-else
+          >
             <img
               :src="changeNFT.ipfsPath"
               alt=""
@@ -319,11 +397,13 @@
 </template>
 
 <script>
+  import oasisChat from "@/views/leftMenu/oasisChat.vue";
+  import Show3D from "@/components/3DModelShow/3DModel.vue";
+  
   import { UpSale, DownSale, getNFTStruct } from "@/api/axios/contract.js";
-  import ChatMemu from "@/views/chat/ChatMemu.vue";
-import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
+  import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
   export default {
-    components: { ChatMemu },
+    components: { oasisChat ,Show3D},
     data() {
       return {
         userBalance: 0,
@@ -333,6 +413,7 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
         NFTArray: [],
         nftContractAddressList: [],
         NFTSeriesnameList: [],
+        NFT3DList:[],
         isOwnerCheckArray: [],
         SearchVo: {
           key: "",
@@ -342,19 +423,33 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
           minMaxmums: "",
           maxMaxmums: "",
         },
+        initModel: null,
+        modelPath: '',
+        isInitModel:false,
 
         MessageShow: false,
         changeNFT: {},
         Price: 0,
         opt: 0,
+        three:false,
       };
     },
-  async mounted() {
+    async mounted() {
       await this.init();
       await this.getNFTSeriesnameList(this.$store.state.ownerNFTList);
       await this.GetNFTContractNFT();
     },
-    methods: {
+  methods: {
+    seeModel(data) {
+        this.initModel = data;
+    },
+    setNewModelPath(path) {
+      this.isInitModel = true;
+      this.modelPath = path;
+      setTimeout(() => {
+        this.initModel();
+      }, 100);
+      },
       async init() {
         let user = this.$store.state.currentAddress;
         try {
@@ -389,14 +484,14 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
             });
           }
         } else {
-              this.$notify({
+          this.$notify({
             title: `价格填写有误`,
             type: "warning",
             position: "top-left",
             offset: 200,
-              });
+          });
         }
-        this.Price = 0
+        this.Price = 0;
         this.UserNFTListInf = await this.$store.state.ownerNFTList;
       },
       async downSale() {
@@ -433,14 +528,16 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
         this.NFTArray = NFTInfList;
       },
       async getSetAddressArray(ContractAddressArray) {
-        this.nftContractAddressList=[]
+        this.nftContractAddressList = [];
         for (const nft of ContractAddressArray) {
-          this.nftContractAddressList.push(nft.nftAddress);
+          this.nftContractAddressList.push(nft.nftAddress
+          );
         }
         this.nftContractAddressList = new Set(this.nftContractAddressList);
       },
-      async getNFTSeriesnameList(array) { 
-        await this.getSetAddressArray(array);
+    async getNFTSeriesnameList(array) {
+      await this.getSetAddressArray(array);
+        
         for (const key of this.nftContractAddressList) {
           let SeriesName;
           let contract = await getNFTStruct(key);
@@ -451,6 +548,7 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
               SeriesName = re;
             });
           this.NFTSeriesnameList.push(SeriesName);
+          
           let owner;
           await contract.methods
             .owner()
@@ -458,29 +556,47 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
             .then((re) => {
               owner = re;
             });
+          let maximums;
+          await contract.methods
+            ._maximums()
+            .call()
+            .then((re) => {
+              maximums = re;
+            });
+          let currentId;
+          await contract.methods
+            ._currentId()
+            .call()
+            .then((re) => {
+              currentId = re;
+            });
           if (
-            this.$store.state.currentAddress.toUpperCase() == owner.toUpperCase()
+            this.$store.state.currentAddress.toUpperCase() == owner.toUpperCase() && maximums != currentId
           ) {
             this.isOwnerCheckArray.push(true);
           } else {
             this.isOwnerCheckArray.push(false);
           }
         }
-      },
+    },
+      
       toMint() {
         this.$router.push("/home/ImitNFT");
       },
       SearchNFT() {
-        if (this.SearchVo.key.length >0 && this.SearchVo.key.replace(/(^s*)|(s*$)/g, "").length !== 0) {
+        if (
+          this.SearchVo.key.length > 0 &&
+          this.SearchVo.key.replace(/(^s*)|(s*$)/g, "").length !== 0
+        ) {
           search(this.SearchVo).then((re) => {
-         this.getNFTSeriesnameList(re.data.data) 
+            this.getNFTSeriesnameList(re.data.data);
           });
           this.$notify({
-              title: `正在搜索...`,
-              type: "success",
-              position: "top-left",
-              offset: 200,
-            });
+            title: `正在搜索...`,
+            type: "success",
+            position: "top-left",
+            offset: 200,
+          });
         } else {
           this.$notify({
             title: "输入不能为空",
@@ -489,10 +605,10 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
             offset: 200,
           });
         }
-      
       },
       CloseMessageBox(opt) {
         this.MessageShow = false;
+        this.three = false;
         this.changeNFT = {};
         this.price = "";
         if (opt == 1) {
@@ -504,7 +620,10 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
           });
         }
       },
-      OpenMessageBox(NFT, opt) {
+    OpenMessageBox(NFT, opt, three) {
+      if (three) { 
+        this.three = true;
+      }
         this.opt = opt;
         this.changeNFT = NFT;
         this.MessageShow = true;
@@ -620,27 +739,22 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
     width: 100%;
     height: 100%;
     overflow: auto;
-    .infBox {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 30px;
-      margin-top: 3%;
-      width: 100%;
+
       .content {
         width: 100%;
         height: 100%;
         color: var(--Dark--);
-        margin-left: 3%;
         background-color: var(--White-eee--);
-
-        .contentTop {
-          width: 100%;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-
-          .userInf {
+        display: flex;
+        .contentLeft {  
+          flex: 1;
+          position: relative;
+          .contentLeftInner{
+            position: absolute;
+            // transform: translate(-50%);
+            left: 5%;
+            top: 3%;
+            .userInf {
             background-color: var(--White--);
             border-radius: 50px;
             width: 600px;
@@ -722,24 +836,33 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
               text-align: left;
             }
           }
+          .BurBox{
+            @extend .NFTListBox;
+          width: 40vw;
+          height: 50vh;
+          overflow: hidden;
+          border-radius: 35px;
+          margin-top: 3%;
+          padding: 0;
+          box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+                    rgba(17, 17, 26, 0.1) 0px 0px 8px;
+          }
+          }
+        
         }
-        .contentBottom {
-          width: 95%;
-          height: 90%;
-          margin-top: 5%;
-          display: flex;
-          justify-content: center;
+        .contentRight { 
+          flex: 1;
+          position: relative;
           .NFTListBox {
-            width: 100%;
+            position: absolute;
+            transform: translate(-50%);
+            left: 50%;
+            top: 3%;
+            width: 80%;
             background-color: var(--White--);
             border-radius: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3%;
+            padding: 5%;
             .NFTList {
-              flex: 2;
-              width: 95%;
               height: 100%;
               /deep/ .el-collapse {
                 border: none;
@@ -775,6 +898,73 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
                       transition: all 0.6s;
                     }
                   }
+                  .Inf {
+                    width: 100%;
+                    height: 60%;
+                    background-color: var(--Dark--);
+                    .InfInnerBox{
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      flex-direction: column;
+                      .Inf-NFTNameBox{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        .NFTName {
+  
+  color: var(--White--);
+  font-weight: 800;
+  text-align: left;
+  font-size: 1.2vw;
+}
+                      }
+                    }
+
+                    .InfTop {
+                      width: 90%;
+                      padding-bottom: 2.5%;
+                      display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                    
+
+                      .TokenID {
+
+                        width: 100px;
+                        padding: 4px 0px 4px 0px;
+                        border-radius: 10px;
+                        transition: all 0.3s ease-in-out;
+                        background-color: rgba(85, 201, 96, 0.12);
+                        color: #55c960;
+                      }
+                      .priceBox {
+                      font-size: 0.5vw;
+                      color: var(--White--);
+                      .price {
+                        font-size: 1.8vw;
+                      }
+                    }
+                    }
+                    .InfBottom {
+                      width: 100%;
+                      
+                      font-size: 30px;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      color: white;
+                      div{
+                        padding-top: 2.5%;
+                      padding-bottom: 2.5%;
+                        width: 100%;
+                        display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      }
+                
+                    }
+                  }
                 }
 
                 .NFTInf:hover {
@@ -785,58 +975,71 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
                   transform: none;
                 }
 
-                .Inf {
-                  width: 100%;
-                  height: 60%;
-                  background-color: var(--Dark--);
+                .NFTInf3D {
+                  margin: 2%;
+                  background-color: white;
+                  border-radius: 25px;
+                  width: 350px;
+                  height: 250px;
+                  display: inline-block;
+                  overflow: hidden;
+                  transition: all 0.3s ease-in-out;
+                  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+                    rgba(17, 17, 26, 0.1) 0px 0px 8px;
+                  .Inf3D {
+                    display: flex;
+                    height: 100%;
 
-                  .priceBox {
-                    padding-top: 2%;
-                    text-align: left;
-                    width: 100%;
-                    font-size: 0.5vw;
-                    color: var(--White--);
-                    .price {
-                      margin-left: 15%;
-                      font-size: 1.8vw;
+                    .Inf3DLeft {
+                      flex: 1;
+                      height: 100%;
+                      display: flex;
+                      background-color: #11243d;
+                      button{
+                        font-size: 1vw;
+                      }
+                      flex-direction: column;
+                      .Inf3DLeftTop {
+                        width: 100%;
+                        height: 50%;
+                   
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      }
+                      .Inf3DLeftBottom {
+                        width: 100%;
+                        height: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      }
                     }
-                  }
-                  .InfTop {
-                    width: 100%;
-                    height: 40px;
-                    position: relative;
-                    .TokenID {
-                      position: absolute;
-                      right: 20px;
-                      top: 35px;
-                      width: 100px;
-                      padding: 4px 0px 4px 0px;
-                      border-radius: 10px;
-                      transition: all 0.3s ease-in-out;
-                      background-color: rgba(85, 201, 96, 0.12);
-                      color: #55c960;
-                    }
-                    .NFTName {
-                      position: absolute;
-                      left: -50px;
-                      top:5px;
-                      color: var(--White--);
-                      font-weight: 800;
-                      text-align: left;
-                      font-size: 1.2vw;
-                      margin-left: 20%;
-                    }
-                  }
-                  .InfBottom {
-                    font-size: 30px;
+                    .Inf3DRight {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    height: 20%;
-                    padding-bottom: 100px;
-                    color: white;
-                    background-color: rgba(0, 149, 255, 0.958);
-                    cursor: pointer;
+                    flex-direction: column;
+                      flex: 2;
+                      height: 100%;
+                      
+                      .priceBox {
+                      width: 100%;
+                      color: black;
+                      .price {
+                        font-size: 1.8vw;
+                      }
+                    }
+                    .TokenID {
+                        padding: 2px 0px 2px 0px;
+                        border-radius: 10px;
+                        transition: all 0.3s ease-in-out;
+                        background-color: rgba(85, 201, 96, 0.12);
+                        color: #55c960;
+                        width: 70%;
+                      }
+  
+                    }
                   }
                 }
               }
@@ -865,16 +1068,14 @@ import { getOwnerNFTsByAddress, search } from "@/api/axios/ownerContractLIst";
               flex: 1;
             }
           }
+         
         }
-      }
+      
     }
   }
 }
 </style>
 <style lang="scss" scoped>
-@import "@/style/index.css";
-</style>
-<style lang="scss" scoped>
-@import "@/style/MarketShop/index.scss";
+// @import "@/style/MarketShop/index.scss";
 </style> 
   

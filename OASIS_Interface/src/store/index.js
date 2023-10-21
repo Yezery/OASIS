@@ -7,64 +7,76 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   namespaced: true,
   state: {
-    IP:"10.39.5.194", 
-    // IP:"localhost",
+    ipfsIP: "10.39.5.194", 
+    // serverIP:"10.22.62.16",
+    serverIP:"localhost",
     //  市场合约地址
     MarketContractAddress: "0x950EA6251a3EF72768A2cb701b3c5eCd0cE3A603",
     // local
     // MarketContractAddress : "0xe3A96a34639C7bf2907B4693EfD2BD7a94479661",
-    isSearch:false,
-    isconnect: false,
-    isDark: false,
+    
+    avatar: require("@/assets/webAssets/MetaMask.png"),
     currentAddress: "",
     Web3: null,
-    ipfs: null,
-    //=========
     ownerNFTList: [],
-    marketNFTInf:null,
-    // ========= 用户信息
-    avatar: require("@/assets/webAssets/MetaMask.png"),
-    isEmpower:false,
+    NFTInf:null,
+    Theme: false,
+    isEmpower: false,
+    isGetToken:false,
+    isconnect: false,
+    gptSocket: null,
+    userSocket:null,
+
+
+    isSearch: false,
+    
   },
   getters: {
   },
   mutations: {
-    changeAvatar(state, value) {
+    // this.$store.commit("setGetToken", handleAccountsChanged[0]);
+    setWEB3(state, value) {
+      state.Web3 = value
+    },
+    setAvatar(state, value) {
       state.avatar =
         "data:image/png;base64," +
         new Identicon(value, 120).toString();
     },
-    setEmpower(state, value) {
-      state.isEmpower = value
-    },
-    connection(state, value) {
-      state.isconnect = value
-     
-    },
-    setIsSearch(state, value){
-        state.isSearch = value
-    },
-    setcurrentAddress(state, value) {
-      state.currentAddress = value
-
-    },
-    setWEB3(state, value) {
-      state.Web3 = value
-
-    },
-    setIPFS(state, value) {
-      state.ipfs = value;
-
-    },
-    setIsDark(state, value) {
-      state.isDark = value;
-    },
     setOwnerNFTList(state, value) {
       state.ownerNFTList = value;
     },
-    setMarketNFTInf(state, value) {
-      state.marketNFTInf= value;
-    }
+    setNFTInf(state, value) {
+      state.NFTInf= value;
+    },
+    setTheme(state, value) {
+      state.Theme = value;
+    },
+    setEmpower(state, value) {
+      state.isEmpower = value
+    },
+    setGetToken(state, value) {
+      state.isGetToken = value
+    },
+    setConnection(state, value) {
+      state.isconnect = value
+    },
+    setcurrentAddress(state, value) {
+      state.currentAddress = value
+    },
+    
+    setGptSocket(state, value){
+      state.gptSocket = value
+  },
+  setUserSocket(state, value){
+        state.userSocket = value
+    },
+setIsSearch(state, value){
+      state.isSearch = value
+    },
+    
+
+
   },
   actions: {
 

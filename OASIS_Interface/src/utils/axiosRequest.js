@@ -1,11 +1,8 @@
 import axios from 'axios'
-// import store from '@/store'
-// const IP = store.state.IP
+import store from '@/store'
+const serverIP = store.state.serverIP
 const service = axios.create({
-  // baseURL: `http://${IP}:8082`,
-  baseURL: 'http://localhost:8082',
-    // baseURL: 'http://10.22.60.119:8082',
-    timeout: 10000,
+  baseURL: `http://${serverIP}:8082`,
 })
 
 // 请求拦截器

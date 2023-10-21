@@ -38,7 +38,7 @@ func (SC *SaleController) GetSaleListByContractAddress(c *gin.Context) {
 	var results []dto.NFTOwnerListDTO
 	repositories.GetDb(c).Model(&models.NFTOwnerList{}).
 		Select("*").
-		Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+		// Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
 		Where("nftAddress = ?", vo.NFTAddress).
 		Find(&results)
 	fmt.Println(results)

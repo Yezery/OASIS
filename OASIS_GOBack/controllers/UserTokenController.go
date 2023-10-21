@@ -13,12 +13,11 @@ import (
 
 type UserTokenController struct{}
 
-type User struct {
-	Address           string `json:"userAddress"`
-	EncryptedPassword string `json:"encryptedPassword"`
-}
-
 func (UTC *UserTokenController) GetToken(c *gin.Context) {
+	type User struct {
+		Address           string `json:"userAddress"`
+		EncryptedPassword string `json:"encryptedPassword"`
+	}
 	var user User
 	if err := c.BindJSON(&user); err != nil {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)

@@ -27,7 +27,7 @@ func (UMC *UserMnemonicController) FiscoConn() error {
 		"config/sdk/sdk.crt",
 		"config/accounts/"+keyName+".pem",
 		1,
-		"127.0.0.1:20200",
+		"localhost:20200",
 		false,
 		1,
 		false,

@@ -1,5 +1,5 @@
 import store from '@/store';
-const IP = store.state.IP
+const ipfsIP = store.state.ipfsIP
 //  铸币合约ABI
 const MintNFTContractABI = JSON.parse(`[
 	{
@@ -1140,20 +1140,20 @@ export function marketContractABI() {
 }
 
 //  IPFS的根URI
-const baseURI = `http://${IP}/`;
+const baseURI = `http://${ipfsIP}/`;
 export function ipfsBaseURI() {
   return baseURI
 }
 
 
 //  IPFS网关根URL
-const publicGatewayUrl = `http://${IP}:8080/`;
+const publicGatewayUrl = `http://${ipfsIP}:8080/`;
 export function ipfsPublicGatewayUrl() {
   return publicGatewayUrl
 }
 
 //远程RPC节点
-const RPCUrl = `http://${IP}:7545`;
+const RPCUrl = `http://${ipfsIP}:7545`;
 export function rpcUrl() {
   return RPCUrl
 }

@@ -1,22 +1,14 @@
 {
-  root: '/Users/yezery/Oasis/OASIS',
+  root: '/Users/yezery/Desktop/OASIS/OASIS_Interface',
   registry: 'https://registry.npmmirror.com',
-  pkgs: [
-    {
-      name: 'element-ui',
-      version: 'latest',
-      type: 'tag',
-      alias: undefined,
-      arg: [Result]
-    }
-  ],
+  pkgs: [],
   production: false,
   cacheStrict: false,
   cacheDir: '/Users/yezery/.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/yezery/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","element-ui","-S"],"original":["--fix-bug-versions","--china","--userconfig=/Users/yezery/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","element-ui","-S"]}',
-    npm_config_user_agent: 'npminstall/7.9.0 npm/? node/v16.14.0 darwin arm64',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/yezery/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"],"original":["--fix-bug-versions","--china","--userconfig=/Users/yezery/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"]}',
+    npm_config_user_agent: 'npminstall/7.11.1 npm/? node/v18.18.2 darwin arm64',
     npm_config_cache: '/Users/yezery/.npminstall_tarball',
     NODE: '/usr/local/bin/node',
     npm_node_execpath: '/usr/local/bin/node',
@@ -49,8 +41,8 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: '/Users/yezery/Oasis/OASIS',
-    INIT_CWD: '/Users/yezery/Oasis/OASIS'
+    npm_rootpath: '/Users/yezery/Desktop/OASIS/OASIS_Interface',
+    INIT_CWD: '/Users/yezery/Desktop/OASIS/OASIS_Interface'
   },
   binaryMirrors: {
     ENVS: {
@@ -185,7 +177,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: '/Users/yezery/Oasis/OASIS',
+  workspaceRoot: '/Users/yezery/Desktop/OASIS/OASIS_Interface',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   offline: false,
