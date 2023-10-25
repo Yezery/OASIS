@@ -14,11 +14,11 @@
             操作
           </div>
         </div>
-        <div class="userSelect_item">
-          <div>
-            切换账户
-          </div>
-        </div>
+       
+          <router-link to="/userhome" class="userSelect_item">
+            个人主页
+        </router-link>
+   
         <div class="userSelect_item">
           找回授权码
         </div>
@@ -32,8 +32,11 @@
             操作
           </div>
         </div>
-        <div class="userSelect_item" @click="connectWallet">
+        <div class="userSelect_item" @click="connectWallet" v-if="isUnlocked">
             授权
+        </div>
+        <div class="userSelect_item"  v-else>
+            请解锁钱包<i class="el-icon-warning" style="color: red;"></i>
         </div>
       </div>
       <div
@@ -70,11 +73,15 @@
   export default {
     data() {
       return {
-        
+        isUnlocked:false
       };
     },
   async mounted() {
-      
+    if (window.ethereum != undefined) {
+      await window.ethereum._metamask
+        .isUnlocked()
+        .then((re) => (this.isUnlocked = re));
+    }
     },
   methods: {
     connectWallet() {
@@ -171,7 +178,7 @@
       color: rgb(156,163,175);
     }
     .userSelect_item {
-      
+     color: var(--Gray--);
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -194,4 +201,8 @@
     display: none;
   }
 }
+a{
+        text-decoration: none;
+        color: var(--Dark--);
+      }
 </style>

@@ -36,7 +36,7 @@
         <div class="toSellLink-Box">
           <router-link
             class="toSellLink"
-            :to="{ name: 'ImitNFT' }"
+            :to="{ name: 'mintNFT' }"
           >
             <span>铸造NFT</span>
           </router-link>

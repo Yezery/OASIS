@@ -29,7 +29,7 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
     ) public onlyOwner {
         require(
             totalSupply() < _maximums,
-            "The number of mints exceeds the maximum limit"
+            "The number of mints exceeds the maximum lmint"
         );
         uint256 newTokenId = _currentId;
         _safeMint(msg.sender, newTokenId);
@@ -66,7 +66,7 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
     ) public onlyOwner {
         require(
             totalSupply() < _maximums,
-            "The number of mints exceeds the maximum limit"
+            "The number of mints exceeds the maximum lmint"
         );
         uint256 newTokenId = _currentId;
         _safeMint(to, newTokenId);

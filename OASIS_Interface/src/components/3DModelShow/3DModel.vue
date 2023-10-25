@@ -1,47 +1,22 @@
 <template>
-  <div
-    style="width: 100%;height:100%;position: relative;"
-    v-loading="loading"
-    :element-loading-text="'正在加载'+loadingProgress+'%'"
-  >
-    <span
-      ref="fullScreen"
-      class="toScreenFull"
-      @click="toggleFullScreen"
-      v-if="this.isModelLoading"
-    >
-      <i class="el-icon-full-screen animate__animated animate__fadeInUp" />
+  <div style="width: 100%;height:100%;position: relative;" v-loading="loading" :element-loading-text="'正在加载'+loadingProgress+'%'">
+    <div v-if="this.isModelLoading">
+       <span ref="fullScreen" class="toScreenFull" @click="toggleFullScreen" >
+      <i class="el-icon-full-screen " />
     </span>
-    <span
-      class="continueRender"
-      @click="continueRenderer"
-      v-if="this.isModelLoading"
-    >
-      <i
-        class="
-        el-icon-video-play animate__animated animate__fadeInUp"
-      />
+    <span class="continueRender" @click="continueRenderer" >
+      <i class="
+        el-icon-video-play " />
     </span>
-    <span
-      class="closeRender"
-      @click="disposeRendererAndClearScene"
-      v-if="this.isModelLoading"
-    >
-      <i
-        class="
-el-icon-video-pause animate__animated animate__fadeInUp"
-      />
+    <span class="closeRender" @click="disposeRendererAndClearScene" >
+      <i class="
+el-icon-video-pause " />
     </span>
+    </div>
+   
 
-    <span
-      v-if="!this.isModelLoading"
-      @click="renderModel"
-      style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);cursor: pointer;font-size: 2vw;color: #ccc;font-weight: 800;"
-    ><i class="el-icon-switch-button" /></span>
-    <div
-      ref="modelCanvas"
-      style="width: 100%;height: 100%;"
-    />
+    <span v-if="!this.isModelLoading" @click="renderModel" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);cursor: pointer;font-size: 2vw;color: #ccc;font-weight: 800;"><i class="el-icon-switch-button" /></span>
+    <div ref="modelCanvas" style="width: 100%;height: 100%;" />
   </div>
 </template>
 
@@ -83,10 +58,9 @@ el-icon-video-pause animate__animated animate__fadeInUp"
       };
     },
     watch: {},
-  mounted() {
-      this.initModel()
-    this.$emit("initModel", this.renderModel);
-      
+    mounted() {
+      this.initModel();
+      this.$emit("initModel", this.renderModel);
     },
     methods: {
       initModel() {
@@ -162,18 +136,18 @@ el-icon-video-pause animate__animated animate__fadeInUp"
         };
       },
       disposeRendererAndClearScene() {
-        this.removerAnimate() 
+        this.removerAnimate();
         this.renderer.dispose();
         this.$notify({
-            title: "停止渲染",
-            type: "success",
-            position: "top-left",
-            offset: 200,
-          });
+          title: "停止渲染",
+          type: "success",
+          position: "top-left",
+          offset: 200,
+        });
       },
       continueRenderer() {
         if (this.animateId == null) {
-          this.animate()
+          this.animate();
         } else {
           this.$notify({
             title: "模型已经渲染",
@@ -200,7 +174,7 @@ el-icon-video-pause animate__animated animate__fadeInUp"
         if (this.animateId) {
           cancelAnimationFrame(this.animateId);
           this.animateId = null;
-        } 
+        }
       },
       // ========================================
       initOrbitControls() {
@@ -262,7 +236,11 @@ el-icon-video-pause animate__animated animate__fadeInUp"
       },
       // ========================================
       renderModel() {
-        this.removerAnimate() 
+        if (this.scene.children[4] != undefined) {
+          this.scene.children[4].children = [];
+        }
+        console.log(this.scene);
+        this.removerAnimate();
         // 动画
         this.animate();
         try {
@@ -388,41 +366,44 @@ el-icon-video-pause animate__animated animate__fadeInUp"
 <style lang="scss" scoped>
 .toScreenFull {
   position: absolute;
-  right: 6vw;
-  bottom: 2vh;
+  right: 70px;
+  bottom: 10px;
   color: #161621;
-  font-size: 1.1vw;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   :hover {
     transition: all 0.3s ease-in-out;
-    scale: 1.5;
+    scale: 1.2;
+
   }
 }
-.closeRender{
+.closeRender {
   position: absolute;
-  right: 2vw;
-  bottom: 2vh;
+  right: 45px;
+  bottom: 10px;
   color: #161621;
-  font-size: 1.1vw;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   :hover {
     transition: all 0.3s ease-in-out;
-    scale: 1.5;
+    scale: 1.2;
+
   }
 }
-.continueRender{
+.continueRender {
   position: absolute;
-  right: 4vw;
-  bottom: 2vh;
+  right: 20px;
+  bottom: 10px;
   color: #161621;
-  font-size: 1.1vw;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   :hover {
     transition: all 0.3s ease-in-out;
-    scale: 1.5;
+    scale: 1.2;
+
   }
 }
 </style>

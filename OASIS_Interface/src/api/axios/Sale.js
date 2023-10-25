@@ -23,9 +23,9 @@ export function deleteSale(data) {
   })
 }
 
-export function getSaleListByContractAddress(data) {
+export function getOnSaleNFTByNFTAddress(data) {
   return request({
-    url: `/GetSaleListByContractAddress`,
+    url: `/getOnSaleNFTByNFTAddress`,
     method: 'post',
     data: data
   })

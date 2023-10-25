@@ -74,11 +74,11 @@
               <div class="EmpowerPasswordBoxBottom">
                 <div class="EmpowerPasswordOpt">
                   <span
-                    style="margin-right: 5%;"
+                    style="margin-right: 5%;color:gray;"
                     @click="viewControl(1)"
                   >忘记授权码</span>
                   <span
-                    style="margin-left: 5%;"
+                    style="margin-left: 5%;color:gray;"
                     @click="canacelEmpover"
                   >不授权直接进入</span>
                 </div>
@@ -311,7 +311,7 @@
           .isUnlocked()
           .then((re) => (this.isUnlocked = re));
         window.ethereum.on("accountsChanged", async () => {
-          window.location.reload();
+            window.location.reload();
         });
         window.ethereum.on("chainChanged", () => {
           window.location.reload();

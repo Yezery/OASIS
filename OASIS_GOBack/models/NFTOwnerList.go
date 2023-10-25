@@ -12,6 +12,6 @@ type NFTOwnerList struct {
 	OwnerAddress string `gorm:"column:ownerAddress" json:"ownerAddress"`
 	NFTAddress   string `gorm:"column:nftAddress" json:"nftAddress"`
 	IpfsPath     string `gorm:"column:ipfsPath" json:"ipfsPath"`
-	Maxmums      uint64 `gorm:"column:maxmums" json:"maxmums"`
+	maximums     uint64 `gorm:"column:maximums" json:"maximums"`
 	Description  string `gorm:"column:description" json:"description"`
 }

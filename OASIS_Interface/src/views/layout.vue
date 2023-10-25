@@ -56,33 +56,6 @@
                   NFTs
                 </div>
               </el-menu-item>
-              <el-menu-item
-                v-if="$store.state.isconnect"
-                index="/home/ImitNFT"
-              >
-                <div class="menu_select_link_item">
-                  <svg
-                    t="1697633111966"
-                    class="icon"
-                    viewBox="0 0 1024 1024"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    p-id="4342"
-                    width="25"
-                    height="25"
-                  >
-                    <path
-                      class="icon-path"
-                      stroke="#1875F0"
-                      stroke-width="3"
-                      d="M835.9424 245.0432L550.1952 80.128a76.8 76.8 0 0 0-76.4416 0L188.0576 245.0432A76.8 76.8 0 0 0 149.8624 311.296v329.8304a76.8 76.8 0 0 0 38.1952 66.304l285.6448 164.9152a75.9296 75.9296 0 0 0 76.4928 0l285.7472-164.9152a76.8 76.8 0 0 0 38.1952-66.304V311.296a76.8 76.8 0 0 0-38.1952-66.2528M471.1936 498.8416v278.1696l-239.7696-135.8848V360.448zM272.7424 290.048l239.0528-138.24 238.9504 138.24L511.744 428.288z m522.24 346.5216L552.8064 776.448V498.5856l240.0256-138.5472z"
-                      fill="#707070"
-                      p-id="4343"
-                    />
-                  </svg>
-                  ImitNFT
-                </div>
-              </el-menu-item>
               <el-menu-item index="/home/MarketShop3D">
                 <div class="menu_select_link_item">
                   <svg
@@ -107,6 +80,33 @@
                   3DModel
                 </div>
               </el-menu-item>
+              <el-menu-item
+                v-if="$store.state.isconnect"
+                index="/mintHome"
+              >
+                <div class="menu_select_link_item">
+                  <svg
+                    t="1697633111966"
+                    class="icon"
+                    viewBox="0 0 1024 1024"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    p-id="4342"
+                    width="25"
+                    height="25"
+                  >
+                    <path
+                      class="icon-path"
+                      stroke="#1875F0"
+                      stroke-width="3"
+                      d="M835.9424 245.0432L550.1952 80.128a76.8 76.8 0 0 0-76.4416 0L188.0576 245.0432A76.8 76.8 0 0 0 149.8624 311.296v329.8304a76.8 76.8 0 0 0 38.1952 66.304l285.6448 164.9152a75.9296 75.9296 0 0 0 76.4928 0l285.7472-164.9152a76.8 76.8 0 0 0 38.1952-66.304V311.296a76.8 76.8 0 0 0-38.1952-66.2528M471.1936 498.8416v278.1696l-239.7696-135.8848V360.448zM272.7424 290.048l239.0528-138.24 238.9504 138.24L511.744 428.288z m522.24 346.5216L552.8064 776.448V498.5856l240.0256-138.5472z"
+                      fill="#707070"
+                      p-id="4343"
+                    />
+                  </svg>
+                  Create
+                </div>
+              </el-menu-item>
             </el-menu>
           </div>
 
@@ -119,10 +119,6 @@
         </div>
       </header>
       <router-view />
-      <!-- <div class="view">
-     
-      </div> -->
-      <!-- <router-view /> -->
       <userEmpower />
     </div>
   </div>
@@ -135,63 +131,51 @@
   import oasisSearch from "@/views/topMenu/oasisSearch.vue";
   import oasisChat from "@/views/leftMenu/oasisChat.vue";
 // func
-  export default {
-    name: "MarketShopIndex",
-    components: {
-      oasisTheme,
-      oasisChat,
-      oasisSearch,
-      walletConnection,
-      userEmpower,
-    },
-    data() {
-      return {
-        activeIndex: "/",
-        //连接钱包
-        user: {
-          encryptedPassword: "",
-        },
-        changeingAccount: false,
-        anmiate1: true,
-        animate2: false,
-        animate3: false,
-        animate4: false,
-        animate5: false,
-        EmpowerSignForm: {
-          sp1: "",
-          sp2: "",
-          sp3: "",
-        },
-        isRepeatClick: true,
-        newMnemonic: "",
-        isUnlocked: false,
+export default {
+  name: "MarketShopIndex",
+  components: {
+    oasisTheme,
+    oasisChat,
+    oasisSearch,
+    walletConnection,
+    userEmpower,
+  },
+  data() {
+    return {
+      activeIndex: "/",
+      //连接钱包
+      user: {
+        encryptedPassword: "",
+      },
+      changeingAccount: false,
+      anmiate1: true,
+      animate2: false,
+      animate3: false,
+      animate4: false,
+      animate5: false,
+      EmpowerSignForm: {
+        sp1: "",
+        sp2: "",
+        sp3: "",
+      },
+      isRepeatClick: true,
+      newMnemonic: "",
+      isUnlocked: false,
 
-        isFixed: false,
-        scrollOffset: 300
-      };
-    },
+      isFixed: false,
+      scrollOffset: 500
+    };
+  },
   created() {
-     
-    },
+
+  },
   mounted() {
     this.$refs.main.addEventListener('scroll', this.handleScroll);
-//     function findScroller(element) {
-//     element.onscroll = function() { console.log(element)}
-
-//     Array.from(element.children).forEach(findScroller);
-// }
-// findScroller(document.body);
   },
   beforeUnmount() {
     this.$refs.main.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
-    // handleScroll(event) {
-    //   const scrollContainer = event.target;
-    //   const scrollTop = scrollContainer.scrollTop;
-    //   this.isFixed = scrollTop >= this.scrollOffset;
-    //   // 在这里可以根据 scrollTop 值执行相关操作，例如调整其他元素的样式或位置等
-    // }
     handleScroll() {
       const scrollContainer = this.$refs.main;
       const scrollTop = scrollContainer.scrollTop;
@@ -200,506 +184,9 @@
     handleSelect(key) {
       this.$router.push(key)
     },
-    
-      // async empower(opt) {
-      //   if (opt == 2) {
-      //     if (
-      //       this.EmpowerSignForm.sp1 == "" ||
-      //       this.EmpowerSignForm.sp2 == "" ||
-      //       this.EmpowerSignForm.sp3 == "" ||
-      //       this.EmpowerSignForm.sp4 == "" ||
-      //       this.EmpowerSignForm.sp5 == "" ||
-      //       this.user.encryptedPassword == ""
-      //     ) {
-      //       this.$notify({
-      //         title: "信息不能为空",
-      //         type: "warning",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //       return;
-      //     }
-      //   }
-      //   this.user.encryptedPassword = CryptoJS.SHA256(
-      //     this.user.encryptedPassword
-      //   ).toString();
-      //   await setMnemonic(this.user);
-      //   this.EmpowerSignForm.userAddress = this.$store.state.currentAddress;
-      //   await setAuthenticationMetaInformation(this.EmpowerSignForm);
-      //   await getToken(this.user).then(async (re) => {
-      //     localStorage.clear();
-      //     if (re.data.data == null) {
-      //       this.$notify({
-      //         title: "密码错误",
-      //         type: "waring",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     } else {
-      //       localStorage.setItem("token", re.data.data);
-      //       let currentAddress = {
-      //         ownerAddress: this.EmpowerSignForm.userAddress,
-      //       };
-      //       await postOwnerContractList(currentAddress).then((re) => {
-      //         this.$store.commit("setOwnerNFTList", re.data.data);
-      //       });
-      //       this.giveChatInitToWalletConnect();
-      //       this.$store.commit("connection", true);
-      //       this.$store.commit("setEmpower", true);
-      //       this.isGetToken = false;
-      //       this.$notify({
-      //         title: "🎉 连接成功",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     }
-      //   });
-      // },
-      // openEmpower() {
-      //   if (this.$store.state.isEmpower || window.ethereum == undefined) {
-      //     return;
-      //   }
-      //   if (!this.isUnlocked) {
-      //     this.$notify({
-      //       title: "钱包未解锁",
-      //       type: "warning",
-      //       position: "top-left",
-      //       offset: 200,
-      //     });
-      //     return;
-      //   } else {
-      //     this.isGetToken = true;
-      //   }
-      // },
-      // async checkEmpower() {
-      //   this.user.encryptedPassword = CryptoJS.SHA256(
-      //     this.user.encryptedPassword
-      //   ).toString();
-      //   await getToken(this.user).then((re) => {
-      //     localStorage.clear();
-      //     if (re.data.data == null) {
-      //       this.$notify({
-      //         title: "授权码错误",
-      //         type: "warning",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     } else {
-      //       let currentAddress = {
-      //         ownerAddress: this.$store.state.currentAddress,
-      //       };
-      //       postOwnerContractList(currentAddress).then((re) => {
-      //         this.$store.commit("setOwnerNFTList", re.data.data);
-      //       });
-      //       localStorage.setItem("token", re.data.data);
-      //       this.$store.commit("setEmpower", true);
-      //       this.$store.commit("connection", true);
-      //       this.giveChatInitToWalletConnect();
-      //       this.isGetToken = false;
-      //       this.$notify({
-      //         title: "🎉 连接成功",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     }
-      //   });
-      // },
-      // viewControl(opt) {
-      //   switch (opt) {
-      //     case 1:
-      //       this.animate2 = false;
-      //       this.animate4 = true;
-      //       break;
-      //     case 2:
-      //       this.animate2 = true;
-      //       this.animate4 = false;
-      //       break;
-      //     case 3:
-      //       this.animate2 = true;
-      //       this.animate5 = false;
-      //       break;
-      //     default:
-      //       this.animate2 = false;
-      //       this.isGetToken = true;
-      //       this.anmiate1 = false;
-      //       this.animate4 = true;
-      //       this.user.encryptedPassword = "";
-      //       break;
-      //   }
-      // },
-      // async backPassword() {
-      //   this.EmpowerSignForm.userAddress = this.$store.state.currentAddress;
-      //   forgetMnemonic(this.EmpowerSignForm).then((re) => {
-      //     if (re.data.data) {
-      //       this.animate5 = true;
-      //       this.animate4 = false;
-      //       this.$notify({
-      //         title: "密保正确",
-      //         type: "success",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     } else {
-      //       this.$notify({
-      //         title: "密保错误",
-      //         type: "warning",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     }
-      //   });
-      // },
-      // async resetMnemonic() {
-      //   this.EmpowerSignForm.newMnemonic = CryptoJS.SHA256(
-      //     this.newMnemonic
-      //   ).toString();
-      //   this.EmpowerSignForm.userAddress = this.$store.state.currentAddress;
-      //   await checkUserExist(this.EmpowerSignForm).then((re) => {
-      //     if (re.data.data == this.EmpowerSignForm.encryptedPassword) {
-      //       this.$notify({
-      //         title: "不能与旧密码重复",
-      //         type: "warning",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //       return;
-      //     } else {
-      //       resetMnemonic(this.EmpowerSignForm).then((re) => {
-      //         if (re.data.data == null) {
-      //           this.$notify.error({
-      //             title: "系统异常",
-      //             position: "top-left",
-      //             offset: 200,
-      //           });
-      //         }
-      //         this.$notify({
-      //           title: "🎉 重设成功",
-      //           position: "top-left",
-      //           offset: 200,
-      //         });
-      //         this.animate2 = true;
-      //         this.animate5 = false;
-      //       });
-      //     }
-      //   });
-      // },
-      // canacelEmpover() {
-      //   this.isGetToken = false;
-      //   this.$store.commit("connection", true);
-      // },
-      // giveChatInitToWalletConnect() {
-      //   console.log("聊天栏正初始化.......");
-      //   this.$refs.ChatMemu.init();
-      // },
-      // setEchartChange(data) {
-      //   this.echartChange = data;
-      //   console.log(this.echartChange);
-      // },
-      // async connectWallet() {
-      //   if (
-      //     localStorage.getItem["token"] == null ||
-      //     !this.$store.state.isconnect
-      //   ) {
-      //     try {
-      //       // 请求用户授权
-      //       await window.ethereum
-      //         .request({ method: "eth_requestAccounts" })
-      //         .then(async (handleAccountsChanged) => {
-      //           this.$store.commit("setcurrentAddress", handleAccountsChanged[0]);
-      //           this.$store.commit("changeAvatar", handleAccountsChanged[0]);
-      //           this.user.userAddress = handleAccountsChanged[0];
-      //         })
-      //         .catch((error) => {
-      //           this.$store.commit("connection", false);
-      //           if (error.code === 4001) {
-      //             // EIP-1193 userRejectedRequest error
-      //             console.log("Please connect to MetaMask.");
-      //           } else {
-      //             console.error(error);
-      //           }
-      //         });
-      //     } catch (error) {
-      //       console.error(error);
-      //       this.$notify.error({
-      //         title: "连接失败",
-      //         position: "top-left",
-      //         offset: 200,
-      //       });
-      //     }
-      //   }
-      // },
-      // Copy() {
-      //   navigator.clipboard
-      //     .writeText(this.$store.state.currentAddress)
-      //     .then(() => {
-      //       this.isCopy = true;
-      //       setTimeout(() => {
-      //         this.isCopy = false;
-      //       }, 3000);
-      //     });
-      // },
-      // GETHashAvatar() {
-      //   if (this.$store.state.isconnect) {
-      //     this.avatar =
-      //       "data:image/png;base64," +
-      //       new this.Identicon(this.$store.state.currentAddress, 120).toString();
-      //     this.$refs.avatar.width = 60;
-      //     this.$refs.avatar.height = 60;
-      //   } else {
-      //     this.avatar = require("@/assets/webAssets/MetaMask.png");
-      //     this.$refs.avatar.width = 40;
-      //     this.$refs.avatar.height = 40;
-      //   }
-      // },
-    },
-  };
+  }
+}
 </script>
-<!-- <style lang="scss" scoped>
-@import "@/style/index.css";
-</style>
-<style lang="scss" scoped>
-@import "@/style/MarketShop/index.scss";
-</style> 
-  
-<style lang="scss" scoped>
-.EmpowerMask {
-  z-index: 200;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .EmpowerBox {
-    transition: all 0.3s ease-in-out;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 650px;
-    border-radius: 30px;
-    background-color: white;
-    display: flex;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-    .EmpowerUserInfbox {
-      margin: 5% 0 5% 0;
-      width: 100%;
-      height: 45%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .animate1 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all 1s ease-in-out;
-        width: 100%;
-        .EmpowerUserInf {
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          overflow: hidden;
-          border: 4px solid var(--border-green--);
-          .UserImage {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
-        }
-        .EmpowerUserAddress {
-          margin-top: 3%;
-          margin-bottom: 3%;
-          font-weight: 800;
-          font-size: 1.2vw;
-          padding-left: 4%;
-        }
-      }
-      .animate2 {
-        transition: all 1s ease-in-out;
-        @extend .animate1;
-        .EmpowerUserAddress {
-          padding-left: 0;
-        }
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        .EmpowerPasswordBox {
-          .EmpowerPasswordBoxTop {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            .el-form {
-              margin-right: 10%;
-            }
-            .el-input /deep/ .el-input__inner {
-              border: 1px solid rgba(0, 0, 0, 0);
-              border-bottom: 1px solid rgb(0, 0, 0);
-              border-radius: 0px;
-            }
-          }
-          .EmpowerPasswordBoxBottom {
-            width: 100%;
-            font-size: 0.7vw;
-            .EmpowerPasswordOpt {
-              margin-top: 30px;
-              display: flex;
-              justify-content: space-around;
-              span {
-                cursor: pointer;
-              }
-            }
-          }
-        }
-      }
-      .animate3 {
-        @extend .animate1;
-        flex-direction: column;
-        .SignTop {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          .SignUserInf {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid #ff0000;
-            .SignUserImage {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-          }
-          .SignUserAddress {
-            font-weight: 800;
-            font-size: 1vw;
-            padding-left: 2%;
-          }
-        }
-
-        .SignForm {
-          width: 50%;
-          margin-top: 2%;
-          .SignSubmitBox {
-            display: flex;
-            margin: 3% 0 3% 0;
-            justify-content: space-around;
-            align-items: center;
-          }
-        }
-      }
-      .animate4 {
-        @extend .animate3;
-        .el-input /deep/ .el-input__inner {
-          border: 1px solid rgba(0, 0, 0, 0);
-          border-bottom: 1px solid rgb(0, 0, 0);
-          border-radius: 0px;
-        }
-      }
-      .animate5 {
-        .el-input /deep/ .el-input__inner {
-          border: 1px solid rgba(0, 0, 0, 0);
-          border-bottom: 1px solid rgb(0, 0, 0);
-          border-radius: 0px;
-        }
-      }
-    }
-  }
-}
-</style>
-<style lang="scss" scoped>
-.Walletbox {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-.avatar {
-  object-fit: fill;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  float: right;
-}
-.avatarBox {
-  overflow: hidden;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 10%;
-  border: 2px solid var(--border-green--);
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    border: 2px solid var(--border-green--);
-    box-shadow: 0 0 20px var(--border-green--);
-    transition: all 0.3s ease-in-out;
-  }
-}
-.MetaMaskAvatar {
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.BOX {
-  width: 100%;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.WalletInnerBox {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-}
-.address {
-  margin-left: 5%;
-  color: var(--Dark--);
-  font-weight: 800;
-  font-size: 12px;
-  width: 50%;
-  text-align: center;
-  border-radius: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
-  font-family: Arial, Helvetica, sans-serif;
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    background-color: rgba(238, 238, 238, 0.1);
-    transition: all 0.3s ease-in-out;
-  }
-}
-.feePercentage {
-  width: 90%;
-  height: 100%;
-  background-color: var(--White--);
-  border-radius: 40px;
-  box-shadow: var(--boxshdow-style--);
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
-      rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-    transition: all 0.3s ease-in-out;
-  }
-}
-</style> -->
-
 <style lang="scss" scoped>
 
 @import "@/style/layout/layout.scss";

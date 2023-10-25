@@ -7,29 +7,39 @@ export function postOwnerContractList(currentAddress) {
   })
 }
 
-export function getOwnerUpSaleNFTs(nftInf) {
+export function getOwnerUpSaleNFTs(data) {
   return request({
     url: `/GetOwnerUpSaleNFTs`,
     method: 'post',
-    data:nftInf
+    data:data
   })
 }
 
-export function getOwnerNFTsByAddress(nftInf) {
+export function getOwnerNFTsByAddress(data) {
   return request({
     url: `/getOwnerNFTsByAddress`,
     method: 'post',
-    data:nftInf
+    data:data
   })
 }
 
-export function updateNFTOwnerListAfterBuy(nftInf) {
+export function updateNFTOwnerListAfterBuy(data) {
   return request({
     url: `/UpdateNFTOwnerListAfterBuy`,
     method: 'post',
-    data:nftInf
+    data:data
   })
 }
+
+
+export function getSeriesByNFTAddress(data) {
+  return request({
+    url: `/getSeriesByNFTAddress`,
+    method: 'post',
+    data:data
+  })
+}
+
 
 export function search(SearchVo) {
   return request({
@@ -38,3 +48,12 @@ export function search(SearchVo) {
     data:SearchVo
   })
 }
+
+export function mainSearch(SearchVo) {
+  return request({
+    url: `/mainSearch`,
+    method: 'post',
+    data:SearchVo
+  })
+}
+

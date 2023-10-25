@@ -14,3 +14,4 @@ func MakeDbModel[T any](m *T, c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	db.AutoMigrate(m)
 }
+

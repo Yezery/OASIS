@@ -20,7 +20,6 @@ func (SC *SaleController) GetSaleList(c *gin.Context) {
 	var Sales []models.Sale
 	db := repositories.GetDb(c)
 	result := db.Find(&Sales)
-	fmt.Println(result)
 	if result.Error != nil {
 		utils.SendResponse(c.Writer, http.StatusInternalServerError, result.Error)
 		panic(result.Error)
@@ -28,8 +27,8 @@ func (SC *SaleController) GetSaleList(c *gin.Context) {
 	utils.SendResponse(c.Writer, http.StatusOK, Sales)
 }
 
-// 条件查询
-func (SC *SaleController) GetSaleListByContractAddress(c *gin.Context) {
+// 条件查询已上架
+func (SC *SaleController) GetOnSaleNFTByNFTAddress(c *gin.Context) {
 	var vo models.NFTOwnerList
 	if err := c.BindJSON(&vo); err != nil {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
@@ -38,12 +37,20 @@ func (SC *SaleController) GetSaleListByContractAddress(c *gin.Context) {
 	var results []dto.NFTOwnerListDTO
 	repositories.GetDb(c).Model(&models.NFTOwnerList{}).
 		Select("*").
-		// Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+		Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
 		Where("nftAddress = ?", vo.NFTAddress).
 		Find(&results)
 	fmt.Println(results)
+
+	var NFTOwnerListDTO []dto.NFTOwnerListDTO
+	for _, product := range results {
+		if product.IsActive {
+			NFTOwnerListDTO = append(NFTOwnerListDTO, product)
+		}
+	}
 	utils.SendResponse(c.Writer, http.StatusOK, &results)
 }
+
 
 // 创建一条新记录
 func (SC *SaleController) CreateSale(c *gin.Context) {
@@ -53,7 +60,6 @@ func (SC *SaleController) CreateSale(c *gin.Context) {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
 		panic(err)
 	}
-	fmt.Println(&sale)
 	db := repositories.GetDb(c)
 	// 向 Sale 表插入记录
 	result := db.Create(&sale)

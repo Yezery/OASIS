@@ -34,7 +34,7 @@
     display: flex;
     height: 64.5px;
     transition: $globalTransition;
-    background-color: var(--White--);
+    background-color: transparent;
 
     a {
       @extend .logo;
@@ -262,32 +262,6 @@
         margin: 3px;
         .GPTIcon {
           cursor: pointer;
-          // @keyframes icon-path-animation {
-          //   0% {
-          //     stroke-dasharray: 4917;
-          //     stroke-dashoffset: 4917;
-          //   }
-
-          //   40% {
-
-          //     stroke-dasharray: 4917;
-          //     stroke-dashoffset: 0;
-          //     fill: var(--White--);
-          //   }
-
-          //   60% {
-
-          //     stroke-dasharray: 4917;
-          //     stroke-dashoffset: 0;
-          //     fill: #13227a;
-          //   }
-
-          //   100% {
-          //     stroke-dasharray: 4917;
-          //     stroke-dashoffset: 1000;
-          //     fill: #13227a;
-          //   }
-          // }
           .icon-body {
             fill: var(--GPTColor--);
             stroke: var(--GPTColor--);
@@ -319,91 +293,6 @@
 .isEnter {
   box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
 }
-
-
-// /deep/ .el-footer {
-//   color: var(--ChatWindow--);
-//   justify-content: center;
-//   display: flex;
-//   align-items: center;
-//   text-align: center;
-//   position: relative;
-//   height: 70px !important;
-//   border-top: solid rgba(128, 128, 128, 0.5) 1px;
-// }
-
-// /deep/  .el-footer button {
-//   color: #e1e1e6;
-//   border: 1px solid rgba(0, 0, 0, 0);
-//   border-radius: 50%;
-//   height: 37px;
-//   justify-content: center;
-//   align-items: center;
-//   width: 40px;
-//   display: inline-flex;
-//   background-color: var(--Chatinput--);
-// }
-
-// /deep/ .el-header {
-//   background-color: var(--White--) !important;
-//   height: 75px !important;
-//   border-bottom: solid rgba(128, 128, 128, 0.5) 1px;
-// }
-
-// /deep/ .el-aside {
-//   color: var(--White--);
-//   text-align: center;
-// }
-
-// /deep/ .el-main {
-//   background-color: var(--White--);
-//   text-align: center;
-//   padding: 0px 0px 3.5% 0px;
-// }
-
-// .topBox {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   height: 100%;
-// }
-
-// /deep/ .inputer {
-//   text-align: center;
-//   width: 90%;
-//   padding: 7px 0px 7px 0px;
-//   margin-bottom: 10px;
-//   margin-top: 20px;
-//   border-radius: 10px;
-//   background-color: var(--Chatinput--);
-//   transition: all 0.3s ease-in-out;
-//   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-
-//   & i {
-//     color: var(--White-eee--);
-//     transition: all 0.3s ease-in-out;
-
-//     &:hover {
-//       animation: send 1s infinite alternate;
-//       transition: all 1s ease-in-out;
-//     }
-//   }
-
-//   .inputarea {
-//     height: 3vh;
-//     width: 65%;
-//     resize: none;
-//     outline: none;
-//     border: none;
-//     vertical-align: top;
-//     font-size: 1.7vw;
-//     text-align: left;
-//     background-color: var(--Chatinput--);
-//     color: var(--White-eee--);
-//   }
-// }
-
 
 .ChatUserName {
   margin-left: 5px;

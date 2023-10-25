@@ -29,27 +29,27 @@ const routes = [
         component: () => import('@/views/main/marketShop/nftMarket3D.vue'),
       },
       {
-        path: 'ImitNFT',
-        name: 'ImitNFT',
-        component: () => import('@/views/main/imit/imitNFT.vue'),
+        path: 'mint3DNFT',
+        name: 'mint3DNFT',
+        component: () => import('@/views/main/mint/mint3DNFT.vue'),
         meta: { isAuth: true }
       },
       {
-        path: 'Imit3DNFT',
-        name: 'Imit3DNFT',
-        component: () => import('@/views/main/imit/imit3DNFT.vue'),
+        path: 'mintNFT',
+        name: 'mintNFT',
+        component: () => import('@/views/main/mint/mintNFT.vue'),
         meta: { isAuth: true }
       },
       {
-        path: 'addImit',
-        name: 'addImit',
-        component: () => import('@/views/main/imit/addImitNFT'),
+        path: 'addmint',
+        name: 'addmint',
+        component: () => import('@/views/main/mint/addMintNFT'),
         meta: { isAuth: true }
       },
       {
-        path: 'addImit3D',
-        name: 'addImit3D',
-        component: () => import('@/views/main/imit/addImit3DNFT'),
+        path: 'addmint3D',
+        name: 'addmint3D',
+        component: () => import('@/views/main/mint/addMint3DNFT'),
         meta: { isAuth: true }
       },
       
@@ -57,13 +57,16 @@ const routes = [
         path: 'NFTInf',
         name: 'NFTInf',
         component: () => import('@/components/infPage/NFTInf'),
-        meta: { isAuth: true }
       },
       {
         path: 'NFTInf3D',
         name: 'NFTInf3D',
         component: () => import('@/components/infPage/3DNFTInf'),
-        meta: { isAuth: true }
+      },
+      {
+        path: 'searchPage',
+        name: 'searchPage',
+        component: () => import('@/views/main/marketShop/searchPage'),
       },
 
     ]
@@ -73,7 +76,17 @@ const routes = [
     name: 'userhome',
     component: () => import('@/views/user/userHome.vue'),
     meta: { isAuth: true }
-  }
+  },
+  {
+    path: '/mintHome',
+    name: 'mintHome',
+    component: () => import('@/views/main/mint/mintHome.vue'),
+  },
+  {
+    path: '/addMintHome',
+    name: 'addMintHome',
+    component: () => import('@/views/main/mint/addMintHome.vue'),
+  },
 ]
 
 const router = new VueRouter({

@@ -1,0 +1,360 @@
+.NFTInfMainBox {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  .NFTInfMain {
+    font-family: Arial, Helvetica, sans-serif;
+    min-width: min-content;
+    width: 95%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .NFTInfMainBg {
+      width: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .NFTInfBg_backHome {
+        width: 100%;
+        margin-top: 20px;
+         button {
+          background-color: var(--FG--);
+          color: var(--Dark--);
+          font-size: 20px;
+          font-weight: 800;
+          :hover {
+            background-color: var(--addMintHomeHover--);
+          }
+        }
+      }
+      .NFTName {
+        color: var(--Dark--);
+        width: 75%;
+        height: auto;
+        font-weight: 800;
+        text-align: left;
+        font-size: 2vw;
+      }
+      .show3DWindow {
+        width: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .active {
+          position: fixed;
+          top: 100px; /* 根据实际情况设置元素的初始位置 */
+          right: 20px;
+        }
+        .show3DBox {
+          background-color: var(--Dark--);
+          width: 70%;
+          height: 50vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+          border-radius: 35px;
+          margin-top: 2%;
+        }
+      }
+
+      .Inf {
+        margin-top: 2%;
+        margin-bottom: 2%;
+        line-height: 50px;
+        width: 75%;
+        color: var(--Dark--);
+
+        .NFTContract {
+          margin-top: 2%;
+        }
+        .NFTSupplyer {
+          text-align: left;
+          font-size: 1.1vw;
+        }
+        .NFTInf {
+          float: left;
+          .NFTCounts {
+            margin-top: 2%;
+            text-align: left;
+            font-size: 1.1vw;
+            span {
+              margin-left: 5px;
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    .selectBox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+
+      height: fit-content;
+      padding-top: 2%;
+
+      /deep/ .selectBox-Button {
+        width: 95%;
+        height: 100%;
+
+        .NFTInf3D {
+                  margin: 2%;
+                  background-color: white;
+                  border-radius: 25px;
+                  width: 300px;
+                  height: 200px;
+                  display: inline-block;
+                  overflow: hidden;
+                  transition: all 0.3s ease-in-out;
+                  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+                    rgba(17, 17, 26, 0.1) 0px 0px 8px;
+                  .Inf3D {
+                    display: flex;
+                    height: 100%;
+
+                    .Inf3DLeft {
+                      flex: 1;
+                      height: 100%;
+                      display: flex;
+                      
+                      background-color: #11243d;
+                      
+                      button{
+                        font-size: 1vw;
+                      }
+                      flex-direction: column;
+                      .Inf3DLeftTop {
+                        width: 100%;
+                        height: 50%;
+                        
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      }
+                      .Inf3DLeftBottom {
+                        width: 100%;
+                        height: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+  
+                        .TokenID {
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          padding: 5px 0px 5px 0px;
+                          border-radius: 10px;
+                          transition: all 0.3s ease-in-out;
+                          background-color: rgba(85, 201, 96, 0.12);
+                          color: #55c960;
+                          width: 50%;
+                        }
+                      }
+                    }
+                    .Inf3DRight {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                      flex: 2;
+                      height: 100%;
+                      .priceBox {
+                        width: 100%;
+                        color: black;
+                        display: flex;
+                        justify-content: center;
+                      .price {
+                        font-size: 25px;
+                      }
+                    }
+                    
+  
+                    }
+                  }
+                }
+        .el-tabs__nav {
+          height: 60px;
+        }
+        .el-tabs {
+          color: #000;
+          border-radius: 20px;
+          left: 0px;
+          top: 0px;
+          position: relative;
+        }
+        /* 去除灰色横条 */
+        .el-tabs__nav-wrap::after {
+          position: static !important;
+        }
+        /* 设置滑块颜色 */
+        .el-tabs__active-bar {
+          background-color: var(--Dark--);
+          border: 1px solid white;
+        }
+        /* 设置滑块停止位置 */
+        .el-tabs__active-bar.is-top {
+          height: 100%;
+          width: 104px !important;
+          border-radius: 17px;
+          top: 0px !important;
+          left: -15px !important;
+          position: absolute !important;
+          z-index: 1;
+        }
+        /* 设置当前选中样式 */
+        .el-tabs__item.is-active {
+          background-color: transparent;
+          color: var(--White--) !important;
+
+          z-index: 2;
+        }
+        /* 设置未被选中样式 */
+        .el-tabs__item {
+          padding: 10px 20px !important;
+          width: auto;
+          font-size: 18px;
+          font-weight: 800;
+          box-sizing: border-box;
+          display: inline-block;
+          position: relative !important;
+          color: var(--Dark--) !important;
+          z-index: 2;
+        }
+
+        .selectBox-Active {
+          border: none;
+          font-size: 1vw;
+          border-radius: 20px;
+          transition: all 0.3s ease-in-out;
+          font-weight: 800;
+          border: none;
+          background-color: rgb(246, 246, 246);
+          &:hover {
+            background-color: rgb(246, 246, 246);
+            transition: all 0.3s ease-in-out;
+            color: white;
+          }
+        }
+        .selectBox-NOActive {
+          @extend .selectBox-Active;
+        }
+        .el-tabs__content {
+          height: 100%;
+
+        }
+      }
+    }
+  }
+  .Buy {
+    transition: all 0.3s ease-in-out;
+    font-size: 15px;
+    font-weight: 800;
+    &:hover {
+      transition: all 0.3s ease-in-out;
+    }
+  }
+  .MessageMask {
+    z-index: 200;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .Message {
+      transition: all 0.3s ease-in-out;
+      overflow: hidden;
+      width: 50%;
+      height: 70%;
+      border-radius: 30px;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+        rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+      // .MessageLeft {
+      //   flex: 1;
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
+      //   padding-right: 10%;
+      //   .imageBox {
+      //     width: 75%;
+      //     height: 75%;
+      //     border-radius: 30px;
+      //     overflow: hidden;
+      //     display: flex;
+      //     justify-content: center;
+      //     align-items: center;
+      //     background-color: transparent;
+      //     img {
+      //       object-fit: contain;
+      //       width: 100%;
+      //       height: 100%;
+      //     }
+      //   }
+      // }
+      .MessageRight {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /deep/ .select {
+          width: 100%;
+          text-align: left;
+          margin-bottom: 20px;
+          .tipsBox {
+            width: 100%;
+            color: rgb(105, 105, 105);
+            text-align: left;
+            transition: all 0.3s ease-in-out;
+            .tipsTitle2 {
+              margin-top: 2%;
+              margin-bottom: 1%;
+              font-size: 15px;
+              font-weight: 800;
+              color: black;
+              transition: all 0.3s ease-in-out;
+              width: 300px;
+            }
+            .tipsTitle {
+              font-size: 20px;
+              color: black;
+              .tipshelp {
+                color: rgb(105, 105, 105);
+                font-size: 15px;
+              }
+            }
+          }
+          .sumbitBox {
+            text-align: left;
+            margin-top: 3%;
+            .createButton {
+              padding: 20px 35px 18px 35px;
+              font-size: 17px;
+              border-radius: 15px;
+              transition: all 0.3s ease-in-out;
+              font-family: "Transformers_Movie";
+            }
+          }
+        }
+        .colseButton {
+          margin-right: 10%;
+        }
+      }
+    }
+  }
+}

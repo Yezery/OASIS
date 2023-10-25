@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"example.com/m/utils"
+	"github.com/FISCO-BCOS/go-sdk/client"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,7 @@ func (UTC *UserTokenController) GetToken(c *gin.Context) {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
 		panic(err)
 	}
-	EncryptedPassword, err := makeUserMnemonicContract().UsrMnemonicCaller.UserMnemonic(bcosClient.GetCallOpts(), common.HexToAddress(user.Address))
+	EncryptedPassword, err := makeUserMnemonicContract(c).UsrMnemonicCaller.UserMnemonic(c.MustGet("fs").(*client.Client).GetCallOpts(), common.HexToAddress(user.Address))
 	if EncryptedPassword == user.EncryptedPassword {
 		fmt.Println(EncryptedPassword == user.EncryptedPassword)
 		// 生成JWT令牌

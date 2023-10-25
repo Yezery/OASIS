@@ -53,7 +53,7 @@ func (NFTLC *NFTOwnerListController) GetOwnerUpSaleNFTs(c *gin.Context) {
 	nol.ownerAddress,
 	nol.nftAddress,
 	nol.ipfsPath,
-	nol.maxmums,
+	nol.maximums,
 	nol.description,
 	s.sale_id
 	FROM nft_owner_lists nol
@@ -70,7 +70,7 @@ func (NFTLC *NFTOwnerListController) GetOwnerNFTs(c *gin.Context) {
 		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
 		panic(err)
 	}
-	
+
 	fmt.Println(nftOwnerList)
 	var results []models.NFTOwnerList
 	db := repositories.GetDb(c)
@@ -82,7 +82,7 @@ func (NFTLC *NFTOwnerListController) GetOwnerNFTs(c *gin.Context) {
 	utils.SendResponse(c.Writer, http.StatusOK, results)
 }
 
-// 查询属于个人的NFT by nftAddress
+// 查询属于个人的NFT by nftAddress and current_nftaddress
 func (NFTLC *NFTOwnerListController) GetOwnerNFTsByAddress(c *gin.Context) {
 	var nftOwnerList models.NFTOwnerList
 	if err := c.BindJSON(&nftOwnerList); err != nil {
@@ -96,6 +96,23 @@ func (NFTLC *NFTOwnerListController) GetOwnerNFTsByAddress(c *gin.Context) {
 	FROM nft_owner_lists nol
 	WHERE nol.nftAddress = ? AND nol.currentOwner = ?`
 	db.Raw(query, nftOwnerList.NFTAddress, nftOwnerList.CurrentOwner).Scan(&results)
+	utils.SendResponse(c.Writer, http.StatusOK, results)
+}
+
+// 查询by nftAddress
+func (NFTLC *NFTOwnerListController) GetSeriesByNFTAddress(c *gin.Context) {
+	var nftOwnerList models.NFTOwnerList
+	if err := c.BindJSON(&nftOwnerList); err != nil {
+		utils.SendResponse(c.Writer, http.StatusBadRequest, err)
+		panic(err)
+	}
+	var results []models.NFTOwnerList
+	db := repositories.GetDb(c)
+	query := `
+	SELECT nol.*
+	FROM nft_owner_lists nol
+	WHERE nol.nftAddress = ? `
+	db.Raw(query, nftOwnerList.NFTAddress).Scan(&results)
 	utils.SendResponse(c.Writer, http.StatusOK, results)
 }
 
@@ -147,16 +164,13 @@ func (NFTLC *NFTOwnerListController) UpdateNFTOwnerListAfterBuy(c *gin.Context) 
 	utils.SendResponse(c.Writer, http.StatusOK, newNFTOwnerList)
 }
 
-// 主页查询
+// 查询
 type NFTSearchCriteria struct {
-	Key      string `json:"key"`
-	Pages    int    `json:"pages"`
-	PageSize int    `json:"pageSize"`
-	// IsActive   bool   `json:"isActive"`
-	// MinPrice   string `json:"minPrice"`
-	// MaxPrice   string `json:"maxPrice"`
-	// MinMaxmums string `json:"minMaxmums"`
-	// MaxMaxmums string `json:"maxMaxmums"`
+	Key string `json:"key"`
+}
+type SearchStruct struct {
+	Value string              `json:"value"`
+	NFT   dto.NFTOwnerListDTO `json:"NFT"`
 }
 
 func (NFTLC *NFTOwnerListController) Search(c *gin.Context) {
@@ -167,25 +181,109 @@ func (NFTLC *NFTOwnerListController) Search(c *gin.Context) {
 		return
 	}
 	keyword := "%" + criteria.Key + "%"
-	// 计算偏移量
-	offset := (criteria.Pages - 1) * criteria.PageSize
-	//精确
-	repositories.GetDb(c).Model(&models.NFTOwnerList{}).Select("*").
-		Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
-		Where("seriesName = ? OR nftName = ? OR symbol = ? OR description = ?", keyword, keyword, keyword, keyword).
-		Offset(offset).
-		Limit(criteria.PageSize).
+
+	//模糊
+	repositories.GetDb(c).Model(&models.NFTOwnerList{}).
+		Select("*").
+		Joins("LEFT JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+		Where("seriesName LIKE ? OR nftName LIKE ? OR symbol LIKE ?", keyword, keyword, keyword).
 		Find(&results)
-	if len(results) == 0 {
-		//模糊
-		repositories.GetDb(c).Model(&models.NFTOwnerList{}).
-			Select("*").
-			Joins("INNER JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
-			Where("seriesName LIKE ? OR nftName LIKE ? OR symbol LIKE ? OR description LIKE ?", keyword, keyword, keyword, keyword).
-			Offset(offset).
-			Limit(criteria.PageSize).
-			Find(&results)
+
+	var searchStructList []SearchStruct
+	for _, value := range results {
+		var searchStruct = SearchStruct{
+			value.SeriesName + " · " + value.NFTName + " · (" + value.Symbol + ")",
+			value,
+		}
+		searchStructList = append(searchStructList, searchStruct)
+	}
+	fmt.Println(searchStructList)
+	utils.SendResponse(c.Writer, http.StatusOK, searchStructList)
+}
+
+func (NFTLC *NFTOwnerListController) KeyDownSearch(c *gin.Context) {
+	var results []dto.NFTOwnerListDTO
+	var criteria NFTSearchCriteria
+	if err := c.ShouldBindJSON(&criteria); err != nil {
+		c.String(http.StatusBadRequest, "Invalid input")
+		return
+	}
+	keyword := "%" + criteria.Key + "%"
+
+	//模糊
+	repositories.GetDb(c).Model(&models.NFTOwnerList{}).
+		Select("*").
+		Joins("LEFT JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+		Where("seriesName LIKE ? OR nftName LIKE ? OR symbol LIKE ?", keyword, keyword, keyword).
+		Find(&results)
+
+	var searchStructList []SearchStruct
+	for _, value := range results {
+		var searchStruct = SearchStruct{
+			value.SeriesName + " · " + value.NFTName + " · (" + value.Symbol + ")",
+			value,
+		}
+		fmt.Println(searchStruct)
+		searchStructList = append(searchStructList, searchStruct)
+	}
+	fmt.Println(searchStructList)
+	utils.SendResponse(c.Writer, http.StatusOK, searchStructList)
+}
+
+type MainCriteria struct {
+	Key      string      `json:"key"`
+	Active   bool        `json:"isActive"`
+	Type     string      `json:"type" `
+	MaxPrice string      `json:"maxPrice"`
+	MinPrice string      `json:"minPrice"`
+	Maxmums  string      `json:"maxmums"`
+	Minmums  string      `json:"minmums"`
+	PageDto  dto.PageDto `json:"pageDto"`
+}
+
+type MainSearchResult struct {
+	Data  []dto.NFTOwnerListDTO `json:"data"`
+	Total int64                 `json:"total"`
+}
+
+func (NFTLC *NFTOwnerListController) MainSearch(c *gin.Context) {
+	var (
+		criteria         MainCriteria
+		mainSearchResult MainSearchResult
+	)
+	if err := c.ShouldBindJSON(&criteria); err != nil {
+		c.String(http.StatusBadRequest, "Invalid input")
+		return
+	}
+	fmt.Println(criteria)
+	query := repositories.GetDb(c).Model(&models.NFTOwnerList{}).Select("*").
+		Joins("LEFT JOIN sales s ON s.nft_owner_list_Id = nft_owner_lists.id").
+		Where("nft_owner_lists.seriesName LIKE ? OR nft_owner_lists.nftName LIKE ? OR nft_owner_lists.symbol LIKE ? ",
+			"%"+criteria.Key+"%", "%"+criteria.Key+"%", "%"+criteria.Key+"%")
+	query.Where("nft_owner_lists.isActive = ? ", criteria.Active)
+
+	if criteria.Type == "1" {
+		query = query.Where("nft_owner_lists.description = '3D'")
+	} else if criteria.Type == "2" {
+		query = query.Where("nft_owner_lists.description != '3D'")
 	}
 
-	utils.SendResponse(c.Writer, http.StatusOK, results)
+	if criteria.MinPrice != "" && criteria.MaxPrice != "" {
+		query = query.Where("(nft_owner_lists.price BETWEEN ? AND ? )", criteria.MinPrice, criteria.MaxPrice)
+	}
+
+	if criteria.Minmums != "" && criteria.Maxmums != "" {
+		query = query.Where("(nft_owner_lists.maxmums BETWEEN ? AND ? )", criteria.Minmums, criteria.Maxmums)
+	}
+	pageReq := &dto.PageDto{
+		Page:     criteria.PageDto.Page,
+		PageSize: criteria.PageDto.PageSize,
+	}
+
+	err := query.Scopes(utils.Paginate(pageReq)).Find(&mainSearchResult.Data).Count(&mainSearchResult.Total).Error
+	if err != nil {
+		fmt.Println(err)
+		utils.SendResponse(c.Writer, http.StatusBadGateway, mainSearchResult)
+	}
+	utils.SendResponse(c.Writer, http.StatusOK, mainSearchResult)
 }

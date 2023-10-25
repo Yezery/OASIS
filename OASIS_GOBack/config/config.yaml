@@ -1,6 +1,6 @@
 server:
   port: 8082
-database:
+mysql:
   username: root
   password: 12345678
   host: localhost
@@ -10,3 +10,19 @@ database:
     charset: utf8mb4
     parseTime: true
     loc: Local
+redis:
+  host: 10.39.5.194
+  port: 6379
+  db: 0
+  password: 123589
+
+fisco:
+  cacert: "config/sdk/ca.crt"
+  key: "config/sdk/sdk.key"
+  cert: "config/sdk/sdk.crt"
+  account: "config/accounts/manage_key_0xbbcb99c61cd3d3746b8760dfc99ee23f336ef0ea.pem"
+  groupid: 1
+  nodeurl: "10.39.5.194:20200"
+  http: false
+  chainid: 1
+  smcrypto: false

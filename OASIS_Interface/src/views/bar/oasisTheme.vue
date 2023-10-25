@@ -66,7 +66,7 @@
         // 通用灰
         document.documentElement.style.setProperty(
           "--Gray--",
-          this.Theme ? "#808080" : "#fff"
+          this.Theme ?   "#fff" : "#808080"
         );
         // 通用白
         document.documentElement.style.setProperty(
@@ -79,11 +79,17 @@
           "--White-eee--",
           this.Theme ? "#eee" : "#1e1e2c"
         );
+        // market table bg hover
+        document.documentElement.style.setProperty(
+          "--tbbg--",
+          this.Theme ?   "rgba(245, 247, 250, 0.6)" : "#0b0f19"
+        );
         // 通用HF主题色
         document.documentElement.style.setProperty(
           "--HFTheme--",
           this.Theme ?   "#fff" : "#0b0f19"
         );
+        
         // #161621
         // 分割线
         document.documentElement.style.setProperty(
@@ -98,6 +104,24 @@
         document.documentElement.style.setProperty(
           "--GPTColor--",
           this.Theme ?   "#13227a" : "#fff"
+        );
+        
+        // mintHome
+        document.documentElement.style.setProperty(
+          "--mintHomebg--",
+          this.Theme ?   "#fff" : "rgb(18, 18, 18)"
+        );
+        document.documentElement.style.setProperty(
+          "--mintHomeLink--",
+          this.Theme ?   "#fff" : "rgb(32, 32, 32)"
+        );
+        document.documentElement.style.setProperty(
+          "--mintHomeBorder--",
+          this.Theme ?    "rgb(18, 18, 18)" : "transparent"
+        );
+        document.documentElement.style.setProperty(
+          "--mintHomeHover--",
+          this.Theme ?   "#fff" : "rgb(37, 37, 37)"
         );
         // document.documentElement.style.setProperty(
         //   "--HFTheme--",

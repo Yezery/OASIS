@@ -19,10 +19,10 @@ const publicGatewayUrl = ipfsPublicGatewayUrl();
 const ipfsIP = store.state.ipfsIP
 
 //====================  部署铸造NFT合约，返回NFT合约实例 
-async function deployNFTContract(Name, Symbol, Maxmums) {
+async function deployNFTContract(Name, Symbol, maximums) {
   let contract = new store.state.Web3.eth.Contract(MintNFTContractABI);
   //  部署合约
-  let NewNFTContractAddress = await contract.deploy({ data: MintNFTContractBytecode, arguments: [Name, Symbol, publicGatewayUrl, Maxmums] })
+  let NewNFTContractAddress = await contract.deploy({ data: MintNFTContractBytecode, arguments: [Name, Symbol, publicGatewayUrl, maximums] })
     .send({
       from: store.state.currentAddress
     });
@@ -52,7 +52,7 @@ export async function savetoIPFS(uploadFiles) {
 }
 
 // ====================  铸造
-async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description, uploadFiles) {
+async function mintNFT(NFTContract, name, symbol, maximums, NFTName, description, uploadFiles) {
   let nftCount = 0
   let ipfsHash = await savetoIPFS(uploadFiles)
   let ipfsPath = `ipfs/${ipfsHash}?filename=${NFTName}`
@@ -78,7 +78,7 @@ async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description,
         "seriesName": name,
         "symbol": symbol,
         "nftName": NFTName,
-        "maxmums": Number(maxmums),
+        "maximums": Number(maximums),
         "description": description,
         "tokenId": Number(nftCount)
       }
@@ -94,7 +94,7 @@ async function mintNFT(NFTContract, name, symbol, maxmums, NFTName, description,
     })
   }
 }
-export async function addMint(to, nftAddress, NFTName, description, uploadFiles, seriesName, symbol, maxmums) {
+export async function addMint(to, nftAddress, NFTName, description, uploadFiles, seriesName, symbol, maximums) {
   let nftCount = 0
   let ipfsHash = await savetoIPFS(uploadFiles)
   let ipfsPath = `ipfs/${ipfsHash}?filename=${NFTName}`
@@ -120,7 +120,7 @@ export async function addMint(to, nftAddress, NFTName, description, uploadFiles,
         "seriesName": seriesName,
         "symbol": symbol,
         "nftName": NFTName,
-        "maxmums": Number(maxmums),
+        "maximums": Number(maximums),
         "description": description,
         "tokenId": Number(nftCount)
       }
@@ -143,11 +143,11 @@ export async function getNFTStruct(nftAddress) {
 }
 
 //==================== NFT总控
-export async function MakeNFT(Name, Symbol, uploadFiles, Maxmums, FirstNFTName, Description) {
+export async function MakeNFT(Name, Symbol, uploadFiles, maximums, FirstNFTName, Description) {
   console.log("部署合约");
-  const NFTContract = await deployNFTContract(Name, Symbol, Maxmums);
+  const NFTContract = await deployNFTContract(Name, Symbol, maximums);
   console.log("铸造");
-  await mintNFT(NFTContract, Name, Symbol, Maxmums, FirstNFTName, Description, uploadFiles)
+  await mintNFT(NFTContract, Name, Symbol, maximums, FirstNFTName, Description, uploadFiles)
 
 }
 //====================  市场合约
@@ -155,6 +155,7 @@ let MarketContract;
 let marketUseWeb3;
 
 // 实例化市场合约
+
   console.log("初始化WEB3......");
 if (window.ethereum != undefined) {
   marketUseWeb3 = new Web3(window.ethereum);
@@ -252,9 +253,9 @@ export async function Buy(NFT) {
     await MarketContract.methods.buy(NFT.saleId)
       .send({
         from: store.state.currentAddress,
-        value: store.state.Web3.utils.toWei(NFT.price.toString(), 'ether'),
+        value: NFT.price.toString(),
       });
-
+      NFT.price = store.state.Web3.utils.fromWei(NFT.price , "ether")
       await makeNewTransaction({
         turnover: parseFloat(NFT.price),
       })

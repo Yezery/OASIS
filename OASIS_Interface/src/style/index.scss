@@ -21,6 +21,11 @@ $globalBorder:1.5px solid var(--HFBorder--);
 }
 
 @font-face {
+  font-family: "OCRB";
+  src: url(@/font/OCRB10PitchBT.otf);
+}
+
+@font-face {
   font-family: "Transformers_Movie";
   src: url(@/font/Transformers_Movie.ttf);
 }

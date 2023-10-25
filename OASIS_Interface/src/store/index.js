@@ -27,7 +27,6 @@ export default new Vuex.Store({
     gptSocket: null,
     userSocket:null,
 
-
     isSearch: false,
     
   },

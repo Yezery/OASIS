@@ -1,22 +1,22 @@
 .searchBox {
   display: flex;
-  justify-content: flex-start;
+  justify-content:center;
   align-items: center;
   transition: $globalTransition;
-  padding-left:80px;
-  width: 100%;
+  margin-left:30px;
+  margin-right:70px;
+  width: 80%;
   height: 100%;
   position: relative;
   
   .search {
     border-radius: .5rem;
-    width: 100%;
+    width: 80%;
     text-align: left;
   }
   /deep/ .el-input__inner {
-    height: 36px;
     border-radius: .5rem;
-    width: 80%;
+    width: 100%;
     background-color: var(--White--);
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
     transition: $globalTransition;

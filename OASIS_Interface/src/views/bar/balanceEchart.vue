@@ -120,7 +120,17 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
   mounted() {
     this.init()
   },
-    methods: {
+  computed:{
+      Theme() {
+			return this.$store.state.Theme;
+		}
+  },
+  watch: {
+    Theme() {
+      this.echartsChang()
+    }
+    },
+  methods: {
       isDayLight() {
         var currdate = new Date();
         if (currdate.getHours() >= 18 || currdate.getHours() < 6) {
@@ -160,6 +170,7 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
       },
       async init() {
         await scheduleDailySummary().then(re => {
+          console.log(re);
         for (let index = 0; index < re.data.data.length; index++) {
           this.chartOptions.series[0].data.push(Number(re.data.data[index].TotalTurnover.toString().slice(0, 4)))
         }
@@ -204,7 +215,7 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
     transition: $globalTransitionUI;
   }
  
-  overflow: hidden;
+  
   
 }
 #EchartsShow {

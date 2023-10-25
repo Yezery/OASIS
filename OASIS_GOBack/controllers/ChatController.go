@@ -182,7 +182,6 @@ func (cc *ChatController) WebSocketHandler(c *gin.Context) {
 				cc.getNowArrayNumber()
 				fmt.Println(websocket.CloseNormalClosure)
 				fmt.Println(websocket.CloseGoingAway)
-				fmt.Println("other")
 			}
 			break
 		}

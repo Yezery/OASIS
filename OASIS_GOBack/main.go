@@ -2,69 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 	"strings"
 
+	"example.com/m/config"
 	"example.com/m/controllers"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/yaml.v3"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
-
-type Config struct {
-	Database struct {
-		Username   string            `yaml:"username"`
-		Password   string            `yaml:"password"`
-		Host       string            `yaml:"host"`
-		Port       int               `yaml:"port"`
-		Database   string            `yaml:"database"`
-		Parameters map[string]string `yaml:"parameters"`
-	} `yaml:"database"`
-	Server struct {
-		Port string `yaml:"port"`
-	} `yaml:"server"`
-}
-
-// 连接数据库
-func (config *Config) setupDatabase() (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?",
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Host,
-		config.Database.Port,
-		config.Database.Database)
-	for k, v := range config.Database.Parameters {
-		dsn += k + "=" + v + "&"
-	}
-	dsn = dsn[:len(dsn)-1]
-	// 初始化数据库连接
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("failed to connect database: %v\n", err)
-	}
-	return db, nil
-}
-
-// 读取配置
-func getYamlConfig(fileName string) Config {
-
-	dataBytes, err := os.ReadFile(fileName)
-	if err != nil {
-		panic("读取配置文件失败")
-	}
-
-	config := Config{}
-	err = yaml.Unmarshal(dataBytes, &config)
-	if err != nil {
-		panic("解析 yaml 文件失败")
-	}
-
-	return config
-}
 
 // 跨域中间件
 func Cors3() gin.HandlerFunc {
@@ -86,7 +31,6 @@ func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 获取请求头中的Authorization字段
 		tokenString := c.GetHeader("Authorization")
-		fmt.Println(tokenString)
 		// 检查Token是否存在
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -124,20 +68,23 @@ func JWT() gin.HandlerFunc {
 }
 
 func main() {
-
+	gin.SetMode(gin.ReleaseMode)
+	config := &config.Config{}
 	// 读取配置文件
-	config := getYamlConfig("config/config.yaml")
-	fmt.Printf("config -> %x\n", config)
-
-	// 初始化数据库
-	db, _ := config.setupDatabase()
-
+	config.GetYamlConfig("config/config.yaml")
+	// 初始化Mysql数据库
+	db, _ := config.SetupMysql()
+	// 初始化Redis数据库
+	rd, _ := config.SetupRedis()
+	fs, _ := config.SetupFisco()
 	// 将附加到 Gin 的 Context 上下文中，以便在控制器和服务中进行使用。
 	router := gin.Default()
 	//
 	router.Use(Cors3())
 	router.Use(func(c *gin.Context) {
 		c.Set("db", db)
+		c.Set("rd", rd)
+		c.Set("fs", fs)
 	})
 	// 开启WebSocket协议
 	Client := controllers.NewChatController()
@@ -148,14 +95,13 @@ func main() {
 	UserTokenController := &controllers.UserTokenController{}
 	TransactionController := &controllers.TransactionController{}
 	GPTController := &controllers.GPTController{}
-	// 连接FiscoBcos
-	UserMnemonicController.FiscoConn()
 	// 公开路由
 	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
-	router.POST("/GetSaleListByContractAddress", SaleController.GetSaleListByContractAddress)
+	router.POST("/getOnSaleNFTByNFTAddress", SaleController.GetOnSaleNFTByNFTAddress)
 	router.GET("/OasisChat/:username", Client.WebSocketHandler)
 	router.POST("/getToken", UserTokenController.GetToken)
 	router.GET("/getSaleList", SaleController.GetSaleList)
+	router.POST("/getSeriesByNFTAddress", NFTOwnerListController.GetSeriesByNFTAddress)
 	router.GET("/getTypeList", SaleTypeController.GetTypeList)
 	router.POST("/setMnemonic", UserMnemonicController.SetMnemonic)
 	router.POST("/setAuthenticationMetaInformation", UserMnemonicController.SetAuthenticationMetaInformation)
@@ -163,6 +109,7 @@ func main() {
 	router.POST("/forgetMnemonic", UserMnemonicController.ForgetMnemonic)
 	router.POST("/resetMnemonic", UserMnemonicController.ResetMnemonic)
 	router.POST("/scheduleDailySummary", TransactionController.ScheduleDailySummary)
+	router.POST("/mainSearch", NFTOwnerListController.MainSearch)
 	// 授权路由
 	jwtGroup := router.Group("/", JWT())
 	jwtGroup.POST("/getOwnerNFTs", NFTOwnerListController.GetOwnerNFTs)
