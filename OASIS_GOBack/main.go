@@ -98,7 +98,7 @@ func main() {
 	// 公开路由
 	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
 	router.POST("/getOnSaleNFTByNFTAddress", SaleController.GetOnSaleNFTByNFTAddress)
-	router.GET("/OasisChat/:username", Client.WebSocketHandler)
+	router.GET("///:username", Client.WebSocketHandler)
 	router.POST("/getToken", UserTokenController.GetToken)
 	router.GET("/getSaleList", SaleController.GetSaleList)
 	router.POST("/getSeriesByNFTAddress", NFTOwnerListController.GetSeriesByNFTAddress)

@@ -15,7 +15,7 @@
           </div>
         </div>
        
-          <router-link to="/userhome" class="userSelect_item">
+          <router-link to="/home/userhome" class="userSelect_item">
             个人主页
         </router-link>
    
@@ -178,7 +178,7 @@
       color: rgb(156,163,175);
     }
     .userSelect_item {
-     color: var(--Gray--);
+     color:gray;
       display: flex;
       justify-content: flex-start;
       align-items: center;

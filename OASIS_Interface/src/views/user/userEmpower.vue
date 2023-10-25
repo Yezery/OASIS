@@ -494,7 +494,7 @@
             let currentAddress = {
               ownerAddress: this.EmpowerSignForm.userAddress,
             };
-            this.openWebsocket(this.$store.state.currentAddress)
+            
             await postOwnerContractList(currentAddress).then((re) => {
               this.$store.commit("setOwnerNFTList", re.data.data);
             });
@@ -503,6 +503,7 @@
             this.$store.commit("setConnection", true);
             this.$store.commit("setEmpower", true);
             this.$store.commit("setGetToken", false);
+           
             this.$notify({
               title: "🎉 连接成功",
               position: "top-left",
@@ -587,7 +588,7 @@
         }
       },
             //开启websocket事务
-      openWebsocket(user,type) {
+      async openWebsocket(user) {
         // 格式["username:admin","username:admin2"]
         let object = {
           username: user,
@@ -641,11 +642,6 @@
           socket.onerror = function () {
             console.log("websocket发生了错误");
           };
-          if (type == 1) {
-            this.$store.commit("setGptSocket", socket);
-          } else {
-            this.$store.commit("setUserSocket", socket);
-          }
           
         }
       },

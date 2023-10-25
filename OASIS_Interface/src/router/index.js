@@ -68,24 +68,27 @@ const routes = [
         name: 'searchPage',
         component: () => import('@/views/main/marketShop/searchPage'),
       },
+      {
+        path: 'userhome',
+        name: 'userhome',
+        component: () => import('@/views/user/userHome.vue'),
+        meta: { isAuth: true }
+      },
 
     ]
   },
-  {
-    path: '/userhome',
-    name: 'userhome',
-    component: () => import('@/views/user/userHome.vue'),
-    meta: { isAuth: true }
-  },
+
   {
     path: '/mintHome',
     name: 'mintHome',
     component: () => import('@/views/main/mint/mintHome.vue'),
+    meta: { isAuth: true }
   },
   {
     path: '/addMintHome',
     name: 'addMintHome',
     component: () => import('@/views/main/mint/addMintHome.vue'),
+    meta: { isAuth: true }
   },
 ]
 

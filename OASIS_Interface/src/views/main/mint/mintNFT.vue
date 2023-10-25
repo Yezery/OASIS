@@ -8,6 +8,13 @@
   >
     <div class="mintNFTFrame ">
       <div class="mintNFTFrameTop">
+        <div class="Mint_backHome">
+        <el-button
+          icon="el-icon-back"
+          circle
+          @click="$router.back(-1)"
+        />
+      </div>
         <div class="mintTitle">
           Create an NFT
         </div>

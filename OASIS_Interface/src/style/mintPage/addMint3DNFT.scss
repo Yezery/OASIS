@@ -1,0 +1,137 @@
+.MainWindow {
+  position: relative;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  margin-bottom: 40px;
+  .mintNFTFrame {
+    transition: all 0.3s ease-in-out;
+    margin: 1.3%;
+    border-radius: 40px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    .mintNFTFrameTop {
+      position: relative;
+      text-align: left;
+      .mintTitle {
+        font-size: 3.5vw;
+        width: 100%;
+        color: var(--Dark--);
+        margin-top: 1%;
+        font-weight: 800;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .mintNFTFrameTop_tipsBox {
+        width: 100%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        text-align: center;
+        font-size: 1.5vw;
+        color: rgb(163, 162, 162);
+        font-weight: 800;
+      }
+      a {
+        text-decoration: none;
+        color: var(--Dark--);
+      }
+    }
+    .mintNFTFrameMain {
+      width: 80%;
+      .mintNFTFrameMain_form {
+        width: 100%;
+        height: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .selectBox {
+          width: 50%;
+          flex-direction: column;
+          /deep/ .select {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 30px;
+            .sumbitBox {
+           
+              text-align: left;
+              margin-top: 6%;
+              margin-bottom: 6%;
+              .createButton {
+                padding: 20px 35px 18px 35px;
+                font-size: 17px;
+                background-color: #fff;
+                border-radius: 15px;
+                transition: all 0.3s ease-in-out;
+                font-family: "Transformers_Movie";
+                color: black;
+                :hover {
+                  color: black;
+                }
+              }
+              .is-disabled {
+                background-color: transparent;
+                color: #c0c4cc;
+                :hover {
+                  color: #c0c4cc;
+                }
+              }
+            }
+            .input_number {
+              margin-top: 1%;
+            }
+            .tipsBox {
+              width: 100%;
+              color: rgb(163, 162, 162);
+              text-align: left;
+              transition: all 0.3s ease-in-out;
+              .tipsTitle {
+                margin-bottom: 1%;
+                width: 76%;
+                font-size: 18px;
+                font-weight: 800;
+                color: var(--Dark--);
+                transition: all 0.3s ease-in-out;
+              }
+              .tipsTitle2 {
+                font-size: 12px;
+                margin-bottom: 3px;
+              }
+            }
+            .show3DBox {
+              width: 30vw;
+              height: 30vw;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border: 1px dashed #ccc;
+              border-radius: 15px;
+              overflow: hidden;
+              margin-top: 2%;
+            }
+            .imageUpLoad {
+              margin-top: 4%;
+              .select3DFile {
+                border-radius: 8px;
+                background-color: var(--Dark--);
+                border: 1px dashed var(--Dark--);
+                color: var(--White--);
+              }
+              .seeShow3D {
+                border-radius: 8px;
+                background-color: var(--Dark--);
+                border: 1px dashed var(--Dark--);
+                color: var(--White--);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

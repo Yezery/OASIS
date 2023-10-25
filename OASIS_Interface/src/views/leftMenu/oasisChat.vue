@@ -1,6 +1,5 @@
 <template>
   <div class="Menu" ref="Menu" :class="{'isEnter':isEnter}">
-    <!-- @mouseleave="OpenAndClose" -->
     <div class="logobox">
       <div class="logo animate__animated">
         <router-link :to="{ name: 'MarketShop' }">
@@ -52,8 +51,8 @@
         </transition>
       </div>
     </transition>
-    <!-- <template> -->
-    <!-- <div
+    <transition enter-active-class="animate__animated animate__fadeInRight" leave-active-class="animate__animated animate__fadeOutRight">>
+    <div
         v-for="otherUser in users"
         :key="otherUser.username"
         class="chat"
@@ -164,16 +163,16 @@
             </div>
           </div>
         </el-popover>
-      </div> -->
+      </div>
 
-    <!-- <el-popover
+    <el-popover
           placement="right"
           trigger="click"
           popper-class="chatGPTep"
           :visible-arrow="false"
           offset="200"
-        /> -->
-    <!-- </template> -->
+        />
+    </transition>
   </div>
 </template>
 
@@ -210,6 +209,7 @@ import axios from 'axios'
         null,
         "你好！我是OASIS GPT，可以向我咨询有关这个系统的信息。"
       );
+      this.$store.commit("setWebScoket",this.init)
     },
     methods: {
       // 更新弹窗位置
@@ -375,17 +375,17 @@ import axios from 'axios'
           msg.scrollTop = msg.scrollHeight;
         });
       },
-      typeText(text) {
-        const textElement = document.getElementById("text");
-        let i = 0;
-        const typingInterval = setInterval(function () {
-          textElement.textContent += text[i];
-          i++;
-          if (i === text.length) {
-            clearInterval(typingInterval);
-          }
-        }, 50); // 控制打字速度
-      },
+      // typeText(text) {
+      //   const textElement = document.getElementById("text");
+      //   let i = 0;
+      //   const typingInterval = setInterval(function () {
+      //     textElement.textContent += text[i];
+      //     i++;
+      //     if (i === text.length) {
+      //       clearInterval(typingInterval);
+      //     }
+      //   }, 50); // 控制打字速度
+      // },
       // createContent(remoteUser, nowUser, text) {
       //   let content;
       //   let html;

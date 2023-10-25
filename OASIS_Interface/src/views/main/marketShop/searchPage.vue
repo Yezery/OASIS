@@ -11,17 +11,34 @@
               <div class="selectBox">
                 <div>3D:</div>
                 <div>
-                  <el-switch v-model="selectType.three" active-color="#000000" inactive-color="#808080" :active-value="true" :inactive-value="false" @change="setType" />
+                  <el-switch
+                    v-model="selectType.three"
+                    active-color="#000000"
+                    inactive-color="#808080"
+                    :active-value="true"
+                    :inactive-value="false"
+                    @change="setType"
+                  />
                 </div>
               </div>
               <div class="selectBox">
                 <div>图片:</div>
                 <div>
-                  <el-switch v-model="selectType.image" active-color="#000000" inactive-color="#808080" :active-value="true" :inactive-value="false" @change="setType" />
+                  <el-switch
+                    v-model="selectType.image"
+                    active-color="#000000"
+                    inactive-color="#808080"
+                    :active-value="true"
+                    :inactive-value="false"
+                    @change="setType"
+                  />
                 </div>
               </div>
             </el-collapse-item>
-            <el-collapse-item title="状态" name="2">
+            <el-collapse-item
+              title="状态"
+              name="2"
+            >
               <div class="selectBox">
                 <div v-if="criteria.isActive">
                   在售:
@@ -30,36 +47,81 @@
                   未售:
                 </div>
                 <div>
-                  <el-switch v-model="criteria.isActive" active-color="#000000" inactive-color="#808080" :active-value="true" :inactive-value="false" @change="setActive" />
+                  <el-switch
+                    v-model="criteria.isActive"
+                    active-color="#000000"
+                    inactive-color="#808080"
+                    :active-value="true"
+                    :inactive-value="false"
+                    @change="setActive"
+                  />
                 </div>
               </div>
             </el-collapse-item>
-            <el-collapse-item title="价格" name="3">
-              <div class="selectBox" style="margin-bottom: 10px;">
+            <el-collapse-item
+              title="价格"
+              name="3"
+            >
+              <div
+                class="selectBox"
+                style="margin-bottom: 10px;"
+              >
                 <div>
                   最高
                 </div>
-                <el-input-number size="mini" controls-position="right" v-model="maxPrice" :precision="3" :step="0.001" :min="0" ></el-input-number>
+                <el-input-number
+                  size="mini"
+                  controls-position="right"
+                  v-model="maxPrice"
+                  :precision="3"
+                  :step="0.001"
+                  :min="0"
+                />
               </div>
               <div class="selectBox">
                 <div>最低</div>
 
-                <el-input-number size="mini" controls-position="right" v-model="minPrice" :precision="3" :step="0.001" :min="0"></el-input-number>
-
+                <el-input-number
+                  size="mini"
+                  controls-position="right"
+                  v-model="minPrice"
+                  :precision="3"
+                  :step="0.001"
+                  :min="0"
+                />
               </div>
             </el-collapse-item>
-            <el-collapse-item title="供应量" name="4">
-              <div class="selectBox" style="margin-bottom: 10px;">
+            <el-collapse-item
+              title="供应量"
+              name="4"
+            >
+              <div
+                class="selectBox"
+                style="margin-bottom: 10px;"
+              >
                 <div>
                   上限
                 </div>
-                <el-input-number size="mini" controls-position="right" v-model="maxmums" :precision="3" :step="0.001" :min="0" ></el-input-number>
+                <el-input-number
+                  size="mini"
+                  controls-position="right"
+                  v-model="maxmums"
+                  :precision="3"
+                  :step="0.001"
+                  :min="0"
+                />
               </div>
               <div class="selectBox">
                 <div>下限</div>
 
-                <el-input-number size="mini" controls-position="right" v-model="minmums" :precision="3" :step="0.001" :min="0"></el-input-number>
-
+                <el-input-number
+                  size="mini"
+                  controls-position="right"
+                  v-model="minmums"
+                  :precision="3"
+                  :step="0.001"
+                  :min="0"
+                />
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -70,45 +132,82 @@
       <div class="Main_right_top">
         <span>NFT</span> <span>Count:{{ total }}</span>
         <div class="searchBox ">
-          <el-input class="search" placeholder="过滤查找" prefix-icon="el-icon-search" v-model="criteria.key" :clearable="true" @keydown.enter.prevent.native="search" />
+          <el-input
+            class="search"
+            placeholder="过滤查找"
+            prefix-icon="el-icon-search"
+            v-model="criteria.key"
+            :clearable="true"
+            @keydown.enter.prevent.native="search"
+          />
         </div>
       </div>
       <div class="Main_right_bottom">
         <div class="marketShopMain ">
-          <el-table :data="pageTicket" class="selectTable" @row-click="toPage">
+          <el-table
+            :data="pageTicket"
+            class="selectTable"
+            @row-click="toPage"
+          >
             <template slot="empty">
-              <div>
-                <img style="padding: 10% 0 0 0;" width="20%" height="20%" src="@/assets/webAssets/MetaMask.png" alt="">
-                <h4 style="padding: 0 0 10% 0">
-                  浏览器未连接Metamask
-                </h4>
-              </div>
+              <el-empty :image-size="200" />
             </template>
-            <el-table-column type="index" width="70" label="Rank" />
             <el-table-column label="藏品">
               <template slot-scope="scope">
                 <div class="collectionRow">
-                  <div class="collectionImageBorder" style="display: inline-block;">
-                    <img class="nftImage" v-show="scope.row.description != '3D'" :src="scope.row.ipfsPath" alt="">
+                  <div
+                    class="collectionImageBorder"
+                    style="display: inline-block;"
+                  >
+                    <img
+                      class="nftImage"
+                      v-show="scope.row.description != '3D'"
+                      :src="scope.row.ipfsPath"
+                      alt=""
+                    >
                   </div>
                   <div style="padding-left: 20px; font-size: 1vw; display: inline-block;">
                     {{ scope.row.nftName }}
-                    <span style="font-size: 0.5vw;">
+                    <span style="font-size: 12px;">
                       #{{ scope.row.tokenId }}
                     </span>
                   </div>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="价格" fixed="right" width="150">
+            <el-table-column label="系列">
               <template slot-scope="scope">
-                <h4> {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH</h4>
+               {{ scope.row.seriesName }}
+              </template>
+            </el-table-column>
+            <el-table-column label="类型">
+              <template slot-scope="scope">
+                <div v-if="scope.row.description == '3D'">3D</div>
+                <div v-else>图片</div>
+              </template>
+            </el-table-column>
+            <el-table-column  label="价格"
+              align="left"
+              
+              fixed="right"
+              width="150"
+            >
+              <template slot-scope="scope">
+                <h4 v-if="scope.row.isActive"> {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH</h4>
+                <h4 v-else>未上架</h4>
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="criteria.pageDto.page" :page-sizes="[5, 10, 50, 100]" :page-size="criteria.pageDto.pageSize" :total="total" />
+          <el-pagination
+            layout="total, sizes, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="criteria.pageDto.page"
+            :page-sizes="[5, 10, 50, 100]"
+            :page-size="criteria.pageDto.pageSize"
+            :total="total"
+          />
         </div>
-
       </div>
     </div>
   </div>
@@ -167,11 +266,18 @@
         results: [],
       };
     },
-    async mounted() {
+  async mounted() {
       for (const NFTInf of this.$route.params.results) {
         this.pageTicket.push(NFTInf.NFT);
       }
+ 
       this.total = this.pageTicket.length;
+      if (this.pageTicket.length == 0) {   
+        this.criteria.isActive = true
+        this.selectType.three = true,
+        this.selectType.image = true
+        await this.search()
+      }
     },
     methods: {
       setType() {
@@ -192,6 +298,7 @@
         this.search();
       },
       async search() {
+        
         if (this.maxmums.toString()!="0" && this.minmums.toString()!="") {
           this.criteria.maxmums = this.maxmums.toString()
           this.criteria.minmums = this.minmums.toString()
@@ -219,6 +326,7 @@
         });
       },
       getPageInfo() {
+        console.log((this.criteria.pageDto.page - 1) * this.criteria.pageDto.pageSize);
         //清空pageTicket中的数据
         this.pageTicket = [];
         // 获取当前页的数据

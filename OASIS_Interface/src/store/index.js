@@ -28,7 +28,7 @@ export default new Vuex.Store({
     userSocket:null,
 
     isSearch: false,
-    
+    initWebScoket:null
   },
   getters: {
   },
@@ -70,6 +70,11 @@ export default new Vuex.Store({
   setUserSocket(state, value){
         state.userSocket = value
     },
+    setWebScoket(state, value) {
+    state.initWebScoket =value
+  },
+  
+  
 setIsSearch(state, value){
       state.isSearch = value
     },

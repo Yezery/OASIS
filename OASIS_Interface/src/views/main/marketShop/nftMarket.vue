@@ -39,7 +39,7 @@
                       </div>
                       <div style="padding-left: 20px; font-size: 1vw; display: inline-block;">
                         {{ JSON.parse(scope.row.tokenURI).name.toUpperCase() }}
-                        <span style="font-size: 0.5vw;">
+                        <span style="font-size: 12px;">
                           #{{ scope.row.tokenId }}
                         </span>
                       </div>
