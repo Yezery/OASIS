@@ -5,17 +5,17 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 contract NFT is ERC721, IERC721Enumerable, Ownable {
-    uint256 public _maximums; // 最大创造量
+    uint256 public _maximums; // 最大铸造量
     uint256 public _currentId; //当前tokenId
     string private _baseTokenURI; // IPFS网关
     mapping(uint256 => string) public  _nftMetaData; // tokenId 映射 NFT元数据
-
+    
     //====================  工厂
     constructor(
         string memory name, // 名称
         string memory symbol, // 代币
         string memory baseURI, // IPFS网关
-        uint256 maximums // 最大创造量
+        uint256 maximums // 最大铸造量
     ) ERC721(name, symbol) {
         _baseTokenURI = baseURI;
         _maximums = maximums;
@@ -29,10 +29,11 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
     ) public onlyOwner {
         require(
             totalSupply() < _maximums,
-            "The number of mints exceeds the maximum lmint"
+            "The number of mints exceeds the maximum limit"
         );
         uint256 newTokenId = _currentId;
         _safeMint(msg.sender, newTokenId);
+        // 设置NFT图片路径
         string memory image = string(
             abi.encodePacked(
                 _baseURI(),
@@ -42,6 +43,7 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
                 nftName
             )
         );
+         // 构造JSON格式元数据
         string memory metadata = string(
             abi.encodePacked(
                  "{\"name\":\"",
@@ -57,6 +59,7 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
         _nftMetaData[newTokenId] = metadata;
         _currentId++;
     }
+    
     //====================  赠送NFT
     function giveMint(
         address to,
@@ -66,10 +69,11 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
     ) public onlyOwner {
         require(
             totalSupply() < _maximums,
-            "The number of mints exceeds the maximum lmint"
+            "The number of mints exceeds the maximum limit"
         );
         uint256 newTokenId = _currentId;
         _safeMint(to, newTokenId);
+        // 设置NFT图片路径
         string memory image = string(
             abi.encodePacked(
                 _baseURI(),
@@ -79,6 +83,7 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
                 nftName
             )
         );
+        // 构造JSON格式元数据
         string memory metadata = string(
             abi.encodePacked(
                  "{\"name\":\"",
@@ -157,4 +162,8 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
         }
         return tokens;
     }
+
+    // function ChangeBaseURI(string memory baseURI) public onlyOwner {
+    //     _baseTokenURI = baseURI;
+    // }
 }

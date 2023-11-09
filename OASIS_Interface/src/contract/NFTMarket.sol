@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// 0x5b2D36d73D974f4b4f223EB8Cab82DAc69AD2EcD
+//local 0xe3A96a34639C7bf2907B4693EfD2BD7a94479661
+
+// 0x17Ff25086a4E8fb49e06502B40078bDfBeB45723
 
 //goerli: 0x27A0bf96E92EA917dD7f72797Ca93A9457b7375A
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -33,9 +35,6 @@ contract NFTMarket is IERC721Receiver, Ownable {
 
     //  NFT商品列表
     Sale[] private sales;
-
-    //  当前商品Id
-    uint256 public SaleId = sales.length;
 
     //  记录交易表
     mapping(uint256 => address) public tokenOwners;
@@ -135,7 +134,6 @@ contract NFTMarket is IERC721Receiver, Ownable {
             nft.getApproved(tokenId) == address(this),
             "Marketplace: Contract not approved for NFT"
         );
-
         uint256 saleId = sales.length;
         string memory tokenURI = NFTcontract.tokenURI(tokenId);
         bytes memory data = bytes(metadata);
@@ -169,11 +167,9 @@ contract NFTMarket is IERC721Receiver, Ownable {
             msg.sender == sale.seller,
             "Marketplace: Only the seller can cancel the sale"
         );
-
         IERC721 nft = IERC721(sale.nftContract);
         sale.isActive = false;
-        nft.safeTransferFrom(sale.seller, address(this), sale.tokenId);
-
+        nft.safeTransferFrom(address(this), msg.sender, sale.tokenId);
         emit SaleCancelled(saleId, sale.seller, sale.nftContract, sale.tokenId);
     }
 
@@ -227,7 +223,7 @@ contract NFTMarket is IERC721Receiver, Ownable {
     }
 
     //====================  查看上架NFT列表信息
-    function getSales() external view returns (Sale[] memory) {
+    function getSales() public view returns (Sale[] memory) {
         return sales;
     }
 
@@ -257,7 +253,7 @@ contract NFTMarket is IERC721Receiver, Ownable {
     function getOwnerSales(address Owner) public view returns (Sale[] memory) {
         uint256 count = 0;
         Sale[] memory result;
-        for (uint256 i = 0; i < SaleId; i++) {
+        for (uint256 i = 0; i < sales.length; i++) {
             IERC721Enumerable nft = IERC721Enumerable(sales[i].nftContract);
             if (
                 sales[i].seller == Owner &&
@@ -269,5 +265,10 @@ contract NFTMarket is IERC721Receiver, Ownable {
             }
         }
         return result;
+    }
+
+    //===================== 获取当前salesId
+    function getSalesId() public view returns (uint256) {
+        return sales.length - 1;
     }
 }
