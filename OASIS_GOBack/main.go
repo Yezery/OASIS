@@ -86,42 +86,46 @@ func main() {
 		c.Set("rd", rd)
 		c.Set("fs", fs)
 	})
-	// 开启WebSocket协议
-	Client := controllers.NewChatController()
 	UserMnemonicController := &controllers.UserMnemonicController{}
 	SaleController := &controllers.SaleController{}
-	SaleTypeController := &controllers.SaleTypeController{}
 	NFTOwnerListController := &controllers.NFTOwnerListController{}
 	UserTokenController := &controllers.UserTokenController{}
 	TransactionController := &controllers.TransactionController{}
 	GPTController := &controllers.GPTController{}
 	// 公开路由
+	// 查
+	router.POST("/sendToGPT", GPTController.SendToGPT)
 	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
 	router.POST("/getOnSaleNFTByNFTAddress", SaleController.GetOnSaleNFTByNFTAddress)
-	router.GET("///:username", Client.WebSocketHandler)
 	router.POST("/getToken", UserTokenController.GetToken)
 	router.GET("/getSaleList", SaleController.GetSaleList)
 	router.POST("/getSeriesByNFTAddress", NFTOwnerListController.GetSeriesByNFTAddress)
-	router.GET("/getTypeList", SaleTypeController.GetTypeList)
-	router.POST("/setMnemonic", UserMnemonicController.SetMnemonic)
-	router.POST("/setAuthenticationMetaInformation", UserMnemonicController.SetAuthenticationMetaInformation)
 	router.POST("/Search", NFTOwnerListController.Search)
-	router.POST("/forgetMnemonic", UserMnemonicController.ForgetMnemonic)
-	router.POST("/resetMnemonic", UserMnemonicController.ResetMnemonic)
 	router.POST("/scheduleDailySummary", TransactionController.ScheduleDailySummary)
 	router.POST("/mainSearch", NFTOwnerListController.MainSearch)
+	// 增
+	router.POST("/setMnemonic", UserMnemonicController.SetMnemonic)
+	router.POST("/setAuthenticationMetaInformation", UserMnemonicController.SetAuthenticationMetaInformation)
+	// 改
+	router.POST("/resetMnemonic", UserMnemonicController.ResetMnemonic)
+	router.POST("/forgetMnemonic", UserMnemonicController.ForgetMnemonic)
+
 	// 授权路由
 	jwtGroup := router.Group("/", JWT())
+	// 查
 	jwtGroup.POST("/getOwnerNFTs", NFTOwnerListController.GetOwnerNFTs)
 	jwtGroup.POST("/getOwnerNFTsByAddress", NFTOwnerListController.GetOwnerNFTsByAddress)
+	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
+	
+	// 增
+	jwtGroup.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
+	jwtGroup.POST("/createNFT", NFTOwnerListController.CreateNFTInf)
 	jwtGroup.POST("/createSale", SaleController.CreateSale)
+	// 改
 	jwtGroup.POST("/UpdateNFTOwnerList", NFTOwnerListController.UpdateNFTOwnerList)
 	jwtGroup.POST("/UpdateNFTOwnerListAfterBuy", NFTOwnerListController.UpdateNFTOwnerListAfterBuy)
-	jwtGroup.POST("/createNFT", NFTOwnerListController.CreateNFTInf)
+	// 删
 	jwtGroup.POST("/DeleteSale", SaleController.DeleteSale)
-	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
-	jwtGroup.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
-	router.POST("/sendToGPT", GPTController.SendToGPT)
-	// router.RunTLS(":"+config.Server.Port, "./config/cert.pem", "./config/key.pem")
+	
 	router.Run(":" + config.Server.Port)
 }

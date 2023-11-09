@@ -1,40 +1,65 @@
 <template>
-  <div class="NFTInfMainBox animate__animated animate__fadeInDown" v-loading.fullscreen.lock="isChanging" element-loading-text="交易进行中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-    <div class="NFTInfMain" ref="NFTInfMain">
-
+  <div
+    class="NFTInfMainBox animate__animated animate__fadeInDown"
+    v-loading.fullscreen.lock="isChanging"
+    element-loading-text="交易进行中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
+    <div
+      class="NFTInfMain"
+      ref="NFTInfMain"
+    >
       <div class="NFTInfMainBg">
         <div class="NFTInfBg_backHome">
-          <el-button icon="el-icon-back" circle @click="$router.back(-1)" />
+          <el-button
+            icon="el-icon-back"
+            circle
+            @click="$router.push('/home/MarketShop3D')"
+          />
         </div>
         <div class="NFTName">
           <h1>{{ nftName }}</h1>
         </div>
 
-        <div class="show3DWindow" ref="show3DWindow" :class="{'active': showFloatingWindow}">
+        <div
+          class="show3DWindow"
+          ref="show3DWindow"
+          :class="{'active': showFloatingWindow}"
+        >
           <div class="show3DBox">
-            <Model :model-path="modelPath" @initModel="seeModel" />
+            <Model
+              :model-path="modelPath"
+              @initModel="seeModel"
+            />
           </div>
         </div>
 
         <div class="Inf">
           <div class="NFTContract">
             <div style="text-align: left;margin-bottom: 3%;">
-              <el-button type="success" plain class="Buy" @click="Buy()" :disabled="!$store.state.isconnect || seller.toUpperCase() == $store.state.currentAddress.toUpperCase() || bought || !isActive">
+              <el-button
+                type="success"
+                plain
+                class="Buy"
+                @click="Buy()"
+                :disabled="!$store.state.isconnect || seller.toUpperCase() == $store.state.currentAddress.toUpperCase() || bought || !isActive"
+              >
                 <i class="el-icon-shopping-cart-1" /> {{ bought?"已购入":"购入" }}
               </el-button>
             </div>
             <div class="NFTSupplyer">
               由 <span style="font-weight: 800;font-size: 1.2vw;">{{ `${this.seller.slice(
-              0,
-              5
-            )}...${this.seller.slice(37)}` }}</span>
+                0,
+                5
+              )}...${this.seller.slice(37)}` }}</span>
             </div>
             <div class="NFTInf">
               <div class="NFTCounts">
                 系列<span style="font-weight: 800;">{{ seriesName }}</span> ·
                 代币符号<span style="font-weight: 800;">{{ symbol }}</span> ·
-                限量铸造<span style="font-weight: 800;">{{ maximums }}</span> ·
-                目前已铸造数量<span style="font-weight: 800;">{{ currentId }}</span>
+                限量创造<span style="font-weight: 800;">{{ maximums }}</span> ·
+                目前已创造数量<span style="font-weight: 800;">{{ currentId }}</span>
               </div>
             </div>
           </div>
@@ -43,18 +68,32 @@
         <div class="selectBox">
           <div class="selectBox-Button">
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="正在售卖" name="first">
+              <el-tab-pane
+                label="正在售卖"
+                name="first"
+              >
                 <div class="SeriesNFT">
-                  <div style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 25px;" v-if="onSaleNFTList.length == 0">
+                  <div
+                    style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 25px;"
+                    v-if="onSaleNFTList.length == 0"
+                  >
                     <el-empty description="无在售" />
                   </div>
                   <template v-else>
                     <template v-for="inf in onSaleNFTList">
-                      <div class="NFTInf3D" :key="inf.image">
+                      <div
+                        class="NFTInf3D"
+                        :key="inf.image"
+                      >
                         <div class="Inf3D">
                           <div class="Inf3DLeft">
                             <div class="Inf3DLeftTop">
-                              <el-button @click="setNewModelPath(inf.ipfsPath)" type="primary" icon="el-icon-video-play" circle />
+                              <el-button
+                                @click="setNewModelPath(inf.ipfsPath)"
+                                type="primary"
+                                icon="el-icon-video-play"
+                                circle
+                              />
                             </div>
                             <div class="Inf3DLeftBottom">
                               <div class="TokenID">
@@ -68,10 +107,16 @@
                               {{ inf.nftName }}
                             </div>
                             <div style="width: 90%;height: 40%;display: flex;justify-content:space-between;align-items: center;">
-                              <div v-if="inf.isActive" class="priceBox">
+                              <div
+                                v-if="inf.isActive"
+                                class="priceBox"
+                              >
                                 <span class="price">{{ $store.state.Web3.utils.fromWei(inf.price, 'ether') }}</span> ETH
                               </div>
-                              <div v-else class="priceBox">
+                              <div
+                                v-else
+                                class="priceBox"
+                              >
                                 <span class="price" />
                               </div>
                             </div>
@@ -82,18 +127,32 @@
                   </template>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="暂未发售" name="second">
+              <el-tab-pane
+                label="暂未发售"
+                name="second"
+              >
                 <div class="SeriesNFT">
-                  <div style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 25px;" v-if="seriesNFTList.filter(inf => !inf.isActive).length == 0">
+                  <div
+                    style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 25px;"
+                    v-if="seriesNFTList.filter(inf => !inf.isActive).length == 0"
+                  >
                     <el-empty description="无数据" />
                   </div>
                   <template v-else>
                     <template v-for="inf in seriesNFTList.filter(inf => !inf.isActive)">
-                      <div class="NFTInf3D" :key="inf.image">
+                      <div
+                        class="NFTInf3D"
+                        :key="inf.image"
+                      >
                         <div class="Inf3D">
                           <div class="Inf3DLeft">
                             <div class="Inf3DLeftTop">
-                              <el-button @click="setNewModelPath(inf.ipfsPath)" type="primary" icon="el-icon-video-play" circle />
+                              <el-button
+                                @click="setNewModelPath(inf.ipfsPath)"
+                                type="primary"
+                                icon="el-icon-video-play"
+                                circle
+                              />
                             </div>
                             <div class="Inf3DLeftBottom">
                               <div class="TokenID">
@@ -107,10 +166,16 @@
                               {{ inf.nftName }}
                             </div>
                             <div style="width: 90%;height: 40%;display: flex;justify-content:space-between;align-items: center;">
-                              <div v-if="inf.isActive" class="priceBox">
+                              <div
+                                v-if="inf.isActive"
+                                class="priceBox"
+                              >
                                 <span class="price">{{ $store.state.Web3.utils.fromWei(inf.price, 'ether') }}</span> ETH
                               </div>
-                              <div v-else class="priceBox">
+                              <div
+                                v-else
+                                class="priceBox"
+                              >
                                 <span class="price" />
                               </div>
                             </div>
@@ -121,18 +186,32 @@
                   </template>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="系列NFT" name="third">
+              <el-tab-pane
+                label="系列NFT"
+                name="third"
+              >
                 <div class="SeriesNFT">
-                  <div style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 25px;" v-if="seriesNFTList.length == 0">
+                  <div
+                    style="margin-top: 10%;margin-bottom: 10%;font-weight: 800;font-size: 25px;"
+                    v-if="seriesNFTList.length == 0"
+                  >
                     <el-empty description="无数据" />
                   </div>
                   <template v-else>
                     <template v-for="inf in seriesNFTList">
-                      <div class="NFTInf3D" :key="inf.image">
+                      <div
+                        class="NFTInf3D"
+                        :key="inf.image"
+                      >
                         <div class="Inf3D">
                           <div class="Inf3DLeft">
                             <div class="Inf3DLeftTop">
-                              <el-button @click="setNewModelPath(inf.ipfsPath)" type="primary" icon="el-icon-video-play" circle />
+                              <el-button
+                                @click="setNewModelPath(inf.ipfsPath)"
+                                type="primary"
+                                icon="el-icon-video-play"
+                                circle
+                              />
                             </div>
                             <div class="Inf3DLeftBottom">
                               <div class="TokenID">
@@ -145,10 +224,16 @@
                               {{ inf.nftName }}
                             </div>
                             <div style="width: 90%;height: 40%;display: flex;justify-content:space-between;align-items: center;">
-                              <div v-if="inf.isActive" class="priceBox">
+                              <div
+                                v-if="inf.isActive"
+                                class="priceBox"
+                              >
                                 <span class="price">{{ $store.state.Web3.utils.fromWei(inf.price, 'ether') }}</span> ETH
                               </div>
-                              <div v-else class="priceBox">
+                              <div
+                                v-else
+                                class="priceBox"
+                              >
                                 <span class="price" />
                               </div>
                             </div>

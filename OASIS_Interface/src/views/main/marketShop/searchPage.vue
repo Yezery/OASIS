@@ -177,24 +177,33 @@
             </el-table-column>
             <el-table-column label="系列">
               <template slot-scope="scope">
-               {{ scope.row.seriesName }}
+                {{ scope.row.seriesName }}
               </template>
             </el-table-column>
             <el-table-column label="类型">
               <template slot-scope="scope">
-                <div v-if="scope.row.description == '3D'">3D</div>
-                <div v-else>图片</div>
+                <div v-if="scope.row.description == '3D'">
+                  3D
+                </div>
+                <div v-else>
+                  图片
+                </div>
               </template>
             </el-table-column>
-            <el-table-column  label="价格"
+            <el-table-column
+              label="价格"
               align="left"
               
               fixed="right"
               width="150"
             >
               <template slot-scope="scope">
-                <h4 v-if="scope.row.isActive"> {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH</h4>
-                <h4 v-else>未上架</h4>
+                <h4 v-if="scope.row.isActive">
+                  {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH
+                </h4>
+                <h4 v-else>
+                  未上架
+                </h4>
               </template>
             </el-table-column>
           </el-table>

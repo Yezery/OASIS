@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -26,7 +25,6 @@ func (UTC *UserTokenController) GetToken(c *gin.Context) {
 	}
 	EncryptedPassword, err := makeUserMnemonicContract(c).UsrMnemonicCaller.UserMnemonic(c.MustGet("fs").(*client.Client).GetCallOpts(), common.HexToAddress(user.Address))
 	if EncryptedPassword == user.EncryptedPassword {
-		fmt.Println(EncryptedPassword == user.EncryptedPassword)
 		// 生成JWT令牌
 		jwtKey := []byte("0xbbcb99c61cd3d3746b8760dfc99ee23f336ef0ea")
 		token := jwt.New(jwt.SigningMethodHS256)
@@ -45,14 +43,8 @@ func (UTC *UserTokenController) GetToken(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 			return
 		}
-		fmt.Println("===========tokenString===============")
-		fmt.Println(tokenString)
-		fmt.Println(EncryptedPassword)
-		fmt.Println(user.EncryptedPassword)
-		fmt.Println("==========================")
 		utils.SendResponse(c.Writer, http.StatusOK, tokenString)
 	} else {
 		utils.SendResponse(c.Writer, http.StatusBadGateway, err)
 	}
-
 }

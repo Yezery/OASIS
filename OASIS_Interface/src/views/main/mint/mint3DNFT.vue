@@ -1,12 +1,18 @@
 <template>
-  <div class="MainWindow animate__animated animate__fadeInRight" v-loading.fullscreen.lock="isChanging" element-loading-text="交易进行中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+  <div
+    class="MainWindow animate__animated animate__fadeInRight"
+    v-loading.fullscreen.lock="isChanging"
+    element-loading-text="交易进行中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
     <div class="mintNFTFrame ">
       <div class="mintNFTFrameTop">
         <div class="mintTitle">
           Create 3DNFT
         </div>
         <div class="mintNFTFrameTop_tipsBox">
-          铸造 3DNFT
+          创造 3DNFT
         </div>
       </div>
       <div class="mintNFTFrameMain">
@@ -22,13 +28,34 @@
                 </div>
               </div>
               <div class="imageUpLoad">
-                <el-upload class="upload-demo" ref="modelUpload" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false" action="#" :lmint="1" :on-change="checkFileType">
-                  <el-button class="select3DFile" slot="trigger" @click="handleRemove">
+                <el-upload
+                  class="upload-demo"
+                  ref="modelUpload"
+                  :on-remove="handleRemove"
+                  :file-list="fileList"
+                  :auto-upload="false"
+                  action="#"
+                  :lmint="1"
+                  :on-change="checkFileType"
+                >
+                  <el-button
+                    class="select3DFile"
+                    slot="trigger"
+                    @click="handleRemove"
+                  >
                     选取3D文件
                   </el-button>
                 </el-upload>
-                <div class="show3DBox" v-loading="loading" v-if="isShow3D" element-loading-text="正在上传到IPFS...">
-                  <Model :model-path="modelPath" @initModel="seeModel" />
+                <div
+                  class="show3DBox"
+                  v-loading="loading"
+                  v-if="isShow3D"
+                  element-loading-text="正在上传到IPFS..."
+                >
+                  <Model
+                    :model-path="modelPath"
+                    @initModel="seeModel"
+                  />
                 </div>
               </div>
             </div>
@@ -41,18 +68,26 @@
                   NFT系列名
                 </div>
               </div>
-              <el-input v-model="Name" placeholder="Please enter a series name" />
+              <el-input
+                v-model="Name"
+                placeholder="Please enter a series name"
+              />
             </div>
             <div class="select">
               <div class="tipsBox">
                 <div class="tipsTitle">
-                 Symbol *
+                  Symbol *
                 </div>
                 <div class="tipsTitle2">
                   该系列NFT代币符号 (要求字符长度不超过11个)
                 </div>
               </div>
-              <el-input show-word-limit v-model="Symbol" placeholder="Please enter the token symbol" maxlength="11" />
+              <el-input
+                show-word-limit
+                v-model="Symbol"
+                placeholder="Please enter the token symbol"
+                maxlength="11"
+              />
             </div>
             <div class="select">
               <div class="tipsBox">
@@ -63,7 +98,10 @@
                   该系列的一号NFT
                 </div>
               </div>
-              <el-input v-model="FirstNFTName" placeholder="Please enter the first 3DNFT name" />
+              <el-input
+                v-model="FirstNFTName"
+                placeholder="Please enter the first 3DNFT name"
+              />
             </div>
             <div class="select">
               <div class="tipsBox">
@@ -71,16 +109,23 @@
                   Supply *
                 </div>
                 <div class="tipsTitle2">
-                  可以铸造的物品数量。
+                  可以创造的物品数量。
                 </div>
               </div>
               <div class="input_number">
-                <el-input-number v-model="maximums" :min="1" />
+                <el-input-number
+                  v-model="maximums"
+                  :min="1"
+                />
               </div>
             </div>
             <div class="select">
               <div class="sumbitBox">
-                <el-button @click="createNFT" :disabled="!canSubmit" class="createButton">
+                <el-button
+                  @click="createNFT"
+                  :disabled="!canSubmit"
+                  class="createButton"
+                >
                   创造
                 </el-button>
               </div>

@@ -13,8 +13,9 @@
         <el-carousel
           :interval="7000"
           type="card"
-          height="230px"
+        
           indicator-position="none"
+          :height="imgHeight"
         >
           <el-carousel-item
             v-for="nft in SaleList3D"
@@ -34,7 +35,7 @@
 
                   <div class="Inf3DLeftBottom">
                     <div class="TokenID">
-                      <span style="font-size: 20px;">#{{ nft.tokenId }}</span>
+                      <span style="font-size: 20px;">#{{ nft.tokenId }} </span>
                     </div>
                   </div>
                 </div>
@@ -81,7 +82,7 @@
             width="70"
             label="Rank"
           />
-          <el-table-column label="系列">
+          <el-table-column label="名称">
             <template slot-scope="scope">
               <div class="collectionRow">
                 <div style="padding-left: 20px; font-size: 1vw; display: inline-block;">
@@ -125,6 +126,7 @@
         initModel: null,
         modelPath: "",
         isInitModel: false,
+        imgHeight: ""
       };
     },
     async mounted() {
@@ -134,6 +136,9 @@
           (NFT) => NFT.isActive && JSON.parse(NFT[6]).description == "3D"
         );
         this.SaleList3D.sort((a, b) => Number(a.price) - Number(b.price));
+      });
+      window.addEventListener("resize", () => {
+        this.imgHeight = String(window.innerWidth / 12);
       });
     },
     methods: {

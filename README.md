@@ -1,2 +1,2 @@
 # OASIS
-NFT exchange
+一个NFT交易所

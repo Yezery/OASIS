@@ -6,22 +6,25 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-  <div class="NFTInfBg_backHome">
-          <el-button icon="el-icon-back" circle @click="$router.back(-1)" />
-        </div>
+    <div class="NFTInfBg_backHome">
+      <el-button
+        icon="el-icon-back"
+        circle
+        @click="$router.push('/')"
+      />
+    </div>
     <el-carousel
       indicator-position="none"
       arrow="never"
       :height="bgHeight"
     >
-   
       <el-carousel-item
-        v-for="image in onSaleNFTList"
-        :key="image.ipfsPath"
+        v-for="images in onSaleNFTList"
+        :key="images.ipfsPath"
       >
         <div
           class="NFTInfMain_Bg"
-          :style="{ backgroundImage: `url('${encodeURI(image.ipfsPath)}')`}"
+          :style="{ backgroundImage: `url('${encodeURI(images.ipfsPath)}')`}"
         />
       </el-carousel-item>
     </el-carousel>
@@ -34,12 +37,12 @@
         :height="imgHeight"
       >
         <el-carousel-item
-          v-for="image in onSaleNFTList"
-          :key="image.ipfsPath"
+          v-for="images in onSaleNFTList"
+          :key="images.ipfsPath"
         >
           <img
             style="width: 100%; object-fit: contain;"
-            :src="image.ipfsPath"
+            :src="images.ipfsPath"
           >
         </el-carousel-item>
       </el-carousel>
@@ -60,8 +63,8 @@
             <div class="NFTCounts">
               系列<span style="font-weight: 800;">{{ seriesName }}</span> ·
               代币符号<span style="font-weight: 800;">{{ symbol }}</span> ·
-              限量铸造<span style="font-weight: 800;">{{ maximums }}</span> ·
-              目前已铸造数量<span style="font-weight: 800;">{{ currentId }}</span>
+              限量创造<span style="font-weight: 800;">{{ maximums }}</span> ·
+              目前已创造数量<span style="font-weight: 800;">{{ currentId }}</span>
             </div>
             <div class="NFTdescription">
               {{ description }}
@@ -252,7 +255,8 @@ import { getNFTStruct,Buy } from "@/api/axios/contract";
         var NFTDto = {
           nftAddress: this.nftAddress,
         };
-        await getOnSaleNFTByNFTAddress(NFTDto).then((re) => {
+      await getOnSaleNFTByNFTAddress(NFTDto).then((re) => {
+          console.log(re);
           this.onSaleNFTList = re.data.data;
         });
       },

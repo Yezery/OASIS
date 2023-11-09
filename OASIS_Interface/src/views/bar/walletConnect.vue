@@ -8,35 +8,57 @@
       :close-delay="0"
       popper-class="userSelectDropdown animate__animated animate__flipInX"
     >
-      <div class="userSelect_connected" v-if="$store.state.isconnect">
-        <div class="userSelect_title" >
+      <div
+        class="userSelect_connected"
+        v-if="$store.state.isconnect"
+      >
+        <div class="userSelect_title">
           <div>
             操作
           </div>
         </div>
        
-          <router-link to="/home/userhome" class="userSelect_item">
-            个人主页
+        <router-link
+          to="/home/userhome"
+          class="userSelect_item"
+        >
+          个人主页
         </router-link>
    
-        <div class="userSelect_item">
+        <!-- <div class="userSelect_item">
           找回授权码
-        </div>
-        <div class="userSelect_item" @click="disConnect">
+        </div> -->
+        <div
+          class="userSelect_item"
+          @click="disConnect"
+        >
           断开连接
         </div>
       </div>
-      <div class="userSelect_unconnect" v-else>
-        <div class="userSelect_title" >
+      <div
+        class="userSelect_unconnect"
+        v-else
+      >
+        <div class="userSelect_title">
           <div>
             操作
           </div>
         </div>
-        <div class="userSelect_item" @click="connectWallet" v-if="isUnlocked">
-            授权
+        <div
+          class="userSelect_item"
+          @click="connectWallet"
+          v-if="isUnlocked"
+        >
+          授权
         </div>
-        <div class="userSelect_item"  v-else>
-            请解锁钱包<i class="el-icon-warning" style="color: red;"></i>
+        <div
+          class="userSelect_item"
+          v-else
+        >
+          请解锁钱包<i
+            class="el-icon-warning"
+            style="color: red;"
+          />
         </div>
       </div>
       <div
@@ -53,19 +75,8 @@
             slot="reference"
           >
         </span>
-        <!-- <div class="userSelect">
-      <div class="userSelect_item">切换</div>
-      <div class="userSelect_item">找回</div>
-      <div class="userSelect_item">退出</div> -->
       </div>
     </el-popover>
-    <!-- <span class="address">{{ 
-        $store.state.currentAddress==""?"MetaMask is not connected":`${this.$store.state.currentAddress.slice(
-          0,
-          5
-        )}...${this.$store.state.currentAddress.slice(-5)}`
-      }}
-      </span> -->
   </div>
 </template>
 

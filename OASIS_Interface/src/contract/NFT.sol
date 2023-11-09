@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 contract NFT is ERC721, IERC721Enumerable, Ownable {
-    uint256 public _maximums; // 最大铸造量
+    uint256 public _maximums; // 最大创造量
     uint256 public _currentId; //当前tokenId
     string private _baseTokenURI; // IPFS网关
     mapping(uint256 => string) public  _nftMetaData; // tokenId 映射 NFT元数据
@@ -15,7 +15,7 @@ contract NFT is ERC721, IERC721Enumerable, Ownable {
         string memory name, // 名称
         string memory symbol, // 代币
         string memory baseURI, // IPFS网关
-        uint256 maximums // 最大铸造量
+        uint256 maximums // 最大创造量
     ) ERC721(name, symbol) {
         _baseTokenURI = baseURI;
         _maximums = maximums;

@@ -240,8 +240,8 @@
                 margin: 1%;
                 background-color: var(--White--);
                 border-radius: 50px;
-                width: 250px;
-                height: 350px;
+                width: 270px;
+                height: 355px;
                 display: inline-block;
                 overflow: hidden;
                 transition: all 0.7s ease-in-out;
@@ -261,7 +261,7 @@
                 }
                 .Inf {
                   width: 100%;
-                  height: 60%;
+                  height: 120px;
                   background-color: var(--Dark--);
                   .InfInnerBox {
                     display: flex;
@@ -276,19 +276,22 @@
                         color: var(--White--);
                         font-weight: 800;
                         text-align: left;
-                        font-size: 1.2vw;
+                        font-size: 25px;
                       }
                     }
                   }
 
                   .InfTop {
                     width: 90%;
-                    padding-bottom: 2.5%;
+
                     display: flex;
                     justify-content: space-around;
                     align-items: center;
 
                     .TokenID {
+                      display: flex;
+                      margin-bottom: 10px;
+                      justify-content: center;align-items: center;
                       width: 100px;
                       padding: 4px 0px 4px 0px;
                       border-radius: 10px;
@@ -297,10 +300,9 @@
                       color: #55c960;
                     }
                     .priceBox {
-                      font-size: 0.5vw;
                       color: var(--White--);
                       .price {
-                        font-size: 1.8vw;
+                        font-size: 25px;
                       }
                     }
                   }
@@ -312,6 +314,7 @@
                     justify-content: center;
                     align-items: center;
                     color: white;
+                    
                     div {
                       padding-top: 2.5%;
                       padding-bottom: 2.5%;
@@ -319,6 +322,7 @@
                       display: flex;
                       justify-content: center;
                       align-items: center;
+                      cursor: pointer;
                     }
                   }
                 }
@@ -346,14 +350,15 @@
                 .Inf3D {
                   display: flex;
                   height: 100%;
-
+                  width: 100%;
                   .Inf3DLeft {
                     flex: 1;
                     height: 100%;
+  
                     display: flex;
                     background-color: #11243d;
                     button {
-                      font-size: 1vw;
+                      font-size: 15px;
                     }
                     flex-direction: column;
                     .Inf3DLeftTop {
@@ -379,7 +384,7 @@
                     flex-direction: column;
                     flex: 2;
                     height: 100%;
-
+                    width: 50%;
                     .priceBox {
                       width: 100%;
                       color: black;
@@ -391,6 +396,7 @@
                       }
                     }
                     .TokenID {
+                      text-align: center;
                       display: flex;
                       justify-content: center;
                       align-items: center;
@@ -399,7 +405,7 @@
                       transition: all 0.3s ease-in-out;
                       background-color: rgba(85, 201, 96, 0.12);
                       color: #55c960;
-                      width: 70%;
+                      width: 200px;
                     }
                   }
                 }

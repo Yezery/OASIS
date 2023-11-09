@@ -13,46 +13,6 @@ import (
 )
 
 type UserMnemonicController struct{}
-
-// 创建与节点的连接
-// var bcosClient
-
-// func (UMC *UserMnemonicController) FiscoConn() error {
-
-// 	keyName := "manage_key_0xbbcb99c61cd3d3746b8760dfc99ee23f336ef0ea"
-// 	// 解析配置文件
-// 	configs, err := conf.ParseConfigOptions(
-// 		"config/sdk/ca.crt",
-// 		"config/sdk/sdk.key",
-// 		"config/sdk/sdk.crt",
-// 		"config/accounts/"+keyName+".pem",
-// 		1,
-// 		"10.39.5.194:20200",
-// 		false,
-// 		1,
-// 		false,
-// 	)
-// 	// 如解析错误则返回
-// 	if err != nil {
-// 		log.Panicln(err)
-// 		return err
-// 	}
-// 	// 连接节点
-// 	client, err := client.Dial(configs)
-
-// 	// 如连接错误则返回
-// 	if err != nil {
-// 		log.Panicln("could not connect to local node")
-// 		log.Panicln(err)
-// 		return err
-// 	}
-// 	// 把client赋值给全局变量bcosClient
-// 	bcosClient = client
-
-// 	log.Println("connect to local geth node...", client)
-// 	return nil
-// }
-
 // 实例化合约
 func makeUserMnemonicContract(c *gin.Context) *contracts.UsrMnemonic {
 	contractAddress := "0xf4a5a8c9898b3070ca874d84e2022c16c47141b1"

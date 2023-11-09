@@ -1,22 +1,47 @@
 <template>
-  <div style="width: 100%;height:100%;position: relative;" v-loading="loading" :element-loading-text="'正在加载'+loadingProgress+'%'">
+  <div
+    style="width: 100%;height:100%;position: relative;"
+    v-loading="loading"
+    :element-loading-text="'正在加载'+loadingProgress+'%'"
+  >
     <div v-if="this.isModelLoading">
-       <span ref="fullScreen" class="toScreenFull" @click="toggleFullScreen" >
-      <i class="el-icon-full-screen " />
-    </span>
-    <span class="continueRender" @click="continueRenderer" >
-      <i class="
-        el-icon-video-play " />
-    </span>
-    <span class="closeRender" @click="disposeRendererAndClearScene" >
-      <i class="
-el-icon-video-pause " />
-    </span>
+      <span
+        ref="fullScreen"
+        class="toScreenFull"
+        @click="toggleFullScreen"
+      >
+        <i class="el-icon-full-screen " />
+      </span>
+      <span
+        class="continueRender"
+        @click="continueRenderer"
+      >
+        <i
+          class="
+        el-icon-video-play "
+        />
+      </span>
+      <span
+        class="closeRender"
+        @click="disposeRendererAndClearScene"
+      >
+        <i
+          class="
+el-icon-video-pause "
+        />
+      </span>
     </div>
    
 
-    <span v-if="!this.isModelLoading" @click="renderModel" style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);cursor: pointer;font-size: 2vw;color: #ccc;font-weight: 800;"><i class="el-icon-switch-button" /></span>
-    <div ref="modelCanvas" style="width: 100%;height: 100%;" />
+    <span
+      v-if="!this.isModelLoading"
+      @click="renderModel"
+      style="position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);cursor: pointer;font-size: 2vw;color: #ccc;font-weight: 800;"
+    ><i class="el-icon-switch-button" /></span>
+    <div
+      ref="modelCanvas"
+      style="width: 100%;height: 100%;"
+    />
   </div>
 </template>
 
@@ -61,6 +86,7 @@ el-icon-video-pause " />
     mounted() {
       this.initModel();
       this.$emit("initModel", this.renderModel);
+      console.log(this.scene);
     },
     methods: {
       initModel() {

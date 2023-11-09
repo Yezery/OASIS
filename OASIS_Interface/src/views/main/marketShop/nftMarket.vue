@@ -10,10 +10,22 @@
             <ad2 />
           </template>
           <template #ad3>
-            <img src="../../../assets/AD2Assets/MotorShow 2023.png" alt="" width="100%" height="100%" style="  object-fit: cover;">
+            <img
+              src="../../../assets/AD2Assets/MotorShow 2023.png"
+              alt=""
+              width="100%"
+              height="100%"
+              style="  object-fit: cover;"
+            >
           </template>
           <template #ad4>
-            <img src="../../../assets/webAssets/logoWhite.png" alt="" width="100%" height="100%" style="  object-fit: fill;">
+            <img
+              src="../../../assets/webAssets/logoWhite.png"
+              alt=""
+              width="100%"
+              height="100%"
+              style="  object-fit: fill;"
+            >
           </template>
         </ad>
       </div>
@@ -21,21 +33,42 @@
         <div class="SellIndex ">
           <div class="SellIndexInner">
             <div class="marketShopMain ">
-              <el-table :data="filteredNFTList.slice(0, 10)" class="marketShopTableLeft" @row-click="toInfPage">
+              <el-table
+                :data="filteredNFTList.slice(0, 10)"
+                class="marketShopTableLeft"
+                @row-click="toInfPage"
+              >
                 <template slot="empty">
                   <div>
-                    <img style="padding: 10% 0 0 0;" width="20%" height="20%" src="@/assets/webAssets/MetaMask.png" alt="">
+                    <img
+                      style="padding: 10% 0 0 0;"
+                      width="20%"
+                      height="20%"
+                      src="@/assets/webAssets/MetaMask.png"
+                      alt=""
+                    >
                     <h4 style="padding: 0 0 10% 0">
                       浏览器未连接Metamask
                     </h4>
                   </div>
                 </template>
-                <el-table-column type="index" width="70" label="Rank" />
+                <el-table-column
+                  type="index"
+                  width="70"
+                  label="Rank"
+                />
                 <el-table-column label="藏品">
                   <template slot-scope="scope">
                     <div class="collectionRow">
-                      <div class="collectionImageBorder" style="display: inline-block;">
-                        <img class="nftImage" :src="JSON.parse(scope.row.tokenURI).image" alt="">
+                      <div
+                        class="collectionImageBorder"
+                        style="display: inline-block;"
+                      >
+                        <img
+                          class="nftImage"
+                          :src="JSON.parse(scope.row.tokenURI).image"
+                          alt=""
+                        >
                       </div>
                       <div style="padding-left: 20px; font-size: 1vw; display: inline-block;">
                         {{ JSON.parse(scope.row.tokenURI).name.toUpperCase() }}
@@ -46,7 +79,12 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" label="价格" fixed="right" width="150">
+                <el-table-column
+                  align="center"
+                  label="价格"
+                  fixed="right"
+                  width="150"
+                >
                   <template slot-scope="scope">
                     <h4> {{ $store.state.Web3.utils.fromWei(scope.row.price, 'ether') }} ETH</h4>
                   </template>

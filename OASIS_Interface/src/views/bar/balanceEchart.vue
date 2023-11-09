@@ -1,20 +1,17 @@
 <template>
-  <div
-    id="EchartBox"
-    ref="EchartBox"
-  >
+  <div id="EchartBox" ref="EchartBox">
     <div id="EchartsShow" />
   </div>
 </template>
 
 <script>
-import { scheduleDailySummary } from "@/api/axios/Sale";
+  import { scheduleDailySummary } from "@/api/axios/Sale";
   import * as echarts from "echarts";
   export default {
     data() {
       return {
         title: "",
-        isOpen:false,
+        isOpen: false,
         subtitle: "",
         chartOptions: {
           title: {
@@ -111,26 +108,25 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
             },
           ],
         },
-        
       };
-  },
-  created() {
-    this.$emit("echart-change", this.echartsChang);
-  },
-  mounted() {
-    this.init()
-  },
-  computed:{
-      Theme() {
-			return this.$store.state.Theme;
-		}
-  },
-  watch: {
-    Theme() {
-      this.echartsChang()
-    }
     },
-  methods: {
+    created() {
+      this.$emit("echart-change", this.echartsChang);
+    },
+    mounted() {
+      this.init();
+    },
+    computed: {
+      Theme() {
+        return this.$store.state.Theme;
+      },
+    },
+    watch: {
+      Theme() {
+        this.echartsChang();
+      },
+    },
+    methods: {
       isDayLight() {
         var currdate = new Date();
         if (currdate.getHours() >= 18 || currdate.getHours() < 6) {
@@ -143,15 +139,16 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
         echarts.dispose(document.getElementById("EchartsShow"));
         if (this.isOpen) {
           var sum = 0;
-        for (
-          let index = 0;
-          index < this.chartOptions.series[0].data.length;
-          index++
-        ) {
-          sum += this.chartOptions.series[0].data[index];
-        }
-        this.title=`Balance`
-        this.subtitle = `${Number(sum)} ETH`;
+          for (
+            let index = 0;
+            index < this.chartOptions.series[0].data.length;
+            index++
+          ) {
+            sum =
+              (sum * 100 + this.chartOptions.series[0].data[index] * 100) / 100;
+          }
+          this.title = `Balance`;
+          this.subtitle = `${sum} ETH`;
         }
         let myChart = echarts.init(document.getElementById("EchartsShow"));
         if (this.$store.state.Theme) {
@@ -159,7 +156,6 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
           this.chartOptions.title.subtext = this.subtitle;
           this.chartOptions.title.subtextStyle.color = "#000000";
           this.chartOptions.xAxis.axisLabel.color = "#000000";
-          
         } else {
           this.chartOptions.title.text = this.title;
           this.chartOptions.title.subtext = this.subtitle;
@@ -169,32 +165,37 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
         myChart.setOption(this.chartOptions);
       },
       async init() {
-        await scheduleDailySummary().then(re => {
-          console.log(re);
-        for (let index = 0; index < re.data.data.length; index++) {
-          this.chartOptions.series[0].data.push(Number(re.data.data[index].TotalTurnover.toString().slice(0, 4)))
-        }
-        this.echartsChang();
-        this.$refs.EchartBox.addEventListener("dblclick", () => {
-          this.$refs.EchartBox.style.height = "100px";
-          setTimeout(() => {
-            this.isOpen = false
-          this.subtitle = ''
-          this.title =''
+        await scheduleDailySummary().then(async (re) => {
+          if (re.data.data) {
+            for (let index = 0; index < re.data.data.length; index++) {
+              console.log(re.data.data[index].TotalTurnover);
+              this.chartOptions.series[0].data.push(
+                re.data.data[index].TotalTurnover
+              );
+            }
+          } else {
+            this.chartOptions.series[0].data.push(0);
+          }
           this.echartsChang();
-        }, 300);
+            this.$refs.EchartBox.addEventListener("dblclick", () => {
+              this.$refs.EchartBox.style.height = "100px";
+              setTimeout(() => {
+                this.isOpen = false;
+                this.subtitle = "";
+                this.title = "";
+                this.echartsChang();
+              }, 300);
+            });
+            this.$refs.EchartBox.addEventListener("click", () => {
+              this.$refs.EchartBox.style.height = "300px";
+              setTimeout(() => {
+                this.isOpen = true;
+                this.echartsChang();
+              }, 300);
+            });
         });
-        this.$refs.EchartBox.addEventListener("click", () => {
-          this.$refs.EchartBox.style.height = "300px";
-        setTimeout(() => {
-          this.isOpen=true
-          this.echartsChang();
-        }, 300);
-      });
-      })
-      }
+      },
     },
- 
   };
 </script>
 
@@ -214,9 +215,6 @@ import { scheduleDailySummary } from "@/api/axios/Sale";
     box-shadow: $globalboxshadowto;
     transition: $globalTransitionUI;
   }
- 
-  
-  
 }
 #EchartsShow {
   width: 100%;

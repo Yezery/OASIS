@@ -53,7 +53,7 @@ func (NFTLC *NFTOwnerListController) GetOwnerUpSaleNFTs(c *gin.Context) {
 	nol.ownerAddress,
 	nol.nftAddress,
 	nol.ipfsPath,
-	nol.maximums,
+	nol.maxmums,
 	nol.description,
 	s.sale_id
 	FROM nft_owner_lists nol

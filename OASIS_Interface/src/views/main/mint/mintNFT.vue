@@ -9,32 +9,32 @@
     <div class="mintNFTFrame ">
       <div class="mintNFTFrameTop">
         <div class="Mint_backHome">
-        <el-button
-          icon="el-icon-back"
-          circle
-          @click="$router.back(-1)"
-        />
-      </div>
+          <el-button
+            icon="el-icon-back"
+            circle
+            @click="$router.push('/')"
+          />
+        </div>
         <div class="mintTitle">
           Create an NFT
         </div>
         <div class="mintNFTFrameTop_tipsBox">
-          铸造NFT
+          创造NFT
         </div>
       </div>
       <div class="mintNFTFrameMain">
         <div class="mintNFTFrameMain_left">
           <div style="text-align: left;margin-bottom: 2%;">
             <span
-              style="color: var(--Dark--);font-weight: 800;font-size: 1vw;"
+              style="color: var(--Dark--);font-weight: 800;font-size: 1.2vw;"
               v-if="processLoading"
             ><i class="el-icon-loading" />审核中...</span>
             <span
-              style="color: rgb(1, 169, 1);font-weight: 800;font-size: 1vw;"
+              style="color: rgb(1, 169, 1);font-weight: 800;font-size: 1.2vw;"
               v-if="isProcess&&!processLoading"
             ><i class="el-icon-success" /> 图片合规</span>
             <span
-              style="color: red;font-weight: 800;font-size: 1vw;"
+              style="color: red;font-weight: 800;font-size: 1.2vw;"
               v-else-if="!isProcess&&!processLoading&&noProcess"
             ><i class="el-icon-error" /> 图片不合规</span>
           </div>
@@ -47,26 +47,33 @@
               :on-change="setPicture"
               :auto-upload="false"
             >
-             <div class="innerBox" v-if="!isUpload">
-              <i
+              <div
+                class="innerBox"
+                v-if="!isUpload"
+              >
+                <i
               
-                class="el-icon-upload2"
-                style="
+                  class="el-icon-upload2"
+                  style="
               font-size: 3vw;
               color: var(--Dark--);
               transition: all 0.3s ease-in-out;
               margin-bottom:15px;
             "
-              />
-              <div style="color: var(--Dark--);font-weight: 800;font-size: 1.2vw;">
-                将文件拖到此处，或</div>
+                />
+                <div style="color: var(--Dark--);font-weight: 800;font-size: 1.2vw;">
+                  将文件拖到此处，或
+                </div>
                 <div style="color: #2081E2;font-weight: 800;font-size: 1.2vw;">
-                点击浏览文件上传</div>
+                  点击浏览文件上传
+                </div>
                 <div style="color: #B3B3B3;font-weight: 300;font-size: 1vw;">
-                Max size: 50MB</div>
-               <div style="color: #B3B3B3;font-weight: 300;font-size: 1vw;">
-                JPG,PNG,JEPG,GIF</div>
-            </div> 
+                  Max size: 50MB
+                </div>
+                <div style="color: #B3B3B3;font-weight: 300;font-size: 1vw;">
+                  JPG,PNG,JEPG,GIF
+                </div>
+              </div> 
               <div
                 slot="file"
                 slot-scope="{ file }"
@@ -156,7 +163,7 @@
                   Supply *
                 </div>
                 <div class="tipsTitle2">
-                  可以铸造的物品数量。
+                  可以创造的物品数量。
                 </div>
               </div>
               <div class="input_number">
@@ -249,7 +256,8 @@
         let prix = this.getFileExtendingName(
           this.$refs.pictureUpload.uploadFiles[0].raw.name
         );
-        if (prix == ".jepg" || prix == ".png" || prix == ".jpg"||prix == ".JEPG" || prix == ".PNG" || prix == ".JPG") {
+        if (prix == ".jepg" || prix == ".png" || prix == ".jpg" || prix
+          == ".JEPG" || prix == ".PNG" || prix == ".JPG" ) {
           setTimeout(async () => {
             try {
               await process(this.$refs.realPicture).then((re) => {
@@ -293,9 +301,33 @@
             return
           }
           if (prix == ".gif" || prix == ".GIF") {
-            this.isProcess = true;
-            this.processLoading = false;
-            this.noProcess = false;
+            setTimeout(async () => {
+            try {
+              await process(this.$refs.realPicture).then((re) => {
+                this.processLoading = false;
+                if (
+                  re[0].className == "Neutral" ||
+                  re[0].className == "Drawing"
+                ) {
+                  this.isProcess = true;
+                } else {
+                  this.handleRemove();
+                  this.isProcess = false;
+                  this.noProcess = true;
+                }
+              });
+            } catch (error) {
+              this.$notify.error({
+                title: "系统异常",
+                position: "top-left",
+                offset: 200,
+              });
+              this.isProcess = false;
+              this.processLoading = false;
+              this.noProcess = false;
+              console.error(error);
+            }
+          }, 100);
           } else {
             this.$notify.error({
               title: "不支持格式",
@@ -367,13 +399,6 @@
         }, 5000);
       },
       handleRemove() {
-        // let uploadFiles = this.$refs.pictureUpload.uploadFiles;
-        // for (var i = 0; i < uploadFiles.length; i++) {
-        //   if (uploadFiles[i]["url"] == file.url) {
-        //     uploadFiles.splice(i, 1);
-        //   }
-        // }
-        console.log();
         this.$refs.pictureUpload.clearFiles();
         this.isProcess = false;
         this.noProcess = false;

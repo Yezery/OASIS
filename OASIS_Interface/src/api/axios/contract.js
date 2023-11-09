@@ -18,7 +18,7 @@ const publicGatewayUrl = ipfsPublicGatewayUrl();
 // ipfsIP
 const ipfsIP = store.state.ipfsIP
 
-//====================  部署铸造NFT合约，返回NFT合约实例 
+//====================  部署创造NFT合约，返回NFT合约实例 
 async function deployNFTContract(Name, Symbol, maximums) {
   let contract = new store.state.Web3.eth.Contract(MintNFTContractABI);
   //  部署合约
@@ -51,7 +51,7 @@ export async function savetoIPFS(uploadFiles) {
   }
 }
 
-// ====================  铸造
+// ====================  创造
 async function mintNFT(NFTContract, name, symbol, maximums, NFTName, description, uploadFiles) {
   let nftCount = 0
   let ipfsHash = await savetoIPFS(uploadFiles)
@@ -146,7 +146,7 @@ export async function getNFTStruct(nftAddress) {
 export async function MakeNFT(Name, Symbol, uploadFiles, maximums, FirstNFTName, Description) {
   console.log("部署合约");
   const NFTContract = await deployNFTContract(Name, Symbol, maximums);
-  console.log("铸造");
+  console.log("创造");
   await mintNFT(NFTContract, Name, Symbol, maximums, FirstNFTName, Description, uploadFiles)
 
 }
@@ -221,6 +221,7 @@ export async function UpSale(NFT) {
 }
 
 export async function DownSale(NFT) {
+  console.log(NFT);
   let SaleId;
   try {
     await getOwnerUpSaleNFTs(NFT).then(re => { SaleId = re.data.data.saleId; })

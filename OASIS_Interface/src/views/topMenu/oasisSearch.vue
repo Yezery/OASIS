@@ -1,7 +1,20 @@
 <template>
   <div class="searchBox ">
-    <el-autocomplete class="search"   @keydown.enter.prevent.native="toSearchPage" v-model="SearchVo.key" :fetch-suggestions="querySearchAsync" placeholder="Search any collection" @select="handleSelect" :trigger-on-focus="false" :clearable="true" >
-      <i slot="prefix" class="el-input__icon el-icon-search"></i></el-autocomplete>
+    <el-autocomplete
+      class="search"
+      @keydown.enter.prevent.native="toSearchPage"
+      v-model="SearchVo.key"
+      :fetch-suggestions="querySearchAsync"
+      placeholder="Search any collection"
+      @select="handleSelect"
+      :trigger-on-focus="false"
+      :clearable="true"
+    >
+      <i
+        slot="prefix"
+        class="el-input__icon el-icon-search"
+      />
+    </el-autocomplete>
   </div>
 </template>
 

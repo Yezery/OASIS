@@ -1,49 +1,137 @@
 <template>
-  <div class="Menu" ref="Menu" :class="{'isEnter':isEnter}">
+  <div
+    class="Menu"
+    ref="Menu"
+    :class="{'isEnter':isEnter}"
+  >
     <div class="logobox">
       <div class="logo animate__animated">
         <router-link :to="{ name: 'MarketShop' }">
-          <div style="display: inline; font-size: 25px" class="animate__animated" ref="logo">
+          <div
+            style="display: inline; font-size: 25px"
+            class="animate__animated"
+            ref="logo"
+          >
             OAS
           </div>
-          <div style="display: inline;  font-size: 25px" class="animate__animated" ref="logo2">
-            <img src="../../assets/webAssets/s1.png" alt="" width="22px" height="22px">S
+          <div
+            style="display: inline;  font-size: 25px"
+            class="animate__animated"
+            ref="logo2"
+          >
+            <img
+              src="../../assets/webAssets/s1.png"
+              alt=""
+              width="22px"
+              height="22px"
+            >S
           </div>
         </router-link>
       </div>
     </div>
-    <div style="text-align: right;padding-top: 10px;padding-right: 10px;cursor: pointer;color: var(--Dark--);" v-if="isChatGPT" @click="OpenAndClose"><i class="el-icon-d-arrow-left"></i></div>
+    <div
+      style="text-align: right;padding-top: 10px;padding-right: 10px;cursor: pointer;color: var(--Dark--);"
+      v-if="isChatGPT"
+      @click="OpenAndClose"
+    >
+      <i class="el-icon-d-arrow-left" />
+    </div>
     
-    <transition enter-active-class="animate__animated animate__fadeInRight" leave-active-class="animate__animated animate__fadeOutRight">
+    <transition
+      enter-active-class="animate__animated animate__fadeInRight"
+      leave-active-class="animate__animated animate__fadeOutRight"
+    >
       <div class="chatGPT">
-        <div class="ChatAvatar animate__animated animate__fadeInRight" @click="isShowGPTChat(1)" >
-         
-          <div class="ChatAvatarBox" ref="ChatWindow" >
-            <el-badge is-dot :hidden="!haveMessage" class="item">
-            <svg  t="1697856532693" class="GPTIcon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4653" width="47" height="47">
-              <path class="icon-body" :class="{'replying':isFinish}" stroke-width="2" d="M1024 512A512 512 0 1 1 0 512a512 512 0 0 1 1024 0z m-128 0q0-73.216-26.989714-141.385143-29.257143-73.874286-85.504-130.194286-56.246857-56.173714-130.194286-85.430857Q585.289143 128 512 128q-73.216 0-141.385143 26.989714-73.874286 29.257143-130.194286 85.504-56.173714 56.246857-85.430857 130.194286Q128 438.637714 128 512q0 73.216 26.989714 141.312 29.257143 73.947429 85.504 130.194286 56.246857 56.32 130.194286 85.577143 68.022857 26.916571 141.312 26.916571 73.216 0 141.312-26.989714 73.947429-29.257143 130.194286-85.504 56.32-56.246857 85.577143-130.194286 26.916571-68.022857 26.916571-141.312z" p-id="4654" fill="#13227a"></path>
-              <path class="icon-eye" stroke-width="2" d="M292.571429 365.714286m73.142857 0l0 0q73.142857 0 73.142857 73.142857l0 146.285714q0 73.142857-73.142857 73.142857l0 0q-73.142857 0-73.142857-73.142857l0-146.285714q0-73.142857 73.142857-73.142857Z" p-id="4655"></path>
-              <path class="icon-eye" stroke-width="2" d="M585.142857 365.714286m73.142857 0l0 0q73.142857 0 73.142857 73.142857l0 146.285714q0 73.142857-73.142857 73.142857l0 0q-73.142857 0-73.142857-73.142857l0-146.285714q0-73.142857 73.142857-73.142857Z" p-id="4656"></path>
-            </svg>
-          </el-badge>
+        <div
+          class="ChatAvatar animate__animated animate__fadeInRight"
+          @click="isShowGPTChat(1)"
+        >
+          <div
+            class="ChatAvatarBox"
+            ref="ChatWindow"
+          >
+            <el-badge
+              is-dot
+              :hidden="!haveMessage"
+              class="item"
+            >
+              <svg
+                t="1697856532693"
+                class="GPTIcon"
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                p-id="4653"
+                width="47"
+                height="47"
+              >
+                <path
+                  class="icon-body"
+                  :class="{'replying':isFinish}"
+                  stroke-width="2"
+                  d="M1024 512A512 512 0 1 1 0 512a512 512 0 0 1 1024 0z m-128 0q0-73.216-26.989714-141.385143-29.257143-73.874286-85.504-130.194286-56.246857-56.173714-130.194286-85.430857Q585.289143 128 512 128q-73.216 0-141.385143 26.989714-73.874286 29.257143-130.194286 85.504-56.173714 56.246857-85.430857 130.194286Q128 438.637714 128 512q0 73.216 26.989714 141.312 29.257143 73.947429 85.504 130.194286 56.246857 56.32 130.194286 85.577143 68.022857 26.916571 141.312 26.916571 73.216 0 141.312-26.989714 73.947429-29.257143 130.194286-85.504 56.32-56.246857 85.577143-130.194286 26.916571-68.022857 26.916571-141.312z"
+                  p-id="4654"
+                  fill="#13227a"
+                />
+                <path
+                  class="icon-eye"
+                  stroke-width="2"
+                  d="M292.571429 365.714286m73.142857 0l0 0q73.142857 0 73.142857 73.142857l0 146.285714q0 73.142857-73.142857 73.142857l0 0q-73.142857 0-73.142857-73.142857l0-146.285714q0-73.142857 73.142857-73.142857Z"
+                  p-id="4655"
+                />
+                <path
+                  class="icon-eye"
+                  stroke-width="2"
+                  d="M585.142857 365.714286m73.142857 0l0 0q73.142857 0 73.142857 73.142857l0 146.285714q0 73.142857-73.142857 73.142857l0 0q-73.142857 0-73.142857-73.142857l0-146.285714q0-73.142857 73.142857-73.142857Z"
+                  p-id="4656"
+                />
+              </svg>
+            </el-badge>
           </div>
-
         </div>
-        <transition enter-active-class="animate__animated animate__fadeInRight" leave-active-class="animate__animated animate__fadeOutRight">
-          <div class="ChatWindowBox" v-show="isChatGPT">
+        <transition
+          enter-active-class="animate__animated animate__fadeInRight"
+          leave-active-class="animate__animated animate__fadeOutRight"
+        >
+          <div
+            class="ChatWindowBox"
+            v-show="isChatGPT"
+          >
             <el-container>
               <el-main>
-
-                <div id="CHAT" v-html="contents[chatUser]"></div>
-                <div v-if="isFinish" class="animate__animated animate__fadeInLeft" style="text-align: right;width:100%">
-                  <i class="el-icon-loading " style="margin-right:15px"/>
-                  <i class="el-icon-video-pause" @click="stopGPT" style="cursor: pointer;"/>
+                <div
+                  id="CHAT"
+                  v-html="contents[chatUser]"
+                />
+                <div
+                  v-if="isFinish"
+                  class="animate__animated animate__fadeInLeft"
+                  style="text-align: right;width:100%"
+                >
+                  <i
+                    class="el-icon-loading "
+                    style="margin-right:15px"
+                  />
+                  <i
+                    class="el-icon-video-pause"
+                    @click="stopGPT"
+                    style="cursor: pointer;"
+                  />
                 </div>
               </el-main>
               <el-footer>
                 <div class="inputer">
-                  <el-input class="input" id="scroll_text" @click="haveMessage = false;"  resize="none" type="textarea" :disabled="isFinish" v-model="text" placeholder="问我任何问题 (Shift + Enter = 换行)" @keydown.enter.native.prevent="handleKeyCode($event,2)">
-                  </el-input>
+                  <el-input
+                    class="input"
+                    id="scroll_text"
+                    @click="haveMessage = false;"
+                    resize="none"
+                    type="textarea"
+                    :disabled="isFinish"
+                    v-model="text"
+                    placeholder="问我任何问题 (Shift + Enter = 换行)"
+                    @keydown.enter.native.prevent="handleKeyCode($event,2)"
+                  />
                 </div>
               </el-footer>
             </el-container>
@@ -51,8 +139,12 @@
         </transition>
       </div>
     </transition>
-    <transition enter-active-class="animate__animated animate__fadeInRight" leave-active-class="animate__animated animate__fadeOutRight">>
-    <div
+    <transition
+      enter-active-class="animate__animated animate__fadeInRight"
+      leave-active-class="animate__animated animate__fadeOutRight"
+    >
+      >
+      <div
         v-for="otherUser in users"
         :key="otherUser.username"
         class="chat"
@@ -165,13 +257,13 @@
         </el-popover>
       </div>
 
-    <el-popover
-          placement="right"
-          trigger="click"
-          popper-class="chatGPTep"
-          :visible-arrow="false"
-          offset="200"
-        />
+      <el-popover
+        placement="right"
+        trigger="click"
+        popper-class="chatGPTep"
+        :visible-arrow="false"
+        offset="200"
+      />
     </transition>
   </div>
 </template>
@@ -207,7 +299,7 @@ import axios from 'axios'
       this.createContent(
         "GPT",
         null,
-        "你好！我是OASIS GPT，可以向我咨询有关这个系统的信息。"
+        "欢迎来到OASIS交易所！我是OASIS系统介绍助手，可以向我咨询有关这个系统的信息。"
       );
       this.$store.commit("setWebScoket",this.init)
     },

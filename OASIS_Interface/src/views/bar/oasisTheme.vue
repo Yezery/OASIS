@@ -2,18 +2,17 @@
   <div class="oasisTheme">
     <div class="oasisThemeInner">
       <el-radio-group
-      v-model="radio"
-      @change="changeTheme"
-    >
-      <el-radio label="1">
-        <i class="el-icon-sunny" />
-      </el-radio>
-      <el-radio label="2">
-        <i class="el-icon-moon" />
-      </el-radio>
-    </el-radio-group>
+        v-model="radio"
+        @change="changeTheme"
+      >
+        <el-radio label="1">
+          <i class="el-icon-sunny" />
+        </el-radio>
+        <el-radio label="2">
+          <i class="el-icon-moon" />
+        </el-radio>
+      </el-radio-group>
     </div>
-  
   </div>
 </template>
 
