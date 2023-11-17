@@ -267,7 +267,7 @@
   export default {
     data() {
       return {
-        isGetToken:false,
+        isGetToken: false,
         //****聊天栏******//
         isOpen: false,
         UserImageList: [],
@@ -294,24 +294,23 @@
         isUnlocked: false,
       };
     },
-    computed:{
+    computed: {
       listenGetToken() {
-			return this.$store.state.isGetToken;
-		}
-  },
-  watch: {
-    listenGetToken() {
-      this.isGetToken=this.$store.state.isGetToken;
-    }
+        return this.$store.state.isGetToken;
+      },
     },
-  async mounted() {
-
+    watch: {
+      listenGetToken() {
+        this.isGetToken = this.$store.state.isGetToken;
+      },
+    },
+    async mounted() {
       if (window.ethereum != undefined) {
         await window.ethereum._metamask
           .isUnlocked()
           .then((re) => (this.isUnlocked = re));
         window.ethereum.on("accountsChanged", async () => {
-            window.location.reload();
+          window.location.reload();
         });
         window.ethereum.on("chainChanged", () => {
           window.location.reload();
@@ -322,7 +321,7 @@
             offset: 200,
           });
         });
-        this.openEmpower()
+        this.openEmpower();
         if (!this.$store.state.isconnect && this.isUnlocked) {
           try {
             await this.connectWallet();
@@ -383,7 +382,7 @@
         this.user.encryptedPassword = CryptoJS.SHA256(
           this.user.encryptedPassword
         ).toString();
-        await getToken(this.user).then((re) => {
+        await getToken(this.user).then(async (re) => {
           localStorage.clear();
           if (re.data.data == null) {
             this.$notify({
@@ -392,8 +391,15 @@
               position: "top-left",
               offset: 200,
             });
-            this.$refs.password.clear()
+            this.$refs.password.clear();
           } else {
+            await window.ethereum.request({
+              method: "personal_sign",
+              params: [re.data.data, this.$store.state.currentAddress],
+            }).catch(err => {
+              console.log(err);
+              return
+            })
             localStorage.setItem("token", re.data.data);
             let currentAddress = {
               ownerAddress: this.$store.state.currentAddress,
@@ -401,11 +407,11 @@
             postOwnerContractList(currentAddress).then((re) => {
               this.$store.commit("setOwnerNFTList", re.data.data);
             });
-          
+
             this.$store.commit("setConnection", true);
             this.$store.commit("setEmpower", true);
             this.$store.commit("setGetToken", false);
-            this.$refs.password.clear()
+            this.$refs.password.clear();
             // this.giveChatInitToWalletConnect();
             this.$notify({
               title: "🎉 连接成功",
@@ -494,16 +500,15 @@
             let currentAddress = {
               ownerAddress: this.EmpowerSignForm.userAddress,
             };
-            
+
             await postOwnerContractList(currentAddress).then((re) => {
               this.$store.commit("setOwnerNFTList", re.data.data);
             });
-            
+
             // this.giveChatInitToWalletConnect();
             this.$store.commit("setConnection", true);
             this.$store.commit("setEmpower", true);
             this.$store.commit("setGetToken", false);
-           
             this.$notify({
               title: "🎉 连接成功",
               position: "top-left",
@@ -587,7 +592,7 @@
           this.$refs.avatar.height = 40;
         }
       },
-            //开启websocket事务
+      //开启websocket事务
       async openWebsocket(user) {
         // 格式["username:admin","username:admin2"]
         let object = {
@@ -606,10 +611,9 @@
           console.log("您的浏览器不支持WebSocket");
         } else {
           console.log("您的浏览器支持WebSocket");
-          const userSocket=this.$store.state.userSocket
+          const userSocket = this.$store.state.userSocket;
           if (userSocket != null) {
             userSocket.close();
-            
           }
           // 开启一个websocket服务
           let socket = newWebSocket("/OasisChat/", username);
@@ -642,7 +646,6 @@
           socket.onerror = function () {
             console.log("websocket发生了错误");
           };
-          
         }
       },
       // giveChatInitToWalletConnect() {

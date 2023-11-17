@@ -9,7 +9,7 @@ export function getToken(data) {
 
 export function checkUserExist(data) {
   return request({
-    url: `/checkMnemonic`,
+    url: `/queryMnemonic`,
     method: 'post',
     data: data
   })

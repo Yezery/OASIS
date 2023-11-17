@@ -71,7 +71,7 @@
                   Max size: 50MB
                 </div>
                 <div style="color: #B3B3B3;font-weight: 300;font-size: 1vw;">
-                  JPG,PNG,JEPG,GIF
+                  JPG,PNG,JPEG,GIF
                 </div>
               </div> 
               <div
@@ -256,8 +256,8 @@
         let prix = this.getFileExtendingName(
           this.$refs.pictureUpload.uploadFiles[0].raw.name
         );
-        if (prix == ".jepg" || prix == ".png" || prix == ".jpg" || prix
-          == ".JEPG" || prix == ".PNG" || prix == ".JPG" ) {
+        if (prix == ".jpeg" || prix == ".png" || prix == ".jpg" || prix
+          == ".JPEG" || prix == ".PNG" || prix == ".JPG" ) {
           setTimeout(async () => {
             try {
               await process(this.$refs.realPicture).then((re) => {
@@ -376,6 +376,7 @@
             this.maximums = 1;
             this.FirstNFTName = "";
             this.Description = "";
+            this.handleRemove()
           } catch (error) {
             this.isChanging = false;
             this.$notify.error({

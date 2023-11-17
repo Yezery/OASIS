@@ -301,7 +301,7 @@ import axios from 'axios'
         null,
         "欢迎来到OASIS交易所！我是OASIS系统介绍助手，可以向我咨询有关这个系统的信息。"
       );
-      this.$store.commit("setWebScoket",this.init)
+      // this.$store.commit("setWebScoket",this.init)
     },
     methods: {
       // 更新弹窗位置
@@ -467,48 +467,6 @@ import axios from 'axios'
           msg.scrollTop = msg.scrollHeight;
         });
       },
-      // typeText(text) {
-      //   const textElement = document.getElementById("text");
-      //   let i = 0;
-      //   const typingInterval = setInterval(function () {
-      //     textElement.textContent += text[i];
-      //     i++;
-      //     if (i === text.length) {
-      //       clearInterval(typingInterval);
-      //     }
-      //   }, 50); // 控制打字速度
-      // },
-      // createContent(remoteUser, nowUser, text) {
-      //   let content;
-      //   let html;
-      //   content = this.contents[this.chatUser || remoteUser] || "";
-      //   // 当前用户消息
-      //   if (nowUser) {
-      //     html = `<div class="MessageBox_nowUser"><span class="currentTime">${parseTime(
-      //       Date(),
-      //       "hh:mm:ss"
-      //     )}</span><div class="Message leftMessage">${text}</div></div>`;
-      //   } else if (remoteUser) {
-      //     html = `
-      //    <div class="MessageBox_remoteUser">
-
-      //                                       <span class="currentTime">${parseTime(
-      //                                         Date(),
-      //                                         "hh:mm:ss"
-      //                                       )}</span>
-      //                                       <div class="Message rightMessage">
-      //                                         ${text}
-      //                                       </div>
-      //                                     </div>
-      //                                   `;
-      //   }
-      //   content += html;
-      //   this.$set(this.contents, this.chatUser, content);
-      //   this.$nextTick(() => {
-      //     let msg = document.getElementById("CHAT");
-      //     msg.scrollTop = msg.scrollHeight;
-      //   });
-      // },
       //开启websocket事务
       init() {
         // 格式["username:admin","username:admin2"]
@@ -572,20 +530,3 @@ import axios from 'axios'
 <style lang="scss" scoped>
 @import "@/style/leftMenu/oasisChat.scss";
 </style>
-<!-- <style lang="scss" >
-.el-popover.chatGPTep{
-  background-color: var(--White--);
-  border-radius: 30px;
-  border: $globalBorder;
-  transition: all 0.3s ease-in-out;
-  
-  &:hover {
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
-      rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-    transition: all 0.3s ease-in-out;
-  }
-  .el-popover__title{
-    background-color: var(--White--);
-  }
-}
-</style> -->

@@ -68,5 +68,6 @@ func (STG *GPTController) SendToGPT(c *gin.Context) {
 		utils.SendResponse(c.Writer, http.StatusInternalServerError, err)
 		return
 	}
+	fmt.Println(string(body))
 	utils.SendResponse(c.Writer, http.StatusOK, string(body))
 }

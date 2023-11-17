@@ -94,11 +94,10 @@ func main() {
 	GPTController := &controllers.GPTController{}
 	// 公开路由
 	// 查
-	router.POST("/sendToGPT", GPTController.SendToGPT)
-	router.POST("/checkMnemonic", UserMnemonicController.CheckMnemonic)
+	router.GET("/getSaleList", SaleController.GetSaleList)
+	router.POST("/queryMnemonic", UserMnemonicController.CheckMnemonic)
 	router.POST("/getOnSaleNFTByNFTAddress", SaleController.GetOnSaleNFTByNFTAddress)
 	router.POST("/getToken", UserTokenController.GetToken)
-	router.GET("/getSaleList", SaleController.GetSaleList)
 	router.POST("/getSeriesByNFTAddress", NFTOwnerListController.GetSeriesByNFTAddress)
 	router.POST("/Search", NFTOwnerListController.Search)
 	router.POST("/scheduleDailySummary", TransactionController.ScheduleDailySummary)
@@ -112,11 +111,12 @@ func main() {
 
 	// 授权路由
 	jwtGroup := router.Group("/", JWT())
+	router.POST("/sendToGPT", GPTController.SendToGPT)
 	// 查
 	jwtGroup.POST("/getOwnerNFTs", NFTOwnerListController.GetOwnerNFTs)
 	jwtGroup.POST("/getOwnerNFTsByAddress", NFTOwnerListController.GetOwnerNFTsByAddress)
 	jwtGroup.POST("/GetOwnerUpSaleNFTs", NFTOwnerListController.GetOwnerUpSaleNFTs)
-	
+
 	// 增
 	jwtGroup.POST("/makeNewTransaction", TransactionController.MakeNewTransaction)
 	jwtGroup.POST("/createNFT", NFTOwnerListController.CreateNFTInf)
@@ -126,6 +126,6 @@ func main() {
 	jwtGroup.POST("/UpdateNFTOwnerListAfterBuy", NFTOwnerListController.UpdateNFTOwnerListAfterBuy)
 	// 删
 	jwtGroup.POST("/DeleteSale", SaleController.DeleteSale)
-	
+
 	router.Run(":" + config.Server.Port)
 }

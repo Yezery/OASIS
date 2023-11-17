@@ -73,7 +73,7 @@
                   Max size: 50MB
                 </div>
                 <div style="color: #B3B3B3;font-weight: 300;font-size: 1vw;">
-                  JPG,PNG,JEPG,GIF
+                  JPG,PNG,JPEG,GIF
                 </div>
               </div>
               <div
@@ -264,10 +264,10 @@
           this.$refs.pictureUpload.uploadFiles[0].raw.name
         );
         if (
-          prix == ".jepg" ||
+          prix == ".jpeg" ||
           prix == ".png" ||
           prix == ".jpg" ||
-          prix == ".JEPG" ||
+          prix == ".JPEG" ||
           prix == ".PNG" ||
           prix == ".JPG"
         ) {

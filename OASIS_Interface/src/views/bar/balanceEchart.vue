@@ -1,5 +1,8 @@
 <template>
-  <div id="EchartBox" ref="EchartBox">
+  <div
+    id="EchartBox"
+    ref="EchartBox"
+  >
     <div id="EchartsShow" />
   </div>
 </template>
